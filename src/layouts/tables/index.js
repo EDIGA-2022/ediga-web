@@ -31,9 +31,20 @@ import DataTable from "examples/Tables/DataTable";
 import authorsTableData from "layouts/tables/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
 
+// Button, Navigation
+import MDButton from "components/MDButton";
+import {Routes, Route, useNavigate} from 'react-router-dom';
+
+
 function Tables() {
   const { columns, rows } = authorsTableData();
   const { columns: pColumns, rows: pRows } = projectsTableData();
+  const navigate = useNavigate();
+
+  const navigateToCreateNewUser = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/createNewUser');
+  };
 
   return (
     <DashboardLayout>
@@ -51,10 +62,14 @@ function Tables() {
                 bgColor="info"
                 borderRadius="lg"
                 coloredShadow="info"
+                style={{ display: "flex" }}
               >
                 <MDTypography variant="h6" color="white">
                   Users Table
                 </MDTypography>
+                <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={navigateToCreateNewUser}>
+                  +
+                </MDButton>
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
