@@ -33,56 +33,60 @@ import MDTypography from "components/MDTypography";
 import colors from "assets/theme/base/colors";
 import typography from "assets/theme/base/typography";
 
-function ProfileInfoCard({ title, description, info, social, action, shadow }) {
-  const labels = [];
+// genre={user.genre}
+// country={user.country}
+// yearsOld={user.yearsOld}
+// middleForm={user.middleFormAnswers}
+// endForm={user.endFormAnswers}
+
+function ProfileInfoCard({
+  title,
+  description,
+  info,
+  social,
+  action,
+  shadow,
+  genre,
+  country,
+  yearsOld,
+  middleForm,
+  endForm,
+  photos
+}) {
+  const labels = [
+    'Genre',
+    'Country',
+    'Years old',
+    'Lo que compartí estos días define lo que soy',
+    'Lo que compartí estos días define lo que quiero que vean de mí',
+    'He establecido contacto con otras personas a través de Instagram por afinidad de género',
+    'Los contenidos de otras personas me han hecho reflexionar sobre mi identidad de género',
+  ];
+
   const values = [];
   const { socialMediaColors } = colors;
   const { size } = typography;
 
-  // Convert this form `objectKey` of the object key in to this `object key`
-  Object.keys(info).forEach((el) => {
-    if (el.match(/[A-Z\s]+/)) {
-      const uppercaseLetter = Array.from(el).find((i) => i.match(/[A-Z]+/));
-      const newElement = el.replace(uppercaseLetter, ` ${uppercaseLetter.toLowerCase()}`);
-
-      labels.push(newElement);
-    } else {
-      labels.push(el);
-    }
-  });
-
-  // Push the object values into the values array
-  Object.values(info).forEach((el) => values.push(el));
+  values.push(genre);
+  values.push(country);
+  values.push(yearsOld);
+  values.push(middleForm.answer1);
+  values.push(middleForm.answer2);
+  values.push(endForm.answer1);
+  values.push(endForm.answer2);
 
   // Render the card info items
   const renderItems = labels.map((label, key) => (
-    <MDBox key={label} display="flex" py={1} pr={2}>
-      <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
-        {label}: &nbsp;
-      </MDTypography>
-      <MDTypography variant="button" fontWeight="regular" color="text">
-        &nbsp;{values[key]}
-      </MDTypography>
-    </MDBox>
+      <MDBox key={label} display="flex" py={1} pr={2}>
+        <MDTypography variant="button" fontWeight="bold">
+          {label}: &nbsp;
+        </MDTypography>
+        <MDTypography variant="button" fontWeight="regular" color="text">
+          &nbsp;{values[key]}
+        </MDTypography>
+      </MDBox>
   ));
 
-  // Render the card social media icons
-  const renderSocial = social.map(({ link, icon, color }) => (
-    <MDBox
-      key={color}
-      component="a"
-      href={link}
-      target="_blank"
-      rel="noreferrer"
-      fontSize={size.lg}
-      color={socialMediaColors[color].main}
-      pr={1}
-      pl={0.5}
-      lineHeight={1}
-    >
-      {icon}
-    </MDBox>
-  ));
 
   return (
     <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
@@ -97,22 +101,22 @@ function ProfileInfoCard({ title, description, info, social, action, shadow }) {
         </MDTypography>
       </MDBox>
       <MDBox p={2}>
-        <MDBox mb={2} lineHeight={1}>
+        {/* <MDBox mb={2} lineHeight={1}>
           <MDTypography variant="button" color="text" fontWeight="light">
             {description}
           </MDTypography>
         </MDBox>
         <MDBox opacity={0.3}>
           <Divider />
-        </MDBox>
+        </MDBox> */}
         <MDBox>
           {renderItems}
-          <MDBox display="flex" py={1} pr={2}>
+          {/* <MDBox display="flex" py={1} pr={2}>
             <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
               social: &nbsp;
             </MDTypography>
             {renderSocial}
-          </MDBox>
+          </MDBox> */}
         </MDBox>
       </MDBox>
     </Card>
