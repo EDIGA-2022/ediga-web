@@ -25,6 +25,7 @@ import MDBadge from "components/MDBadge";
 import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
+import { Link } from 'react-router-dom'
 
 export default function data() {
   const Author = ({ image, name, email }) => (
@@ -72,9 +73,9 @@ export default function data() {
           </MDTypography>
         ),
         action: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            Edit
-          </MDTypography>
+          <Link to={"./editUser"}>
+          Dashboard
+        </Link>
         ),
       },
       {
