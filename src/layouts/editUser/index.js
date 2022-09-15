@@ -53,11 +53,11 @@ function EditUser() {
 
     async function fetchUser() {
 
-        const response = await fetch("http://localhost:3001/api/user/956598fa-9312-421f-91ba-ffb1613fd5d8");
+        const response = await fetch("http://localhost:3001/api/user/08da429b-23f3-46a8-8585-a6e60893d76a");
 
         const result = await response.json();
 
-        setUserId("956598fa-9312-421f-91ba-ffb1613fd5d8");
+        setUserId("08da429b-23f3-46a8-8585-a6e60893d76a");
         setUserCountry(result.userCountry);
         setAnswer1(result.answer1);
         setAnswer2(result.answer2);
