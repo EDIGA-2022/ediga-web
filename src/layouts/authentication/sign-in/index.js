@@ -37,6 +37,22 @@ import loginApi from "../../../api/login";
 
 function Basic() {
 
+  const [email, setEmail] = useState('');
+  const emailChange = (e) => setEmail(e.target.value);
+
+  const [password, setPassword] = useState('');
+  const passwordChange = (e) => setPassword(e.target.value);
+
+  function login(event) {
+    loginApi(email, password).then(response => {
+      if (response.ok) {
+        console.log('Login success');
+      } else {
+        console.log('Login failed', response)
+      }
+    });
+  }  
+
   return (
     <BasicLayout image={bgImage}>
       <Card>
@@ -59,10 +75,10 @@ function Basic() {
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
+              <MDInput type="email" label="Email" fullWidth value={email} onChange={emailChange}/>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput type="password" label="Password" fullWidth value={password} onChange={passwordChange}/>
             </MDBox>
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth onClick={login}>
@@ -75,11 +91,5 @@ function Basic() {
     </BasicLayout>
   );
 }
-
-function login(event) {
-  console.log(event);
-  loginApi.login();
-}
-
 
 export default Basic;
