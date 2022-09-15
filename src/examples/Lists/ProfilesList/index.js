@@ -28,41 +28,8 @@ import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
 import MDButton from "components/MDButton";
 
-function ProfilesList({ title, profiles, shadow }) {
-  const renderProfiles = profiles.map(({ image, name, description, action }) => (
-    <MDBox key={name} component="li" display="flex" alignItems="center" py={1} mb={1}>
-      <MDBox mr={2}>
-        <MDAvatar src={image} alt="something here" shadow="md" />
-      </MDBox>
-      <MDBox display="flex" flexDirection="column" alignItems="flex-start" justifyContent="center">
-        <MDTypography variant="button" fontWeight="medium">
-          {name}
-        </MDTypography>
-        <MDTypography variant="caption" color="text">
-          {description}
-        </MDTypography>
-      </MDBox>
-      <MDBox ml="auto">
-        {action.type === "internal" ? (
-          <MDButton component={Link} to={action.route} variant="text" color="info">
-            {action.label}
-          </MDButton>
-        ) : (
-          <MDButton
-            component="a"
-            href={action.route}
-            target="_blank"
-            rel="noreferrer"
-            variant="text"
-            color={action.color}
-          >
-            {action.label}
-          </MDButton>
-        )}
-      </MDBox>
-    </MDBox>
-  ));
-
+function ProfilesList({ title, photos, shadow }) {
+// console.log("photo.photo", photos)
   return (
     <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
       <MDBox pt={2} px={2}>
@@ -71,9 +38,15 @@ function ProfilesList({ title, profiles, shadow }) {
         </MDTypography>
       </MDBox>
       <MDBox p={2}>
-        <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
+      <img src={`data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII`} />
+      {photos.map(photo => {
+        <div>
+          <img src={`data:image/jpeg;base64,${photo.photo}`} />
+        </div>
+      })}
+        {/* <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
           {renderProfiles}
-        </MDBox>
+        </MDBox> */}
       </MDBox>
     </Card>
   );
@@ -87,7 +60,7 @@ ProfilesList.defaultProps = {
 // Typechecking props for the ProfilesList
 ProfilesList.propTypes = {
   title: PropTypes.string.isRequired,
-  profiles: PropTypes.arrayOf(PropTypes.object).isRequired,
+  photos: PropTypes.arrayOf(PropTypes.object).isRequired,
   shadow: PropTypes.bool,
 };
 
