@@ -45,6 +45,7 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import CreateNewUser from "layouts/createNewUser"
+import EditUser from "layouts/editUser"
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -121,6 +122,14 @@ const routes = [
     icon: <Icon fontSize="small">createNewUser</Icon>,
     route: "/createNewUser",
     component: <CreateNewUser />,
+  },
+  {
+    type: "collapse",
+    name: "Edit User",
+    key: "editUser",
+    icon: <Icon fontSize="small">editUser</Icon>,
+    route: "/editUser",
+    component: <EditUser />,
   },
 ];
 
