@@ -39,14 +39,14 @@ import Footer from "examples/Footer";
 function CreateNewUser() {
   
   const [userCountry, setUserCountry] = useState('');
-  const [answer1, setAnswer1] = useState('');
+  const [answer1, setAnswer1] = useState('1');
   const [answer2, setAnswer2] = useState('');
   const [answer1openField, setAnswer1openField] = useState('');
   const [answer3openField, setAnswer3openField] = useState('');
   const [jsonResponseMessage, setJsonResponseMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
-  
+  const [alias, setAlias] = useState('');
 
   const ages = [
     { label: '13 años', age: 13 },
@@ -86,9 +86,10 @@ function CreateNewUser() {
       answer2: answer2,
       answer1openField: answer1openField,
       answer3: "Si",
-      answer3openField: answer3openField
+      answer3openField: answer3openField,
+      alias: alias
    }
-   const result = await fetch('http://localhost:3001/api/createParticipant', {
+   const result = await fetch('http://localhost:3001/api/createUser', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -123,7 +124,7 @@ function CreateNewUser() {
                 <MDBox p={2}>
                   <MDTypography variant="h5">Nombre ficticio</MDTypography>
                   <MDBox p={1}></MDBox>
-                  <TextField id="standard-basic" label="Alias" variant="standard" />
+                  <TextField id="standard-basic" label="Nombre ficticio" variant="standard" onChange={(e) => setAlias(e.target.value)}/>
                 </MDBox>
                 <MDBox p={2}>
                     <MDTypography variant="h5">Edad</MDTypography>

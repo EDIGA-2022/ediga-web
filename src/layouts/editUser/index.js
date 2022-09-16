@@ -47,6 +47,7 @@ function EditUser() {
   const [jsonResponseMessage, setJsonResponseMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
+  const [alias, setAlias] = useState('');
 
 
   useEffect(function effectFunction() {
@@ -63,7 +64,7 @@ function EditUser() {
         setAnswer2(result.answer2);
         setAnswer3openField(result.answer3openField);
         setAnswer1openField(result.answer1openField);
-
+        setAlias(result.alias);
     }
 
     fetchUser();
@@ -105,10 +106,11 @@ function EditUser() {
       answer2: answer2,
       answer1openField: answer1openField,
       answer3: "Si",
-      answer3openField: answer3openField
+      answer3openField: answer3openField,
+      alias: alias
    }
    const result = await fetch('http://localhost:3001/api/editUser', {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -136,7 +138,7 @@ function EditUser() {
                 <MDBox p={2}>
                   <MDTypography variant="h5">Nombre ficticio</MDTypography>
                   <MDBox p={1}></MDBox>
-                  <TextField id="standard-basic" label="Alias" variant="standard" />
+                  <TextField id="standard-basic" label="Nombre ficticio" variant="standard" value={alias} onChange={(e) => setAlias(e.target.value)}/>
                 </MDBox>
                 <MDBox p={2}>
                     <MDTypography variant="h5">Edad</MDTypography>
