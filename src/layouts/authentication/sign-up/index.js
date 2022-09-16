@@ -13,6 +13,8 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
+import { useCallback, useState } from "react";
+
 // react-router-dom components
 import { Link } from "react-router-dom";
 
@@ -29,12 +31,81 @@ import MDButton from "components/MDButton";
 // Authentication layout components
 import CoverLayout from "layouts/authentication/components/CoverLayout";
 
-// Images
-import bgImage from "assets/images/bg-sign-up-cover.jpeg";
+// Loader component
+import Spinner from "components/shared/spinner/spinner"
+import FormError from "components/shared/formError/formError"
+
+import registerApi from "../../../api/register";
+import MDAlert from "components/MDAlert";
+
+
 
 function Cover() {
+
+  const [name, setName] = useState('');
+  const nameChange = (e) => setName(e.target.value);
+
+  const [email, setEmail] = useState('');
+  const emailChange = (e) => setEmail(e.target.value);
+
+  const [password, setPassword] = useState('');
+  const passwordChange = (e) => {
+    setPassword(e.target.value)
+    if (password.length > 6) {
+      setPasswordError('');
+    }
+  };
+
+  const [errors, setErrors] = useState('')
+  const [passwordError, setPasswordError] = useState('');
+
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+
+
+
+  function register(event) {
+    console.log("entro register");
+    setLoading(true);
+    setSubmitted(true);
+    if (!name || !password || !email) {
+      setErrors({ email: !email, password: !password, name: !name });
+      setLoading(false);
+      return;
+    }
+    if (password.length <= 6) {
+      setPasswordError('La contraseña debe tener al menos 7 caracteres.');
+      setLoading(false);
+      return;
+    }
+    registerApi(name, email, password).then(response => {
+      if (response.ok) {
+        cleanForm();
+        setLoading(false);
+        console.log('Register success', response);
+      } else {
+        console.log('Register failed');
+        response.json().then(r => {
+          setErrors({ serverError: r.message });
+        });
+        console.log(errors);
+        setLoading(false);
+        setSubmitted(false);
+      }
+    })
+  }
+
+  function cleanForm() {
+    setEmail("");
+    setName("");
+    setPassword("");
+    setSubmitted(false);
+  }
+
+
   return (
-    <CoverLayout image={bgImage}>
+    <CoverLayout>
       <Card>
         <MDBox
           variant="gradient"
@@ -48,64 +119,37 @@ function Cover() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Join us today
-          </MDTypography>
-          <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your email and password to register
+            Registra un nuevo investigador
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
+          {errors.serverError && <MDAlert p={0.5} color="error" style={{fontWeight: "normal", fontSize:"14px"}}>{errors.serverError}</MDAlert>}
             <MDBox mb={2}>
-              <MDInput type="text" label="Name" variant="standard" fullWidth />
+              <MDInput type="text" label="Nombre" variant="standard" fullWidth onChange={nameChange} disabled={loading} />
+              {!name && submitted && <FormError text="Este campo es obligatorio"></FormError>}
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
+              <MDInput type="email" label="Email" variant="standard" fullWidth onChange={emailChange} disabled={loading} />
+              {!email && submitted && <FormError text="Este campo es obligatorio"></FormError>}
             </MDBox>
-            <MDBox mb={2}>
-              <MDInput type="password" label="Password" variant="standard" fullWidth />
+            <MDBox mb={1}>
+              <MDInput type="password" label="Contraseña" variant="standard" fullWidth onChange={passwordChange} disabled={loading} />
+              {password && passwordError && submitted && <FormError text={passwordError}></FormError>}
+              {!password && submitted && <FormError text="Este campo es obligatorio"></FormError>}
             </MDBox>
-            <MDBox display="flex" alignItems="center" ml={-1}>
-              <Checkbox />
-              <MDTypography
-                variant="button"
-                fontWeight="regular"
-                color="text"
-                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-              >
-                &nbsp;&nbsp;I agree the&nbsp;
-              </MDTypography>
-              <MDTypography
-                component="a"
-                href="#"
-                variant="button"
-                fontWeight="bold"
-                color="info"
-                textGradient
-              >
-                Terms and Conditions
-              </MDTypography>
-            </MDBox>
-            <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
-              </MDButton>
-            </MDBox>
-            <MDBox mt={3} mb={1} textAlign="center">
+            <MDBox mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
-                Already have an account?{" "}
-                <MDTypography
-                  component={Link}
-                  to="/authentication/sign-in"
-                  variant="button"
-                  color="info"
-                  fontWeight="medium"
-                  textGradient
-                >
-                  Sign In
-                </MDTypography>
+                El usuario deberá cambiar la contraseña al iniciar sesión
               </MDTypography>
             </MDBox>
+            <MDBox mt={1} mb={1}>
+              {!loading && <MDButton variant="gradient" color="info" fullWidth onClick={register}>
+                Registrar
+              </MDButton>}
+              {loading && <Spinner></Spinner>}
+            </MDBox>
+
           </MDBox>
         </MDBox>
       </Card>
