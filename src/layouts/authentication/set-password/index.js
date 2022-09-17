@@ -34,7 +34,7 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
-import loginApi from "../../../api/login";
+import setPasswordApi from "../../../api/setPassword";
 
 // FormError
 import FormError from "components/shared/formError/formError"
@@ -42,63 +42,42 @@ import FormError from "components/shared/formError/formError"
 // Loader
 import Spinner from "components/shared/spinner/spinner"
 
-// Set password form
-import SetPasswordForm from "../set-password/index"
 
-function Basic() {
 
-  const [email, setEmail] = useState('');
-  const emailChange = (e) => setEmail(e.target.value);
+
+function Basic(props) {
 
   const [password, setPassword] = useState('');
   const passwordChange = (e) => setPassword(e.target.value);
 
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const repeatPasswordChange = (e) => setRepeatPassword(e.target.value);
+  
   const [loading, setLoading] = useState(false);
 
-  const [errors, setErrors] = useState('')
+  const [error, setError] = useState('')
   const [submitted, setSubmitted] = useState(false);
 
-  const [showSetPassword, setShowSetPassword] = useState(false);
-  const [name, setName] = useState('');
 
-  const [user, setUser] = useState({});
-
-
-  const childToParent = (childdata) => {
-    setShowSetPassword(false);
-    navigateHome();
-  }
-
-  function navigateHome(){
-    console.log('aca navegamos a la home del usuario')
-  }
-
-
-  function login(event) {
+  function submit(event) {
     setLoading(true);
     setSubmitted(true);
-    if (!password || !email) {
-      setErrors({ email: !email, password: !password });
+    console.log("lll");
+    props.childToParent("HOLAAa");
+    if (password !== repeatPassword) {
+      setError("Las contraseñas no coinciden");
       setLoading(false);
       return;
     }
-    loginApi(email, password).then(response => {
+    setPasswordApi(password).then(response => {
       if (response.ok) {
-        response.json().then(r => {
-          setUser(r.user);
-          if (user.firstLogIn) {
-            setName(user.name);
-            setLoading(false);
-            setShowSetPassword(true);
-          } else {
-            navigateHome();
-          }
-        })
+        console.log('Set pass success.');
       } else {
+        console.log("else");
         response.json().then(r => {
-          setErrors({ serverError: r.message });
+          setError(r.message);
           setLoading(false);
-          console.log(errors);
+          console.log(error);
         })
 
       }
@@ -106,8 +85,8 @@ function Basic() {
   }
 
   return (
-    <BasicLayout image={bgImage}>
-      {!showSetPassword && <Card>
+
+      <Card>
         <MDBox
           variant="gradient"
           bgColor="info"
@@ -120,33 +99,36 @@ function Basic() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Iniciar sesión
+            ¡Hola, {props.name}!
           </MDTypography>
-
+          <MDTypography  fontWeight="medium" color="white" mt={1}>
+            Establece una contraseña
+          </MDTypography>
 
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
-            {submitted && errors.serverError && <MDAlert p={0.5} color="error" style={{ fontWeight: "normal", fontSize: "14px" }}>{errors.serverError}</MDAlert>}
-            <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth value={email} onChange={emailChange} />
-              {!email && submitted && <FormError text="Este campo es obligatorio"></FormError>}
-            </MDBox>
+            {submitted && error && <MDAlert p={0.5} color="error" style={{ fontWeight: "normal", fontSize: "14px" }}>{error}</MDAlert>}
             <MDBox mb={2}>
               <MDInput type="password" label="Contraseña" fullWidth value={password} onChange={passwordChange} />
               {!password && submitted && <FormError text="Este campo es obligatorio"></FormError>}
+
+            </MDBox>
+            <MDBox mb={2}>
+              <MDInput type="password" label="Repetir contraseña" fullWidth value={repeatPassword} onChange={repeatPasswordChange} />
+              {!repeatPassword && submitted && <FormError text="Este campo es obligatorio"></FormError>}
+
             </MDBox>
             <MDBox mt={4} mb={1}>
-              {!loading && <MDButton variant="gradient" color="info" fullWidth onClick={login}>
-                Iniciar sesión
+              {!loading && <MDButton variant="gradient" color="info" fullWidth onClick={submit}>
+                Confirmar
               </MDButton>}
               {loading && <Spinner></Spinner>}
             </MDBox>
           </MDBox>
         </MDBox>
-      </Card>}
-      {showSetPassword && <SetPasswordForm name={name} childToParent={childToParent} ></SetPasswordForm>}
-    </BasicLayout>
+      </Card>
+
   );
 }
 

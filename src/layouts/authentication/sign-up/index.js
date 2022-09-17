@@ -61,12 +61,9 @@ function Cover() {
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
-
-
+  const [success, setSuccess] = useState(false);
 
   function register(event) {
-    console.log("entro register");
     setLoading(true);
     setSubmitted(true);
     if (!name || !password || !email) {
@@ -81,17 +78,14 @@ function Cover() {
     }
     registerApi(name, email, password).then(response => {
       if (response.ok) {
+        setSuccess(true);
         cleanForm();
         setLoading(false);
-        console.log('Register success', response);
       } else {
-        console.log('Register failed');
         response.json().then(r => {
           setErrors({ serverError: r.message });
+          setLoading(false);
         });
-        console.log(errors);
-        setLoading(false);
-        setSubmitted(false);
       }
     })
   }
@@ -124,7 +118,8 @@ function Cover() {
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
-          {errors.serverError && <MDAlert p={0.5} color="error" style={{fontWeight: "normal", fontSize:"14px"}}>{errors.serverError}</MDAlert>}
+            {submitted && errors.serverError && <MDAlert p={0.5} color="error" style={{ fontWeight: "normal", fontSize: "14px" }}>{errors.serverError}</MDAlert>}
+            {success && <MDAlert p={0.5} color="success" style={{ fontWeight: "normal", fontSize: "14px" }}>Usuario creado exitosamente</MDAlert>}
             <MDBox mb={2}>
               <MDInput type="text" label="Nombre" variant="standard" fullWidth onChange={nameChange} disabled={loading} />
               {!name && submitted && <FormError text="Este campo es obligatorio"></FormError>}
