@@ -2,6 +2,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 function register(name, email, password) {
 	return fetch(`${API_URL}/api/register`, {
+		credentials: 'include',
 		method: "POST",
 		body: JSON.stringify({
 			name: name,

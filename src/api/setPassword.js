@@ -1,11 +1,10 @@
 const API_URL = process.env.REACT_APP_API_URL;
 
-function login(email, password) {
-  return fetch(`${API_URL}/api/login`, {
+function setPassword(password) {
+  return fetch(`${API_URL}/api/password-reset`, {
     credentials: 'include',
     method: "POST",
     body: JSON.stringify({
-      email: email,
       password: password
     }),
     headers: {
@@ -15,4 +14,4 @@ function login(email, password) {
   });
 }
 
-module.exports = login;
+module.exports = setPassword;
