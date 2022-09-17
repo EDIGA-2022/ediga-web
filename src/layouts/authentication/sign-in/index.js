@@ -98,7 +98,6 @@ function Basic() {
         response.json().then(r => {
           setErrors({ serverError: r.message });
           setLoading(false);
-          console.log(errors);
         })
 
       }
