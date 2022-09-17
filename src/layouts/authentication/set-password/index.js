@@ -62,8 +62,7 @@ function Basic(props) {
   function submit(event) {
     setLoading(true);
     setSubmitted(true);
-    console.log("lll");
-    props.childToParent("HOLAAa");
+    props.childToParent("");
     if (password !== repeatPassword) {
       setError("Las contraseñas no coinciden");
       setLoading(false);
@@ -73,11 +72,9 @@ function Basic(props) {
       if (response.ok) {
         console.log('Set pass success.');
       } else {
-        console.log("else");
         response.json().then(r => {
           setError(r.message);
           setLoading(false);
-          console.log(error);
         })
 
       }
