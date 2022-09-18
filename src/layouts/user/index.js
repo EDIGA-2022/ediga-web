@@ -41,7 +41,7 @@ import React from "react";
 import 'react-quill/dist/quill.snow.css';
 
 // API requests
-import { getUser } from "../../api/user"
+import { getUserProfile } from "../../api/getUserProfile"
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 function User() {
@@ -64,7 +64,7 @@ function User() {
 
   useEffect(() => {
     console.log("REACT_APP_API_URL", REACT_APP_API_URL)
-    fetch(`${REACT_APP_API_URL}/api/users/7a7d8d2b-9a89-4bee-823f-f07b2b50383d`, {
+    fetch(`${REACT_APP_API_URL}/api/user/7a7d8d2b-9a89-4bee-823f-f07b2b50383d`, {
       method: "GET",
       headers: {
         "access-control-allow-origin": "*",
