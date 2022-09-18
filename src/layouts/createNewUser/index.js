@@ -35,6 +35,8 @@ import MDButton from "components/MDButton";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+const API_URL = process.env.REACT_APP_API_URL;
+import { createUser } from "../../api/createUser"
 
 function CreateNewUser() {
   
@@ -89,13 +91,8 @@ function CreateNewUser() {
       answer3openField: answer3openField,
       alias: alias
    }
-   const result = await fetch('http://localhost:3001/api/createUser', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-   })
+
+   const result = await createUser(data);
    
    const resultInJson = await result.json();
    setIsSuccess(resultInJson.message == "Success");

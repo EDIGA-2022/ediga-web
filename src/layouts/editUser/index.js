@@ -35,6 +35,8 @@ import MDButton from "components/MDButton";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+import { getUser } from "../../api/getUser";
+import { editUser } from "../../api/editUser";
 
 function EditUser() {
 
@@ -54,7 +56,7 @@ function EditUser() {
 
     async function fetchUser() {
 
-        const response = await fetch("http://localhost:3001/api/user/08da429b-23f3-46a8-8585-a6e60893d76a");
+        const response = await getUser('08da429b-23f3-46a8-8585-a6e60893d76a');
 
         const result = await response.json();
 
@@ -109,15 +111,8 @@ function EditUser() {
       answer3openField: answer3openField,
       alias: alias
    }
-   const result = await fetch('http://localhost:3001/api/editUser', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-   })
+   const resultInJson = editUser(userId, data);
    
-   const resultInJson = await result.json();
    setIsSuccess(resultInJson.message == "Success");
    setShowMsg(true);
    setJsonResponseMessage(resultInJson.message);
