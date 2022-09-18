@@ -64,7 +64,7 @@ function User() {
 
   useEffect(() => {
     console.log("REACT_APP_API_URL", REACT_APP_API_URL)
-    fetch(`${REACT_APP_API_URL}/api/users/7a7d8d2b-9a89-4bee-823f-f07b2b50383d`, {
+    fetch(`${REACT_APP_API_URL}/api/user/7a7d8d2b-9a89-4bee-823f-f07b2b50383d`, {
       method: "GET",
       headers: {
         "access-control-allow-origin": "*",
@@ -91,13 +91,13 @@ function User() {
         <Tab label="Observaciones" />
         <Tab label="Diario de campo" />
       </Tabs>
-      {user.photos.forEach(photo => {
+      {/* {user.photos.forEach(photo => {
+        console.log("hola!");
         <div>
-          <img src={`data:image/jpeg;base64,${photo.photo}`} />
-          {/* <img src={`data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII`} /> */}
+          <img src={`data:image/jpeg;base64,${photo.photo.replace('\n', '')}`} />
         </div>
 
-      })}
+      })} */}
       <MDBox mt={5} mb={3}>
         <Grid container spacing={1}>
           {/* <Grid item xs={12} md={6} xl={4}>

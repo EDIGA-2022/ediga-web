@@ -29,7 +29,7 @@ import MDAvatar from "components/MDAvatar";
 import MDButton from "components/MDButton";
 
 function ProfilesList({ title, photos, shadow }) {
-// console.log("photo.photo", photos)
+  // photos[0] ? console.log("photo------->", `data:image/jpeg;base64,${photos[0].photo}`) : console.log("");
   return (
     <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
       <MDBox pt={2} px={2}>
@@ -38,17 +38,24 @@ function ProfilesList({ title, photos, shadow }) {
         </MDTypography>
       </MDBox>
       <MDBox p={2}>
-      <img src={`data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII`} />
-      {photos.map(photo => {
-        <div>
-          <img src={`data:image/jpeg;base64,${photo.photo}`} />
-        </div>
-      })}
+        {photos[0]
+          ? <img style={{ height: '215px', width: '150px' }}
+            src={`data:image/jpeg;base64,${photos[0].photo}`} />
+          : ''}
+
+        <img style={{ height: '215px', width: '150px' }}
+          src={ `data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII`} />
+
+        {photos[0] ? photos.forEach(photo => {
+          console.log("PHOTOO", photo);
+          <img style={{ height: '215px', width: '150px' }}
+            src={`data:image/jpeg;base64,${photo.photo}`} />
+        }) : ''}
         {/* <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
           {renderProfiles}
         </MDBox> */}
       </MDBox>
-    </Card>
+    </Card >
   );
 }
 
