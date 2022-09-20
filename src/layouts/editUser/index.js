@@ -36,6 +36,10 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
+// API requests
+import editUserAPI from "../../api/editUser"
+import getUserAPI from "../../api/getUser"
+
 function EditUser() {
 
   const [userId, setUserId] = useState('');
@@ -54,17 +58,17 @@ function EditUser() {
 
     async function fetchUser() {
 
-        const response = await fetch("http://localhost:3001/api/user/08da429b-23f3-46a8-8585-a6e60893d76a");
-
-        const result = await response.json();
-
-        setUserId("08da429b-23f3-46a8-8585-a6e60893d76a");
-        setUserCountry(result.userCountry);
-        setAnswer1(result.answer1);
-        setAnswer2(result.answer2);
-        setAnswer3openField(result.answer3openField);
-        setAnswer1openField(result.answer1openField);
-        setAlias(result.alias);
+        await getUserAPI("08da429b-23f3-46a8-8585-a6e60893d76a").then(res => {
+          res.json().then(response => {
+            setUserId("08da429b-23f3-46a8-8585-a6e60893d76a");
+            setUserCountry(response.userCountry);
+            setAnswer1(response.answer1);
+            setAnswer2(response.answer2);
+            setAnswer3openField(response.answer3openField);
+            setAnswer1openField(response.answer1openField);
+            setAlias(response.alias);
+          })
+        });
     }
 
     fetchUser();
@@ -99,6 +103,7 @@ function EditUser() {
   );
 
   const submitUser = async () => {
+
     const data = {
       userId: userId,
       userCountry: userCountry,
@@ -109,19 +114,14 @@ function EditUser() {
       answer3openField: answer3openField,
       alias: alias
    }
-   const result = await fetch('http://localhost:3001/api/editUser', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-   })
-   
-   const resultInJson = await result.json();
-   setIsSuccess(resultInJson.message == "Success");
-   setShowMsg(true);
-   setJsonResponseMessage(resultInJson.message);
-   console.log(resultInJson);
+   editUserAPI(data).then(response => {
+      setIsSuccess(response.ok);
+      setShowMsg(true);
+      response.json().then(msg => {
+        setJsonResponseMessage(msg.message);
+      })
+   });
+
   }
 
   return (
