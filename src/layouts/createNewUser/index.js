@@ -38,6 +38,7 @@ import Footer from "examples/Footer";
 
 // API requests
 import createUserAPI from "../../api/createUser";
+import { useNavigate } from "react-router-dom";
 
 function CreateNewUser() {
   
@@ -50,6 +51,7 @@ function CreateNewUser() {
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
   const [alias, setAlias] = useState('');
+  const navigate = useNavigate();
 
   const ages = [
     { label: '13 años', age: 13 },
@@ -185,6 +187,9 @@ function CreateNewUser() {
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitUser}>
                     Añadir participante
+                </MDButton>
+                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-1)}>
+                    Cancelar
                 </MDButton>
               </MDBox>
             </Card>
