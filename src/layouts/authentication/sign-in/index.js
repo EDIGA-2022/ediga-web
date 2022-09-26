@@ -45,6 +45,9 @@ import Spinner from "components/shared/spinner/spinner"
 // Set password form
 import SetPasswordForm from "../set-password/index"
 
+import { useNavigate } from 'react-router-dom';
+
+
 function Basic() {
 
   const [email, setEmail] = useState('');
@@ -62,15 +65,12 @@ function Basic() {
   const [name, setName] = useState('');
 
   const [user, setUser] = useState({});
+  const navigate = useNavigate();
 
 
   const childToParent = (childdata) => {
     setShowSetPassword(false);
-    navigateHome();
-  }
-
-  function navigateHome(){
-    console.log('aca navegamos a la home del usuario')
+    navigate("/users");
   }
 
 
@@ -91,7 +91,7 @@ function Basic() {
             setLoading(false);
             setShowSetPassword(true);
           } else {
-            navigateHome();
+            navigate("/users");
           }
         })
       } else {
