@@ -36,12 +36,16 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
+import { useParams } from "react-router-dom";
+
 // API requests
 import editUserAPI from "../../api/editUser"
 import getUserAPI from "../../api/getUser"
 
+
 function EditUser() {
 
+  const { itemId } = useParams();
   const [userId, setUserId] = useState('');
   const [userCountry, setUserCountry] = useState('');
   const [answer1, setAnswer1] = useState('');
@@ -58,9 +62,9 @@ function EditUser() {
 
     async function fetchUser() {
 
-        await getUserAPI("08da429b-23f3-46a8-8585-a6e60893d76a").then(res => {
+        await getUserAPI(itemId).then(res => {
           res.json().then(response => {
-            setUserId("08da429b-23f3-46a8-8585-a6e60893d76a");
+            setUserId(itemId);
             setUserCountry(response.userCountry);
             setAnswer1(response.answer1);
             setAnswer2(response.answer2);
@@ -105,7 +109,7 @@ function EditUser() {
   const submitUser = async () => {
 
     const data = {
-      userId: userId,
+      userId: itemId,
       userCountry: userCountry,
       answer1: answer1,
       answer2: answer2,

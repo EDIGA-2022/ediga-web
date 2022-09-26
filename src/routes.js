@@ -112,7 +112,7 @@ const routes = [
         name: "Edit User",
         key: "editUser",
         icon: <Icon fontSize="small">editUser</Icon>,
-        route: "/editUser",
+        route: "/editUser/:itemId",
         component: <EditUser />,
       }
     ]
