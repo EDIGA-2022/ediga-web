@@ -30,8 +30,15 @@ import MDButton from "components/MDButton";
 
 function ProfilesList({ title, photos, shadow }) {
   // photos[0] ? console.log("photo------->", `data:image/jpeg;base64,${photos[0].photo}`) : console.log("");
+
   return (
     <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
+      {photos.map(photo => {
+        console.log("photo.photo", photos[0] ? photos[0].photo.replace('\n', '') : "");
+          < div >
+          <img src={`data:image/jpeg;base64,${photo.photo.replace('\n', '').replace(' ', '')}`} />
+        </div>
+      })}
       <MDBox pt={2} px={2}>
         <MDTypography variant="h6" fontWeight="medium" textTransform="capitalize">
           {title}

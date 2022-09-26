@@ -95,6 +95,8 @@ function User() {
         console.log("hola!");
         <div>
           <img src={`data:image/jpeg;base64,${photo.photo.replace('\n', '')}`} />
+        <div>
+          <img src={`data:image/jpeg;base64,${(photo.photo)}`} />
         </div>
 
       })} */}
