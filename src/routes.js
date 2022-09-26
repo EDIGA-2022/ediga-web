@@ -93,10 +93,10 @@ const routes = [
     collapse: [
       {
         type: "collapse",
-        name: "Billing",
-        key: "billing",
+        name: "User profile",
+        key: "userProfile",
         icon: <Icon fontSize="small">receipt_long</Icon>,
-        route: "/user",
+        route: "/user/:userId",
         component: <User />,
       },
       {

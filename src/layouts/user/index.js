@@ -39,18 +39,21 @@ import ProfilesList from "examples/Lists/ProfilesList";
 // Images
 import React from "react";
 import 'react-quill/dist/quill.snow.css';
+import { useParams } from "react-router-dom";
 
 // API requests
-import { getUserProfile } from "../../api/getUserProfile"
+import getUserProfile from "../../api/getUserProfile"
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 function User() {
+  const { userId } = useParams();
+
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
   const [user, setUser] = useState({
-    userId: '',
+    userId,
     country: '',
     photos: [],
     genre: '',
@@ -64,19 +67,17 @@ function User() {
 
   useEffect(() => {
     console.log("REACT_APP_API_URL", REACT_APP_API_URL)
-    fetch(`${REACT_APP_API_URL}/api/user/7a7d8d2b-9a89-4bee-823f-f07b2b50383d`, {
-      method: "GET",
-      headers: {
-        "access-control-allow-origin": "*",
-        "Content-type": "application/json; charset=UTF-8"
-      }
-    })
-      .then((response) => response.json())
-      .then(newUser => {
-        // const newUser = {...user};
-        // newUser.photos = response.photos;
-        setUser(newUser)
-      });
+    async function fetchUser() {
+      await getUserProfile(userId)
+        .then((response) => response.json())
+        .then(newUser => {
+          // const newUser = {...user};
+          // newUser.photos = response.photos;
+          console.log("user", newUser)
+          setUser(newUser);
+        });
+    }
+    fetchUser()
   }, []);
 
   console.log("user", user, user.photos)
