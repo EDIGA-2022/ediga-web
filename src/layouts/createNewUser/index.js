@@ -36,6 +36,9 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
+// API requests
+import createUserAPI from "../../api/createUser";
+
 function CreateNewUser() {
   
   const [userCountry, setUserCountry] = useState('');
@@ -89,19 +92,13 @@ function CreateNewUser() {
       answer3openField: answer3openField,
       alias: alias
    }
-   const result = await fetch('http://localhost:3001/api/createUser', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-   })
-   
-   const resultInJson = await result.json();
-   setIsSuccess(resultInJson.message == "Success");
-   setShowMsg(true);
-   setJsonResponseMessage(resultInJson.message);
-   console.log(resultInJson);
+   createUserAPI(data).then(response => {
+    setIsSuccess(response.ok);
+    setShowMsg(true);
+    response.json().then(msg => {
+      setJsonResponseMessage(msg.message);
+    })
+   });
   }
 
   return (
