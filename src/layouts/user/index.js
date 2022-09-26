@@ -41,7 +41,7 @@ import React from "react";
 import 'react-quill/dist/quill.snow.css';
 
 // API requests
-import { getUser } from "../../api/user"
+import { getUserProfile } from "../../api/getUserProfile"
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 function User() {

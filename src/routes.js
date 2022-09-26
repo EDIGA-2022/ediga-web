@@ -38,13 +38,12 @@ Coded by www.creative-tim.com
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
-import Billing from "layouts/billing";
-import RTL from "layouts/rtl";
-import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import User from "layouts/user";
+import CreateNewUser from "layouts/createNewUser"
+import EditUser from "layouts/editUser"
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -60,10 +59,10 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Users",
+    name: "Usuarios",
     key: "tables",
     icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
+    route: "/users",
     component: <Tables />,
   },
   {
@@ -100,6 +99,22 @@ const routes = [
         route: "/user",
         component: <User />,
       },
+      {
+        type: "collapse",
+        name: "Create New User",
+        key: "createNewUser",
+        icon: <Icon fontSize="small">createNewUser</Icon>,
+        route: "/createNewUser",
+        component: <CreateNewUser />,
+      },
+      {
+        type: "collapse",
+        name: "Edit User",
+        key: "editUser",
+        icon: <Icon fontSize="small">editUser</Icon>,
+        route: "/editUser/:itemId",
+        component: <EditUser />,
+      }
     ]
   }
 ];
