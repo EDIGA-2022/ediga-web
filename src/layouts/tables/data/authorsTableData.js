@@ -26,6 +26,7 @@ import MDBadge from "components/MDBadge";
 import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
+import { Link } from 'react-router-dom'
 
 export default function Data() {
   const Author = ({ image, name, email }) => (
@@ -56,7 +57,8 @@ export default function Data() {
       { Header: "function", accessor: "function", align: "left" },
       { Header: "status", accessor: "status", align: "center" },
       { Header: "employed", accessor: "employed", align: "center" },
-      { Header: "action", accessor: "action", align: "center" },
+      { Header: "editar", accessor: "editar", align: "center" },
+      { Header: "ver", accessor: "ver", align: "center" },
     ],
 
     rows: [
@@ -73,11 +75,16 @@ export default function Data() {
             23/04/18
           </MDTypography>
         ),
-        action: (
+        ver: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => navigate("/user")}>
-            Edit
-          </MDTypography>
+            View
+          </MDTypography> 
         ),
+        editar: (
+          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => navigate("/editUser")}>
+            Edit
+          </MDTypography> 
+        )
       },
       {
         author: <Author image={team3} name="Alexa Liras" email="alexa@creative-tim.com" />,
