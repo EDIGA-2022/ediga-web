@@ -41,9 +41,10 @@ import Tables from "layouts/tables";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
-import User from "layouts/user";
+import User from "layouts/userProfile";
 import CreateNewUser from "layouts/createNewUser"
 import EditUser from "layouts/editUser"
+import UserImage from "layouts/userImage"
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -114,6 +115,14 @@ const routes = [
         icon: <Icon fontSize="small">editUser</Icon>,
         route: "/editUser/:itemId",
         component: <EditUser />,
+      },
+      {
+        type: "collapse",
+        name: "User image",
+        key: "userImage",
+        icon: <Icon fontSize="small">userImage</Icon>,
+        route: "/image/:imageId",
+        component: <UserImage />,
       }
     ]
   }
