@@ -41,6 +41,7 @@ import Tables from "layouts/tables";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import Logout from "layouts/authentication/logout";
 import User from "layouts/user";
 import CreateNewUser from "layouts/createNewUser"
 import EditUser from "layouts/editUser"
@@ -75,7 +76,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign In",
+    name: "Iniciar sesión",
     key: "sign-in",
     icon: <Icon fontSize="small">login</Icon>,
     route: "/authentication/sign-in",
@@ -83,12 +84,21 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign Up",
+    name: "Registrar investigador",
     key: "sign-up",
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
   },
+  {
+    type: "collapse",
+    name: "Cerrar sesión",
+    key: "logout",
+    icon: <Icon fontSize="small">logout</Icon>,
+    route: "/authentication/logout",
+    component: <Logout />,
+  },
+  
   {
     collapse: [
       {

@@ -42,9 +42,6 @@ import FormError from "components/shared/formError/formError"
 // Loader
 import Spinner from "components/shared/spinner/spinner"
 
-
-
-
 function Basic(props) {
 
   const [password, setPassword] = useState('');
