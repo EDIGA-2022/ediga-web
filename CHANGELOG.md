@@ -120,7 +120,7 @@
   - DashboardLayout
   - PageLayout
 - Lists
-  - ProfilesList
+  - ProfilePhotosList
 - Navbars
   - DashboardNavbar
   - DefaultNavbar
