@@ -45,6 +45,7 @@ import User from "layouts/userProfile";
 import CreateNewUser from "layouts/createNewUser"
 import EditUser from "layouts/editUser"
 import UserImage from "layouts/userImage"
+import CreateNewObservation from "layouts/createNewObservation"
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -123,6 +124,14 @@ const routes = [
         icon: <Icon fontSize="small">userImage</Icon>,
         route: "/image/:imageId",
         component: <UserImage />,
+      },
+      {
+        type: "collapse",
+        name: "Create New Observation",
+        key: "createNewObservation",
+        icon: <Icon fontSize="small">createNewObservation</Icon>,
+        route: "/createNewObservation/:itemId",
+        component: <CreateNewObservation />,
       }
     ]
   }

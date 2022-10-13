@@ -35,6 +35,9 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
 import ProfilePhotosList from "examples/Lists/ProfilePhotosList";
+import Card from "@mui/material/Card";
+import MDTypography from "components/MDTypography";
+import MDButton from "components/MDButton";
 
 // Images
 import React from "react";
@@ -77,6 +80,11 @@ function User() {
     fetchUser()
   }, []);
 
+  const navigateToCreateNewObservation = () => {
+    // 👇️ navigate to /navigateToCreateNewObservation
+    navigate("/createNewObservation/" + userId);
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar onArrowClick={() => navigate(-2)}/>
@@ -105,6 +113,35 @@ function User() {
           </Grid>
           <Grid item xs={12} xl={6}>
             <ProfilePhotosList title="Imagenes" photos={user.photos} shadow={true} />
+          </Grid>
+        </Grid>
+      </MDBox>}
+      {tabValue === 1 &&       <MDBox pt={6} pb={3}>
+        <Grid container spacing={6}>
+          <Grid item xs={12}>
+            <Card>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                coloredShadow="info"
+                style={{ display: "flex" }}
+              >
+                <MDTypography variant="h6" color="white">
+                  Observaciones
+                </MDTypography>
+                <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={navigateToCreateNewObservation}>
+                  +
+                </MDButton>
+              </MDBox>
+              <MDBox pt={3}>
+                
+              </MDBox>
+            </Card>
           </Grid>
         </Grid>
       </MDBox>}
