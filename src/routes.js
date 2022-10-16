@@ -46,6 +46,7 @@ import CreateNewUser from "layouts/createNewUser"
 import EditUser from "layouts/editUser"
 import UserImage from "layouts/userImage"
 import CreateNewObservation from "layouts/createNewObservation"
+import EditObservation from "layouts/editObservation"
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -132,6 +133,14 @@ const routes = [
         icon: <Icon fontSize="small">createNewObservation</Icon>,
         route: "/createNewObservation/:itemId",
         component: <CreateNewObservation />,
+      },
+      {
+        type: "collapse",
+        name: "Edit Observation",
+        key: "editObservation",
+        icon: <Icon fontSize="small">editObservation</Icon>,
+        route: "/editObservation/:itemId",
+        component: <EditObservation />,
       }
     ]
   }

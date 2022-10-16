@@ -85,6 +85,11 @@ function User() {
     navigate("/createNewObservation/" + userId);
   };
 
+  const navigateToEditObservation = () => {
+    // 👇️ navigate to /navigateToCreateNewObservation
+    navigate("/editObservation/" + userId);
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar onArrowClick={() => navigate(-2)}/>
@@ -136,6 +141,9 @@ function User() {
                 </MDTypography>
                 <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={navigateToCreateNewObservation}>
                   +
+                </MDButton>
+                <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={navigateToEditObservation}>
+                  Editar
                 </MDButton>
               </MDBox>
               <MDBox pt={3}>
