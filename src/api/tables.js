@@ -4,7 +4,6 @@ function getUsers() {
   const users = fetch(`${API_URL}/api/users`, {
     method: "GET",
     headers: {
-      "access-control-allow-origin": "*",
       "Content-type": "application/json; charset=UTF-8"
     }
   })

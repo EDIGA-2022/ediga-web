@@ -83,6 +83,7 @@ function Basic() {
     loginApi(email, password).then(response => {
       if (response.ok) {
         response.json().then(r => {
+          localStorage.setItem("token", r.token)
           if (r.user.firstLogIn) {
             setName(r.user.name);
             setLoading(false);

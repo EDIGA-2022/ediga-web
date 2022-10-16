@@ -34,7 +34,6 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
-import logoutApi from "../../../api/logout";
 
 // FormError
 import FormError from "components/shared/formError/formError"
@@ -53,20 +52,11 @@ function Basic() {
   const navigate = useNavigate();
 
 
-  function clearUserInfo() {
-    // Remove jwt cookie
-    document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  }
-
   function logout(event) {
     setLoading(true);
-    logoutApi().then(response => {
-      clearUserInfo();
-      if (response.ok) {
-        setLoading(false);
-        navigate("/authentication/sign-in");
-      }
-    })
+    localStorage.removeItem("token");
+    setLoading(false);
+    navigate("/authentication/sign-in");
   }
 
   function cancel() {
