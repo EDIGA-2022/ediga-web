@@ -53,6 +53,8 @@ function CreateNewObservation() {
   const [music, setMusic] = useState('');
   const [hasMusic, setHasMusic] = useState(false);
   const [observation, setObservation] = useState('');
+  const [photo, setPhoto] = useState('');
+  const [selectedImage, setSelectedImage] = useState(false);
   const [jsonResponseMessage, setJsonResponseMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
@@ -89,7 +91,8 @@ function CreateNewObservation() {
       music: music,
       date: date,
       hasMusic: hasMusic,
-      observation: observation
+      observation: observation,
+      edigaUserPhoto: photo
    }
    createObservationAPI(data).then(response => {
     setIsSuccess(response.ok);
@@ -100,6 +103,25 @@ function CreateNewObservation() {
    });
   }
 
+  const handleFileRead = async (event) => {
+    const file = event.target.files[0]
+    const base64 = await convertBase64(file)
+    setPhoto(base64);
+    setSelectedImage(true);
+  }
+
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file)
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      }
+      fileReader.onerror = (error) => {
+        reject(error);
+      }
+    })
+  }
 
 
   return (
@@ -202,8 +224,26 @@ function CreateNewObservation() {
                         </MDBox>
                     </Grid>
                     <Grid item xs={4} lg={4}>
-                        <MDBox p={1}>
 
+                    </Grid>
+                    <Grid item xs={4} lg={4}>
+                        <MDBox p={1}>
+                        <TextField
+                          id="edigaUserPhoto"
+                          type="file"
+                          inputProps={{ accept: 'image/*' }}
+                          label="Foto"
+                          name="photo"
+                          onChange={e => handleFileRead(e)}
+                          size="small"
+                          variant="standard"
+                        />
+                        </MDBox>
+                        <MDBox>
+                        {selectedImage && (
+                        <div>
+                          <img style={{width: 400, height: 400}} src={`${photo}`}/>
+                          </div>)}
                         </MDBox>
                     </Grid>
                 </Grid> 

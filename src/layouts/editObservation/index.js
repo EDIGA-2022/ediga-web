@@ -47,7 +47,7 @@ import moment from 'moment';
 function EditObservation() {
   
   //const { itemId } = useParams(); esto es el id de la observación
-  const itemId  = "Hola1";
+  const itemId  = "70f01dfb-4be5-46a4-973a-27eae22cb4dd";
   const [userId, setUserId] = useState('');
   const [observationId, setObservationId] = useState('');
   const [title, setTitle] = useState('');
@@ -58,6 +58,8 @@ function EditObservation() {
   const [music, setMusic] = useState('');
   const [hasMusic, setHasMusic] = useState(false);
   const [observation, setObservation] = useState('');
+  const [photo, setPhoto] = useState('');
+  const [selectedImage, setSelectedImage] = useState(false);
   const [jsonResponseMessage, setJsonResponseMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
@@ -95,7 +97,8 @@ function EditObservation() {
       music: music,
       date: date,
       hasMusic: hasMusic,
-      observation: observation
+      observation: observation,
+      edigaUserPhoto: photo
    }
    editObservationAPI(data).then(response => {
     setIsSuccess(response.ok);
@@ -121,6 +124,9 @@ function EditObservation() {
             setDate(moment(new Date(response.date)).format("YYYY-MM-DD"));
             setHasMusic(response.hasMusic);
             setObservation(response.observation);
+            setPhoto(response.edigaUserPhoto);
+            setSelectedImage(true);
+            console.log(response.edigaUserPhoto);
           })
         });
     }
@@ -128,6 +134,27 @@ function EditObservation() {
     fetchObservation();
 
 }, []);
+
+const handleFileRead = async (event) => {
+  const file = event.target.files[0]
+  const base64 = await convertBase64(file)
+  setPhoto(base64);
+  setSelectedImage(true);
+}
+
+const convertBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file)
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    }
+    fileReader.onerror = (error) => {
+      reject(error);
+    }
+  })
+}
+
 
 
   return (
@@ -230,8 +257,26 @@ function EditObservation() {
                         </MDBox>
                     </Grid>
                     <Grid item xs={4} lg={4}>
-                        <MDBox p={1}>
 
+                    </Grid>
+                    <Grid item xs={4} lg={4}>
+                        <MDBox p={1}>
+                        <TextField
+                          id="edigaUserPhoto"
+                          type="file"
+                          inputProps={{ accept: 'image/*' }}
+                          label="Foto"
+                          name="photo"
+                          onChange={e => handleFileRead(e)}
+                          size="small"
+                          variant="standard"
+                        />
+                        </MDBox>
+                        <MDBox>
+                        {selectedImage && (
+                        <div>
+                          <img style={{width: 400, height: 400}} src={`${photo}`}/>
+                          </div>)}
                         </MDBox>
                     </Grid>
                 </Grid> 
