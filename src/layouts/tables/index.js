@@ -29,14 +29,16 @@ import DataTable from "examples/Tables/DataTable";
 
 // Data
 import usersTable from "layouts/tables/data/usersTable";
+import observationsTable from "layouts/tables/data/observationsTable";
 
 // Button, Navigation
 import MDButton from "components/MDButton";
 import {Routes, Route, useNavigate} from 'react-router-dom';
 
 
-function Tables() {
-  const { columns, rows } = usersTable();
+function Tables(props) {
+  const { columns, rows } = props.type === 'users' ? usersTable() : observationsTable(props.userId);
+  const title = props.type === 'users' ? 'Usuarios' : "Observaciones";
   const navigate = useNavigate();
 
   const navigateToCreateNewUser = () => {
@@ -45,8 +47,7 @@ function Tables() {
   };
 
   return (
-    <DashboardLayout>
-      <DashboardNavbar />
+    <div>
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
@@ -63,7 +64,7 @@ function Tables() {
                 style={{ display: "flex" }}
               >
                 <MDTypography variant="h6" color="white">
-                  Usuarios
+                  {title}
                 </MDTypography>
                 <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={navigateToCreateNewUser}>
                   +
@@ -83,7 +84,7 @@ function Tables() {
         </Grid>
       </MDBox>
       <Footer />
-    </DashboardLayout>
+    </div>
   );
 }
 

@@ -14,6 +14,7 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from "react";
+import Tables from "../tables";
 
 
 // @mui material components
@@ -79,7 +80,7 @@ function User() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar onArrowClick={() => navigate(-2)}/>
+      <DashboardNavbar onArrowClick={() => navigate(-2)} />
       <MDBox mb={2} />
       <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
         <Tab label="App ediga" />
@@ -104,10 +105,18 @@ function User() {
             <Divider orientation="vertical" sx={{ mx: 0 }} />
           </Grid>
           <Grid item xs={12} xl={6}>
-            <ProfilePhotosList title="Imagenes" photos={user.photos} shadow={true} />
+            <ProfilePhotosList
+              title="Imagenes"
+              photos={user.photos}
+              shadow={true}
+              userId={userId}
+            />
           </Grid>
         </Grid>
       </MDBox>}
+      {tabValue === 1 &&
+          <Tables type={"observations"} userId={userId} />
+      }
     </DashboardLayout>
   );
 };

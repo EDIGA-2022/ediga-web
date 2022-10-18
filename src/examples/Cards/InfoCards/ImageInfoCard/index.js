@@ -28,6 +28,7 @@ import Icon from "@mui/material/Icon";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
+import MDButton from "components/MDButton";
 
 // Material Dashboard 2 React base styles
 import colors from "assets/theme/base/colors";
@@ -37,7 +38,8 @@ function ImageInfoCard({
     answer1,
     answer2,
     answer3,
-    shadow
+    shadow,
+    photoSrc,
 }) {
     const labels = [
         'Antes de subir esta imagen he reflexionado sobre la idea de mujer, hombre u otros que muestro hacia los demás',
@@ -70,16 +72,29 @@ function ImageInfoCard({
 
     return (
         <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
-            <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
-                <MDTypography variant="h6" fontWeight="bold" >
-                    {"Preguntas que acompañan a la imagen"}
-                </MDTypography>
-            </MDBox>
-            <MDBox p={2}>
-                <MDBox>
-                    {renderItems}
-                </MDBox>
-            </MDBox>
+            <div style={{ display: "flex" }}>
+                <div>
+                    <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
+                        <MDTypography variant="h6" fontWeight="bold" >
+                            {"Preguntas que acompañan a la imagen"}
+                        </MDTypography>
+                    </MDBox>
+                    <MDBox p={2}>
+                        <MDBox>
+                            {renderItems}
+                        </MDBox>
+                    </MDBox>
+                </div>
+                <div style={{
+                    padding: '20px'
+                }}>
+                    <img
+                        src={photoSrc}
+                        loading="lazy"
+                        height="350"
+                    />
+                </div>
+            </div>
         </Card>
     );
 }
