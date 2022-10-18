@@ -8,7 +8,7 @@ function setPassword(password) {
       password: password
     }),
     headers: {
-      "access-control-allow-origin": "*",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
       "Content-type": "application/json; charset=UTF-8"
     }
   });

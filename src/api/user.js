@@ -4,7 +4,7 @@ export async function getUser(userId) {
   const users = fetch(`${API_URL}/api/user/${userId}`, {
     method: "GET",
     headers: {
-      "access-control-allow-origin": "*",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
       "Content-type": "application/json; charset=UTF-8"
     }
   })
