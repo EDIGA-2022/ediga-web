@@ -42,8 +42,6 @@ import typography from "assets/theme/base/typography";
 function ProfileInfoCard({
   title,
   description,
-  info,
-  social,
   action,
   shadow,
   genre,
@@ -53,70 +51,70 @@ function ProfileInfoCard({
   endForm,
   photos
 }) {
-  const labels = [
-    'Genre',
-    'Country',
-    'Years old',
+  const labels1 = [
+    'Género',
+    'País',
+    'Edad',
+  ];
+  const labels2 = [
     'Lo que compartí estos días define lo que soy',
     'Lo que compartí estos días define lo que quiero que vean de mí',
+  ];
+  const labels3 = [
     'He establecido contacto con otras personas a través de Instagram por afinidad de género',
     'Los contenidos de otras personas me han hecho reflexionar sobre mi identidad de género',
   ];
 
-  const values = [];
+  const values1 = [];
+  const values2 = [];
+  const values3 = [];
+
   const { socialMediaColors } = colors;
   const { size } = typography;
 
-  values.push(genre);
-  values.push(country);
-  values.push(yearsOld);
-  values.push(middleForm.answer1);
-  values.push(middleForm.answer2);
-  values.push(endForm.answer1);
-  values.push(endForm.answer2);
+  values1.push(genre);
+  values1.push(country);
+  values1.push(yearsOld);
+  values2.push(middleForm.answer1);
+  values2.push(middleForm.answer2);
+  values3.push(endForm.answer1);
+  values3.push(endForm.answer2);
 
   // Render the card info items
-  const renderItems = labels.map((label, key) => (
-      <MDBox key={label} display="flex" py={1} pr={2}>
-        <MDTypography variant="button" fontWeight="bold">
-          {label}: &nbsp;
-        </MDTypography>
-        <MDTypography variant="button" fontWeight="regular" color="text">
-          &nbsp;{values[key]}
-        </MDTypography>
+  function renderItems(labels, values) {
+    return labels.map((label, key) => (
+      <MDBox key={label} display="flex" >
+        <div style={{ flexDirection: 'column' }}>
+          <MDTypography variant="button" fontWeight="bold">
+            {label}: &nbsp;
+          </MDTypography>
+          <MDTypography variant="button" fontWeight="regular" color="text">
+            &nbsp;{values[key] ? values[key] : "-"}
+          </MDTypography>
+        </div>
       </MDBox>
-  ));
-
+    ));
+  }
 
   return (
     <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
       <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
-        <MDTypography variant="h6" fontWeight="medium" textTransform="capitalize">
+        <MDTypography variant="h6" fontWeight="medium" >
           {title}
         </MDTypography>
         <MDTypography component={Link} to={action.route} variant="body2" color="secondary">
-          <Tooltip title={action.tooltip} placement="top">
-            <Icon>edit</Icon>
-          </Tooltip>
         </MDTypography>
       </MDBox>
       <MDBox p={2}>
-        {/* <MDBox mb={2} lineHeight={1}>
-          <MDTypography variant="button" color="text" fontWeight="light">
-            {description}
-          </MDTypography>
-        </MDBox>
-        <MDBox opacity={0.3}>
-          <Divider />
-        </MDBox> */}
         <MDBox>
-          {renderItems}
-          {/* <MDBox display="flex" py={1} pr={2}>
-            <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
-              social: &nbsp;
-            </MDTypography>
-            {renderSocial}
-          </MDBox> */}
+          <div>{"Preguntas iniciales"}</div>
+          {renderItems(labels1, values1)}
+          <Divider />
+          {values2.length && <div>{"Preguntas intermedias"}</div>}
+          {values2.length && renderItems(labels2, values2)}
+          <Divider />
+          {values3.length && <div>{"Preguntas finales"}</div>}
+          {values3.length && renderItems(labels3, values3)}
         </MDBox>
       </MDBox>
     </Card>

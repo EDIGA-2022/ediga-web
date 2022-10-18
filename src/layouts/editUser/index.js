@@ -36,7 +36,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 // API requests
 import editUserAPI from "../../api/editUser"
@@ -56,6 +56,7 @@ function EditUser() {
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
   const [alias, setAlias] = useState('');
+  const navigate = useNavigate();
 
 
   useEffect(function effectFunction() {
@@ -208,6 +209,9 @@ function EditUser() {
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitUser}>
                     Confirmar edición
+                </MDButton>
+                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
+                    Cancelar
                 </MDButton>
               </MDBox>
             </Card>

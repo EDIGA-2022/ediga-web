@@ -34,12 +34,12 @@ import MDBox from "components/MDBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
-import ProfilesList from "examples/Lists/ProfilesList";
+import ProfilePhotosList from "examples/Lists/ProfilePhotosList";
 
 // Images
 import React from "react";
 import 'react-quill/dist/quill.snow.css';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 // API requests
 import getUserProfile from "../../api/getUserProfile"
@@ -47,6 +47,7 @@ const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 function User() {
   const { userId } = useParams();
+  const navigate = useNavigate();
 
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
@@ -66,74 +67,32 @@ function User() {
 
 
   useEffect(() => {
-    console.log("REACT_APP_API_URL", REACT_APP_API_URL)
     async function fetchUser() {
       await getUserProfile(userId)
         .then((response) => response.json())
         .then(newUser => {
-          // const newUser = {...user};
-          // newUser.photos = response.photos;
-          console.log("user", newUser)
           setUser(newUser);
         });
     }
     fetchUser()
   }, []);
 
-  console.log("user", user, user.photos)
-
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <DashboardNavbar onArrowClick={() => navigate(-2)}/>
       <MDBox mb={2} />
-      {/* <Header> */}
       <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
-        <Tab label={"App ediga"} />
+        <Tab label="App ediga" />
         <Tab label="Observaciones" />
         <Tab label="Diario de campo" />
       </Tabs>
-      {/* {user.photos.forEach(photo => {
-        console.log("hola!");
-        <div>
-          <img src={`data:image/jpeg;base64,${photo.photo.replace('\n', '')}`} />
-        <div>
-          <img src={`data:image/jpeg;base64,${(photo.photo)}`} />
-        </div>
-
-      })} */}
       {tabValue === 0 && <MDBox mt={5} mb={3}>
         <Grid container spacing={1}>
-          {/* <Grid item xs={12} md={6} xl={4}>
-            <PlatformSettings />
-          </Grid> */}
           <Grid item xs={12} md={12} xl={6} sx={{ display: "flex" }}>
             <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
             <ProfileInfoCard
-              title="Informacion"
+              title="Informacion del participante"
               description=""
-              info={{
-                fullName: "Alec M. Thompson",
-                mobile: "(44) 123 1234 123",
-                email: "alecthompson@mail.com",
-                location: "USA",
-              }}
-              social={[
-                {
-                  link: "https://www.facebook.com/CreativeTim/",
-                  icon: <FacebookIcon />,
-                  color: "facebook",
-                },
-                {
-                  link: "https://twitter.com/creativetim",
-                  icon: <TwitterIcon />,
-                  color: "twitter",
-                },
-                {
-                  link: "https://www.instagram.com/creativetimofficial/",
-                  icon: <InstagramIcon />,
-                  color: "instagram",
-                },
-              ]}
               action={{ route: "", tooltip: "Edit Profile" }}
               shadow={true}
               genre={user.genre}
@@ -145,7 +104,7 @@ function User() {
             <Divider orientation="vertical" sx={{ mx: 0 }} />
           </Grid>
           <Grid item xs={12} xl={6}>
-            <ProfilesList title="Imagenes" photos={user.photos} shadow={true} />
+            <ProfilePhotosList title="Imagenes" photos={user.photos} shadow={true} />
           </Grid>
         </Grid>
       </MDBox>}

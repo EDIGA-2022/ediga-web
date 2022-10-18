@@ -53,7 +53,7 @@ import {
   setOpenConfigurator,
 } from "context";
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function DashboardNavbar({ absolute, light, isMini, onArrowClick }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
@@ -131,7 +131,13 @@ function DashboardNavbar({ absolute, light, isMini }) {
     >
       <Toolbar sx={(theme) => navbarContainer(theme)}>
         <MDBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
-          <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} />
+          {!onArrowClick && <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} />}
+          {onArrowClick && <div onClick={() => onArrowClick()} style={{
+            cursor: 'pointer',
+            fontSize: 'xx-large',
+            fontWeight: 'bold',
+            marginLeft: '8px'
+          }}>{"<"}</div>}
         </MDBox>
         {isMini ? null : (
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>

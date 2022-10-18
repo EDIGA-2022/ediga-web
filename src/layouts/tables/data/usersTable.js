@@ -95,7 +95,7 @@ function GetUsers() {
           <MDBox display="flex" alignItems="center" lineHeight={1}>
             <MDAvatar src={profilePhoto} alias={row.userId} size="sm" />
             <MDBox ml={2} lineHeight={1}>
-            <MDTypography component="a" href="#" display="block" variant="button" fontWeight="medium" onClick={() => navigate("/user/profile/" + row.userId)}>
+            <MDTypography component="a" href="#" display="block" variant="button" fontWeight="medium" onClick={() => navigate("/user/" + row.userId)}>
                 {row.userId}
               </MDTypography>
             <MDTypography variant="caption">{row.instagramProfile}</MDTypography>
