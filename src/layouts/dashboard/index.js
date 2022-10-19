@@ -35,8 +35,23 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 
+import { useState, useEffect } from "react";
+
+// import metricsApi 
+import { getMetrics } from "../../api/getMetrics"
+
+
+
+
+
 function Dashboard() {
   const { sales, tasks } = reportsLineChartData;
+  useEffect(() => {
+    getMetrics().then((response) => {
+      console.log(response);
+    });
+  }, []);
+
 
   return (
     <DashboardLayout>
@@ -47,8 +62,8 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="dark"
-                icon="weekend"
-                title="Bookings"
+                icon="person"
+                title="Cantidad de usuarios"
                 count={281}
                 percentage={{
                   color: "success",
