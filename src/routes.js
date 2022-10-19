@@ -46,6 +46,7 @@ import Logout from "layouts/authentication/logout";
 import CreateNewUser from "layouts/createNewUser"
 import EditUser from "layouts/editUser"
 import UserImage from "layouts/userImage"
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -65,7 +66,11 @@ const routes = [
     key: "tables",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/users",
-    component: <Tables />,
+
+    component:
+      <DashboardLayout>
+        <Tables type={"users"} />
+      </DashboardLayout>,
   },
   {
     type: "collapse",

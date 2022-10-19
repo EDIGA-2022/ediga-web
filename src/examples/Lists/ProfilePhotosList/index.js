@@ -32,9 +32,8 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { useNavigate } from "react-router-dom";
 
-function ProfilePhotosList({ title, photos, shadow }) {
+function ProfilePhotosList({ title, photos, shadow, userId }) {
   const navigate = useNavigate();
-
   return (
     <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
       <MDBox pt={2} px={2}>
@@ -54,6 +53,7 @@ function ProfilePhotosList({ title, photos, shadow }) {
                   {
                     state: {
                       photoId: item.photoId,
+                      userId,
                       photo: JSON.stringify(item.photo),
                       answer1: item.answer1,
                       answer2: item.answer2,
