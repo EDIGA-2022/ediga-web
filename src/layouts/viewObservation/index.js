@@ -81,7 +81,6 @@ function ViewObservation() {
             setObservation(response.observation);
             setPhoto(response.edigaUserPhoto);
             setSelectedImage(true);
-            console.log(response.edigaUserPhoto);
           })
         });
     }

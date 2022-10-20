@@ -125,7 +125,6 @@ function EditObservation() {
             setObservation(response.observation);
             setPhoto(response.edigaUserPhoto);
             setSelectedImage(true);
-            console.log(response.edigaUserPhoto);
           })
         });
     }
