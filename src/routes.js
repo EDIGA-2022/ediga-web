@@ -48,6 +48,7 @@ import EditUser from "layouts/editUser"
 import UserImage from "layouts/userImage"
 import CreateNewObservation from "layouts/createNewObservation"
 import EditObservation from "layouts/editObservation"
+import ViewObservation from "layouts/viewObservation"
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 
@@ -157,6 +158,14 @@ const routes = [
         icon: <Icon fontSize="small">editObservation</Icon>,
         route: "/editObservation/:itemId",
         component: <EditObservation />,
+      },
+      {
+        type: "collapse",
+        name: "View Observation",
+        key: "viewObservation",
+        icon: <Icon fontSize="small">viewObservation</Icon>,
+        route: "/viewObservation/:itemId",
+        component: <ViewObservation />,
       }
     ]
   }

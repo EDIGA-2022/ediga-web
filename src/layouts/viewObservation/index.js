@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -38,13 +38,17 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
-// API requests
-import createObservationAPI from "../../api/createObservation";
+// API requests 
+import editObservationAPI from "../../api/editObservation";
+import getObservationAPI from "../../api/getObservation";
 import { useNavigate, useParams } from "react-router-dom";
+import moment from 'moment';
 
-function CreateNewObservation() {
+function ViewObservation() {
   
-  const { itemId } = useParams();
+  const { itemId } = useParams(); 
+  const [userId, setUserId] = useState('');
+  const [observationId, setObservationId] = useState('');
   const [title, setTitle] = useState('');
   const [type, setType] = useState('1');
   const [likes, setLikes] = useState('');
@@ -60,68 +64,52 @@ function CreateNewObservation() {
   const [showMsg, setShowMsg] = useState(false);
   const navigate = useNavigate();
 
-  function handleHasMusicChange() {
-    if(hasMusic){
-        setHasMusic(false);
+  useEffect(function effectFunction() {
+
+    async function fetchObservation() {
+        await getObservationAPI(itemId).then(res => {
+          res.json().then(response => {
+            setObservationId(itemId);
+            setUserId(response.userId);
+            setTitle(response.title);
+            setType(response.type);
+            setLikes(response.likes);
+            setComments(response.comments);
+            setMusic(response.music);
+            setDate(moment(new Date(response.date)).format("YYYY-MM-DD"));
+            setHasMusic(response.hasMusic);
+            setObservation(response.observation);
+            setPhoto(response.edigaUserPhoto);
+            setSelectedImage(true);
+            console.log(response.edigaUserPhoto);
+          })
+        });
     }
-    else{
-        setHasMusic(true);
+
+    fetchObservation();
+
+}, []);
+
+const handleFileRead = async (event) => {
+  const file = event.target.files[0]
+  const base64 = await convertBase64(file)
+  setPhoto(base64);
+  setSelectedImage(true);
+}
+
+const convertBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file)
+    fileReader.onload = () => {
+      resolve(fileReader.result);
     }
-};
+    fileReader.onerror = (error) => {
+      reject(error);
+    }
+  })
+}
 
-  const jsonError = (name) => (
-    <MDTypography variant="body2" color="white">
-      Error: {name}.
-    </MDTypography>
-  );
-
-  const jsonSuccess = () => (
-    <MDTypography variant="body2" color="white">
-      Se ha creado una nueva observación.
-    </MDTypography>
-  );
-
-  const submitObservation = async () => {
-    const data = {
-      userId : itemId,
-      title: title,
-      type: type,
-      likes: likes,
-      comments: comments,
-      music: music,
-      date: date,
-      hasMusic: hasMusic,
-      observation: observation,
-      edigaUserPhoto: photo
-   }
-   createObservationAPI(data).then(response => {
-    setIsSuccess(response.ok);
-    setShowMsg(true);
-    response.json().then(msg => {
-      setJsonResponseMessage(msg.message);
-    })
-   });
-  }
-
-  const handleFileRead = async (event) => {
-    const file = event.target.files[0]
-    const base64 = await convertBase64(file)
-    setPhoto(base64);
-    setSelectedImage(true);
-  }
-
-  const convertBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file)
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      }
-      fileReader.onerror = (error) => {
-        reject(error);
-      }
-    })
-  }
 
 
   return (
@@ -132,12 +120,12 @@ function CreateNewObservation() {
           <Grid item xs={12} lg={11}>
             <Card>
               <MDBox p={2}>
-                <MDTypography variant="h5">Nueva observación</MDTypography>
+                <MDTypography variant="h5">Observación</MDTypography>
               </MDBox>
               <form>
                 <MDBox p={2}>
                   <MDBox p={1}></MDBox>
-                  <TextField id="standard-basic" label="Título de la observación" variant="outlined" onChange={(e) => setTitle(e.target.value)} style = {{width: 650}}/>
+                  <TextField id="standard-basic" label="Título de la observación" variant="outlined" value={title} readOnly={true} style = {{width: 650}}/>
                 </MDBox>
                 <Grid container spacing={3} justifyContent="center">
                     <Grid item xs={4} lg={4}>
@@ -145,9 +133,9 @@ function CreateNewObservation() {
                             <MDTypography color="info" fontWeight="regular" variant="h6">Tipo</MDTypography>
                             <RadioGroup
                             aria-labelledby="demo-radio-buttons-group-label"
-                            defaultValue="P"
+                            value={type}
                             name="radio-buttons-group"
-                            onChange={(e) => setType(e.target.value)}
+                            readOnly={true}
                             >
                             <FormControlLabel value="P" control={<Radio />} label="Publicación" />
                             <FormControlLabel value="S" control={<Radio />} label="Historia" />
@@ -165,10 +153,10 @@ function CreateNewObservation() {
                             label="Likes"
                             type="number"
                             value={likes}
+                            readOnly={true}
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                            onChange={(e) => setLikes(e.target.value)}
                             />
                         </MDBox>
                         <MDBox p={2}>
@@ -179,10 +167,10 @@ function CreateNewObservation() {
                             label="Comentarios"
                             type="number"
                             value={comments}
+                            readOnly={true}
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                            onChange={(e) => setComments(e.target.value)}
                             />
                         </MDBox>
                     </Grid>
@@ -195,10 +183,10 @@ function CreateNewObservation() {
                             label="Fecha"
                             type="date"
                             value={date}
+                            readOnly={true}
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                            onChange={(e) => setDate(e.target.value)}
                             />
                       </MDBox>
                       <MDBox p={1}>
@@ -208,11 +196,11 @@ function CreateNewObservation() {
                         <MDTypography color="info" fontWeight="regular" variant="h6">Contiene música?</MDTypography>
                         <Switch
                             checked={hasMusic}
-                            onChange={handleHasMusicChange}
+                            disabled={true}
                             inputProps={{ 'aria-label': 'controlled' }}
                         />
                         </Grid>
-                        <TextField id="standard-basic" label="Música" variant="standard" onChange={(e) => setMusic(e.target.value)} disabled={!hasMusic}/>
+                        <TextField id="standard-basic" label="Música" variant="standard" value={music} readOnly={true} />
                         </MDBox>
                     </Grid>
                     <MDBox p={2}></MDBox>
@@ -220,7 +208,9 @@ function CreateNewObservation() {
                 <Grid container spacing={1} justifyContent="left">
                     <Grid item xs={4} lg={4}> 
                         <MDBox p={1}>
-                                <ReactQuill theme="snow" value={observation} onChange={setObservation} style = {{width: 650, height: 300}}/>
+                                <ReactQuill    value={observation}
+                                              readOnly={true}
+                                              theme={"bubble"} style = {{width: 650, height: 300}}/>
                         </MDBox>
                     </Grid>
                     <Grid item xs={4} lg={4}>
@@ -228,16 +218,7 @@ function CreateNewObservation() {
                     </Grid>
                     <Grid item xs={4} lg={4}>
                         <MDBox p={1}>
-                        <TextField
-                          id="edigaUserPhoto"
-                          type="file"
-                          inputProps={{ accept: 'image/*' }}
-                          label="Foto"
-                          name="photo"
-                          onChange={e => handleFileRead(e)}
-                          size="small"
-                          variant="standard"
-                        />
+                        
                         </MDBox>
                         <MDBox>
                         {selectedImage && (
@@ -249,22 +230,9 @@ function CreateNewObservation() {
                 </Grid> 
                 <MDBox p={3}></MDBox>            
               </form>
-              {showMsg &&!isSuccess && <MDBox pt={2} px={2}>
-                <MDAlert color="error">
-                  {jsonError(jsonResponseMessage)}
-                </MDAlert>
-              </MDBox>}
-             {showMsg && isSuccess && <MDBox pt={2} px={2}>
-                <MDAlert color="success">
-                  {jsonSuccess()}
-                </MDAlert>
-              </MDBox>}
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitObservation}>
-                    Crear observación
-                </MDButton>
                 <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
-                    Cancelar
+                    Volver
                 </MDButton>
               </MDBox>
             </Card>
@@ -276,4 +244,4 @@ function CreateNewObservation() {
   );
 }
 
-export default CreateNewObservation;
+export default ViewObservation;

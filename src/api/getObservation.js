@@ -4,7 +4,7 @@ function getObservation(observationId) {
   return fetch(`${API_URL}/api/observation/${observationId}`, {
     method: "GET",
     headers: {
-      "access-control-allow-origin": "*",
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
       "Content-type": "application/json; charset=UTF-8"
     }
   })  

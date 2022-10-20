@@ -46,8 +46,7 @@ import moment from 'moment';
 
 function EditObservation() {
   
-  //const { itemId } = useParams(); esto es el id de la observación
-  const itemId  = "70f01dfb-4be5-46a4-973a-27eae22cb4dd";
+  const { itemId } = useParams(); 
   const [userId, setUserId] = useState('');
   const [observationId, setObservationId] = useState('');
   const [title, setTitle] = useState('');
@@ -165,7 +164,7 @@ const convertBase64 = (file) => {
           <Grid item xs={12} lg={11}>
             <Card>
               <MDBox p={2}>
-                <MDTypography variant="h5">Nueva observación</MDTypography>
+                <MDTypography variant="h5">Editar observación</MDTypography>
               </MDBox>
               <form>
                 <MDBox p={2}>
@@ -296,7 +295,7 @@ const convertBase64 = (file) => {
                 <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitObservation}>
                     Editar observación
                 </MDButton>
-                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-1)}>
+                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
                     Cancelar
                 </MDButton>
               </MDBox>
