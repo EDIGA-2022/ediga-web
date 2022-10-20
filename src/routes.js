@@ -49,6 +49,8 @@ import UserImage from "layouts/userImage"
 import CreateNewObservation from "layouts/createNewObservation"
 import EditObservation from "layouts/editObservation"
 import ViewObservation from "layouts/viewObservation"
+import CreateDiaryEntry from "layouts/createDiaryEntry"
+import EditDiaryEntry from "layouts/editDiaryEntry"
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 
@@ -166,6 +168,22 @@ const routes = [
         icon: <Icon fontSize="small">viewObservation</Icon>,
         route: "/viewObservation/:itemId",
         component: <ViewObservation />,
+      },
+      {
+        type: "collapse",
+        name: "Create diary entry",
+        key: "createDiaryEntry",
+        icon: <Icon fontSize="small">createDiaryEntry</Icon>,
+        route: "/createDiaryEntry/:itemId",
+        component: <CreateDiaryEntry />,
+      },
+      {
+        type: "collapse",
+        name: "Edit diary entry",
+        key: "editDiaryEntry",
+        icon: <Icon fontSize="small">editDiaryEntry</Icon>,
+        route: "/editDiaryEntry/:itemId",
+        component: <EditDiaryEntry />,
       }
     ]
   }

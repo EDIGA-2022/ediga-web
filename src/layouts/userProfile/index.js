@@ -130,6 +130,9 @@ function User() {
       {tabValue === 1 &&
           <Tables type={"observations"} userId={userId} />
       }
+      {tabValue === 2 &&
+          <Tables type={"other"} userId={userId} />
+      }
     </DashboardLayout>
   );
 };

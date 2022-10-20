@@ -51,6 +51,16 @@ function Tables(props) {
     navigate('/createNewObservation/' + props.userId);
   };
 
+  const navigateToCreateNewDiaryEntry = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/createDiaryEntry/' + props.userId);
+  };
+
+  const navigateToEditDiaryEntry = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/editDiaryEntry/' + props.userId);
+  };
+
   return (
     <div>
       <MDBox pt={6} pb={3}>
@@ -74,6 +84,12 @@ function Tables(props) {
                 <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={props.type === 'users' ? navigateToCreateNewUser : navigateToCreateNewObservation}>
                   +
                 </MDButton>
+                {props.type === 'other' && <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={props.type === 'other' ? navigateToCreateNewDiaryEntry : ''}>
+                  entrada campo
+                </MDButton>}
+                {props.type === 'other' && <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={props.type === 'other' ? navigateToEditDiaryEntry : ''}>
+                  editar entrada campo
+                </MDButton>}
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
