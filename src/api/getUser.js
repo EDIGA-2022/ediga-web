@@ -4,7 +4,6 @@ function getUser(userId) {
   return fetch(`${API_URL}/api/user/${userId}`, {
     method: "GET",
     headers: {
-      "access-control-allow-origin": "*",
       "Content-type": "application/json; charset=UTF-8"
     }
   })  

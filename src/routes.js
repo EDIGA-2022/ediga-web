@@ -42,11 +42,14 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import User from "layouts/userProfile";
+import Logout from "layouts/authentication/logout";
 import CreateNewUser from "layouts/createNewUser"
 import EditUser from "layouts/editUser"
 import UserImage from "layouts/userImage"
 import CreateNewObservation from "layouts/createNewObservation"
 import EditObservation from "layouts/editObservation"
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -66,7 +69,11 @@ const routes = [
     key: "tables",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/users",
-    component: <Tables />,
+
+    component:
+      <DashboardLayout>
+        <Tables type={"users"} />
+      </DashboardLayout>,
   },
   {
     type: "collapse",
@@ -78,7 +85,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign In",
+    name: "Iniciar sesión",
     key: "sign-in",
     icon: <Icon fontSize="small">login</Icon>,
     route: "/authentication/sign-in",
@@ -86,12 +93,21 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign Up",
+    name: "Registrar investigador",
     key: "sign-up",
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
   },
+  {
+    type: "collapse",
+    name: "Cerrar sesión",
+    key: "logout",
+    icon: <Icon fontSize="small">logout</Icon>,
+    route: "/authentication/logout",
+    component: <Logout />,
+  },
+  
   {
     collapse: [
       {

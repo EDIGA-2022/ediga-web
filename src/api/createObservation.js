@@ -1,7 +1,7 @@
 const API_URL = process.env.REACT_APP_API_URL;
 
-async function createObservation(data) {
-    return await fetch(`${API_URL}/api/createObservation`, {
+function createObservation(data) {
+    return fetch(`${API_URL}/api/observations`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

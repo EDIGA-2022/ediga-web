@@ -4,7 +4,6 @@ function getUserProfile(userId) {
   return fetch(`${API_URL}/api/user/profile/${userId}`, {
     method: "GET",
     headers: {
-      "access-control-allow-origin": "*",
       "Content-type": "application/json; charset=UTF-8"
     }
   })

@@ -14,6 +14,7 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from "react";
+import Tables from "../tables";
 
 
 // @mui material components
@@ -92,7 +93,7 @@ function User() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar onArrowClick={() => navigate(-2)}/>
+      <DashboardNavbar onArrowClick={() => navigate(-2)} />
       <MDBox mb={2} />
       <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
         <Tab label="App ediga" />
@@ -117,42 +118,18 @@ function User() {
             <Divider orientation="vertical" sx={{ mx: 0 }} />
           </Grid>
           <Grid item xs={12} xl={6}>
-            <ProfilePhotosList title="Imagenes" photos={user.photos} shadow={true} />
+            <ProfilePhotosList
+              title="Imagenes"
+              photos={user.photos}
+              shadow={true}
+              userId={userId}
+            />
           </Grid>
         </Grid>
       </MDBox>}
-      {tabValue === 1 &&       <MDBox pt={6} pb={3}>
-        <Grid container spacing={6}>
-          <Grid item xs={12}>
-            <Card>
-              <MDBox
-                mx={2}
-                mt={-3}
-                py={3}
-                px={2}
-                variant="gradient"
-                bgColor="info"
-                borderRadius="lg"
-                coloredShadow="info"
-                style={{ display: "flex" }}
-              >
-                <MDTypography variant="h6" color="white">
-                  Observaciones
-                </MDTypography>
-                <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={navigateToCreateNewObservation}>
-                  +
-                </MDButton>
-                <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={navigateToEditObservation}>
-                  Editar
-                </MDButton>
-              </MDBox>
-              <MDBox pt={3}>
-                
-              </MDBox>
-            </Card>
-          </Grid>
-        </Grid>
-      </MDBox>}
+      {tabValue === 1 &&
+          <Tables type={"observations"} userId={userId} />
+      }
     </DashboardLayout>
   );
 };

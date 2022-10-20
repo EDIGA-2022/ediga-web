@@ -18,39 +18,27 @@ import { useState, useEffect } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
-import Divider from "@mui/material/Divider";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-
-// @mui icons
-import FacebookIcon from "@mui/icons-material/Facebook";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
-
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import ProfilesList from "examples/Lists/ProfilesList";
 import ImageInfoCard from "examples/Cards/InfoCards/ImageInfoCard";
 
 // Images
 import React from "react";
 import 'react-quill/dist/quill.snow.css';
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import Card from "@mui/material/Card";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import MDButton from "components/MDButton";
 
 // API requests
-import getUserProfile from "../../api/getUserProfile"
-const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+import createObservation from "../../api/createObservation";
 
 function UserImage() {
     const navigate = useNavigate();
-
     useEffect(() => {
 
     }, []);
@@ -62,30 +50,92 @@ function UserImage() {
         photo,
         answer1,
         answer2,
-        answer3 } = state;
+        answer3,
+        userId,
+    } = state;
+
+    const modules = {
+        toolbar: [
+            [{ font: [] }],
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            ["bold", "italic", "underline", "strike"],
+            [{ color: [] }, { background: [] }],
+            [{ script: "sub" }, { script: "super" }],
+            ["blockquote", "code-block"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+            ["link", "image", "video"],
+            ["clean"],
+        ],
+    }
+    const [addingObservation, setAddingObservation] = useState(false);
+    const [observationText, setObservationText] = useState('');
+
+    const onAddObservation = () => {
+        setAddingObservation(true);
+    }
+
+    const handleObservationTextChange = (value) => {
+        setObservationText(value);
+    }
+
+    const onCancel = () => {
+        setAddingObservation(false);
+    }
+
+    const onSave = () => {
+        createObservation({
+            photoId,
+            userId,
+            observation: observationText,
+        })
+        setAddingObservation(false);
+    }
 
     return (
         <DashboardLayout>
             <DashboardNavbar onArrowClick={() => navigate(-1)} />
             <MDBox mb={2} />
-            <Grid container spacing={1}>
-                <Grid item xs={12} md={12} xl={6} sx={{ display: "flex", height: 400 }}>
-                    <img
-                        src={`data:image/jpeg;base64,${photo.replaceAll('"', '')}`}
-                        loading="lazy"
-                        height="350"
-                    />
-                </Grid>
+            <Grid container spacing={1} sx={{ width: '1600px' }}>
                 <Grid item xs={12} md={12} xl={6} sx={{ display: "flex", height: 400 }}>
                     <ImageInfoCard
                         answer1={answer1}
                         answer2={answer2}
                         answer3={answer3}
                         shadow
+                        photoSrc={`data:image/jpeg;base64,${photo.replaceAll('"', '')}`}
                     />
                 </Grid>
             </Grid>
-
+            {!addingObservation && <div style={{ padding: '16px 0' }}>
+                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={() => onAddObservation()}>
+                    Añadir observacion
+                </MDButton>
+            </div>}
+            {addingObservation &&
+                <div>
+                    <MDBox p={2} style={{ padding: '24px 0' }}>
+                        <Grid >
+                            <div>
+                                <ReactQuill
+                                    modules={modules}
+                                    style={{ width: '80%', background: 'white' }}
+                                    theme="snow"
+                                    onChange={handleObservationTextChange}
+                                />
+                            </div>
+                        </Grid>
+                    </MDBox>
+                    <div style={{ padding: '16px 0' }}>
+                        <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={() => onSave()}>
+                            Guardar
+                        </MDButton>
+                        <MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => onCancel()}>
+                            Cancelar
+                        </MDButton>
+                    </div>
+                </div>
+            }
         </DashboardLayout>
     );
 };

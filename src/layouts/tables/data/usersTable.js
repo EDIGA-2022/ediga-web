@@ -56,27 +56,29 @@ function GetUsers() {
     getUsers().then((response) => {
       if (response.ok) {
         response.json().then((r) => {
-          setRows(r); 
+          setRows(r);
         });
-        
       } else {
+        if (response.status === 401) {
+          navigate("/authentication/sign-in");
+        }
         return Promise.reject(response);
       }
     })
-    .catch((e) => {
-      console.log('error',e);
-    })
-    .finally(() => {
-      setLoadingRows(false);
-    });
+      .catch((e) => {
+        console.log('error', e);
+      })
+      .finally(() => {
+        setLoadingRows(false);
+      });
   }
-  
-  
+
+
   useEffect(() => {
     fetchAllUsers();
   }, []);
 
- const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return {
     columns: [
