@@ -36,6 +36,9 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
 import ProfilePhotosList from "examples/Lists/ProfilePhotosList";
+import Card from "@mui/material/Card";
+import MDTypography from "components/MDTypography";
+import MDButton from "components/MDButton";
 
 // Images
 import React from "react";
@@ -77,6 +80,16 @@ function User() {
     }
     fetchUser()
   }, []);
+
+  const navigateToCreateNewObservation = () => {
+    // 👇️ navigate to /navigateToCreateNewObservation
+    navigate("/createNewObservation/" + userId);
+  };
+
+  const navigateToEditObservation = () => {
+    // 👇️ navigate to /navigateToCreateNewObservation
+    navigate("/editObservation/" + userId);
+  };
 
   return (
     <DashboardLayout>

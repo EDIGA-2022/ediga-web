@@ -46,6 +46,11 @@ function Tables(props) {
     navigate('/createNewUser');
   };
 
+  const navigateToCreateNewObservation = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/createNewObservation/' + props.userId);
+  };
+
   return (
     <div>
       <MDBox pt={6} pb={3}>
@@ -66,7 +71,7 @@ function Tables(props) {
                 <MDTypography variant="h6" color="white">
                   {title}
                 </MDTypography>
-                <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={navigateToCreateNewUser}>
+                <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={props.type === 'users' ? navigateToCreateNewUser : navigateToCreateNewObservation}>
                   +
                 </MDButton>
               </MDBox>

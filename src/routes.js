@@ -46,7 +46,11 @@ import Logout from "layouts/authentication/logout";
 import CreateNewUser from "layouts/createNewUser"
 import EditUser from "layouts/editUser"
 import UserImage from "layouts/userImage"
+import CreateNewObservation from "layouts/createNewObservation"
+import EditObservation from "layouts/editObservation"
+import ViewObservation from "layouts/viewObservation"
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -138,6 +142,30 @@ const routes = [
         icon: <Icon fontSize="small">userImage</Icon>,
         route: "/image/:imageId",
         component: <UserImage />,
+      },
+      {
+        type: "collapse",
+        name: "Create New Observation",
+        key: "createNewObservation",
+        icon: <Icon fontSize="small">createNewObservation</Icon>,
+        route: "/createNewObservation/:itemId",
+        component: <CreateNewObservation />,
+      },
+      {
+        type: "collapse",
+        name: "Edit Observation",
+        key: "editObservation",
+        icon: <Icon fontSize="small">editObservation</Icon>,
+        route: "/editObservation/:itemId",
+        component: <EditObservation />,
+      },
+      {
+        type: "collapse",
+        name: "View Observation",
+        key: "viewObservation",
+        icon: <Icon fontSize="small">viewObservation</Icon>,
+        route: "/viewObservation/:itemId",
+        component: <ViewObservation />,
       }
     ]
   }

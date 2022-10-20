@@ -70,7 +70,7 @@ function GetObservations(userId) {
       rows.map((row) => {
         return {
           title: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => navigate("/viewObservation/" + row.observationId )}>
               {row.title}
             </MDTypography>
           ),
