@@ -28,7 +28,7 @@ import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
 // Data
-import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
+
 import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 
 // Dashboard components
@@ -39,17 +39,80 @@ import { useState, useEffect } from "react";
 
 // import metricsApi 
 import { getMetrics } from "../../api/getMetrics"
+import MDAlert from "components/MDAlert";
 
 
 
 
 
 function Dashboard() {
-  const { sales, tasks } = reportsLineChartData;
-  useEffect(() => {
-    getMetrics().then((response) => {
-      console.log(response);
+  // total users variable
+  const [totalUsers, setTotalUsers] = useState(0);
+
+
+  const [gendersBarChartData, setGendersBarChartData] = useState({labels: [], datasets: [] });
+  const [countriesBarChartData, setCountriesBarChartData] = useState({ labels: [], datasets: [] });
+
+  const [data, setData] = useState(false);
+
+
+
+  function setCountriesInChart(countries) {
+    var labels = [];
+    var datasets = {
+      label: "Usuarios",
+      data: [],
+    };
+    countries.forEach(element => {
+      labels.push(element.country);
+      datasets.data.push(element.amount);
     });
+
+    setCountriesBarChartData({
+      labels: labels,
+      datasets: datasets,
+    });
+  }
+
+  function setGendersInChart(genders) {
+    var labels = [];
+    var datasets = {
+      label: "Cantidad",
+      data: [],
+    };
+
+    var otherGenders = 0;
+    genders.forEach(element => {
+      if (element.genderCode !== 6) {
+        labels.push(element.gender);
+        datasets.data.push(element.amount);
+      } else {
+        otherGenders += element.amount;
+      }
+    });
+    labels.push("Otros");
+    datasets.data.push(otherGenders);
+    setGendersBarChartData({
+      labels: labels,
+      datasets: datasets,
+    });
+  }
+  const { sales, tasks } = reportsLineChartData;
+
+  useEffect(() => {
+
+    getMetrics().then((response) => {
+      if (response.ok) {
+        response.json().then(r => {
+          setTotalUsers(r.totalUsers)
+          setCountriesInChart(r.countries);
+          setGendersInChart(r.userGenders);
+          setData(true);
+        })
+      }
+    });
+
+
   }, []);
 
 
@@ -64,7 +127,7 @@ function Dashboard() {
                 color="dark"
                 icon="person"
                 title="Cantidad de usuarios"
-                count={281}
+                count={totalUsers}
                 percentage={{
                   color: "success",
                   amount: "+55%",
@@ -122,13 +185,25 @@ function Dashboard() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
-                <ReportsBarChart
-                  color="info"
-                  title="website views"
+                {data && <ReportsBarChart
+                  color="success"
+                  title="Usuarios por país"
                   description="Last Campaign Performance"
                   date="campaign sent 2 days ago"
-                  chart={reportsBarChartData}
-                />
+                  chart={countriesBarChartData}
+                />}
+              </MDBox>
+            </Grid>
+
+            <Grid item xs={12} md={6} lg={4}>
+              <MDBox mb={3}>
+                {data && <ReportsBarChart
+                  color="info"
+                  title="Géneros"
+                  description="Last Campaign Performance"
+                  date="just updated"
+                  chart={gendersBarChartData}
+                />}
               </MDBox>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -143,17 +218,6 @@ function Dashboard() {
                   }
                   date="updated 4 min ago"
                   chart={sales}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
-                  date="just updated"
-                  chart={tasks}
                 />
               </MDBox>
             </Grid>
