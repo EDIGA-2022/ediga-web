@@ -49,9 +49,9 @@ function Dashboard() {
   // total users variable
   const [totalUsers, setTotalUsers] = useState(0);
 
-
-  const [gendersBarChartData, setGendersBarChartData] = useState({labels: [], datasets: [] });
+  const [gendersBarChartData, setGendersBarChartData] = useState({ labels: [], datasets: [] });
   const [countriesBarChartData, setCountriesBarChartData] = useState({ labels: [], datasets: [] });
+  const [agesBarChartData, setAgesBarChartData] = useState({ labels: [], datasets: [] });
 
   const [data, setData] = useState(false);
 
@@ -69,6 +69,23 @@ function Dashboard() {
     });
 
     setCountriesBarChartData({
+      labels: labels,
+      datasets: datasets,
+    });
+  }
+
+  function setAgesInChart(ages) {
+    var labels = [];
+    var datasets = {
+      label: "Usuarios",
+      data: [],
+    };
+    ages.forEach(element => {
+      labels.push(element.age);
+      datasets.data.push(element.amount);
+    });
+
+    setAgesBarChartData({
       labels: labels,
       datasets: datasets,
     });
@@ -107,6 +124,7 @@ function Dashboard() {
           setTotalUsers(r.totalUsers)
           setCountriesInChart(r.countries);
           setGendersInChart(r.userGenders);
+          setAgesInChart(r.userAges);
           setData(true);
         })
       }
@@ -130,8 +148,8 @@ function Dashboard() {
                 count={totalUsers}
                 percentage={{
                   color: "success",
-                  amount: "+55%",
-                  label: "than lask week",
+                  // amount: "+55%",
+                  label: "Usuarios de todos los países",
                 }}
               />
             </MDBox>
@@ -208,7 +226,14 @@ function Dashboard() {
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
-                <ReportsLineChart
+                <ReportsBarChart
+                  color="secondary"
+                  title="Edades"
+                  description="Last Campaign Performance"
+                  date="just updated"
+                  chart={agesBarChartData}
+                />
+                {/* <ReportsLineChart
                   color="success"
                   title="daily sales"
                   description={
@@ -218,7 +243,7 @@ function Dashboard() {
                   }
                   date="updated 4 min ago"
                   chart={sales}
-                />
+                /> */}
               </MDBox>
             </Grid>
           </Grid>
