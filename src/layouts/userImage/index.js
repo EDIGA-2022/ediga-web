@@ -25,6 +25,8 @@ import MDBox from "components/MDBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import ImageInfoCard from "examples/Cards/InfoCards/ImageInfoCard";
+import TextField from '@mui/material/TextField';
+import Divider from "@mui/material/Divider";
 
 // Images
 import React from "react";
@@ -36,108 +38,221 @@ import MDButton from "components/MDButton";
 
 // API requests
 import createObservation from "../../api/createObservation";
+import getObservationAPI from "../../api/getObservation";
+import editObservationAPI from "../../api/editObservation";
 
 function UserImage() {
-    const navigate = useNavigate();
-    useEffect(() => {
+	const navigate = useNavigate();
+	const { state } = useLocation();
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	const view = !!urlParams.get('view');
+	const edit = !!urlParams.get('edit');
 
-    }, []);
+	const { imageId } = useParams();
 
-    const { imageId } = useParams();
-    const { state } = useLocation();
-    const {
-        photoId,
-        photo,
-        answer1,
-        answer2,
-        answer3,
-        userId,
-    } = state;
+	const [addingObservation, setAddingObservation] = useState(false);
+	const [observationText, setObservationText] = useState('');
+	const [observationTitle, setObservationTitle] = useState('')
+	const [photo, setPhoto] = useState({
+		photoId: '',
+		photo: '',
+		answer1: '',
+		answer2: '',
+		answer3: '',
+		userId: '',
+	})
 
-    const modules = {
-        toolbar: [
-            [{ font: [] }],
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            ["bold", "italic", "underline", "strike"],
-            [{ color: [] }, { background: [] }],
-            [{ script: "sub" }, { script: "super" }],
-            ["blockquote", "code-block"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
-            ["link", "image", "video"],
-            ["clean"],
-        ],
-    }
-    const [addingObservation, setAddingObservation] = useState(false);
-    const [observationText, setObservationText] = useState('');
+	async function fetchObservation() {
+		// the imageId here is the observationId 
+		await getObservationAPI(imageId).then(res => {
+			res.json().then(response => {
+				setPhoto({
+					photoId: response.photoId,
+					photo: response.photo,
+					answer1: response.answer1,
+					answer2: response.answer2,
+					answer3: response.answer3,
+					userId: response.userId,
+				})
+				setObservationText(response.observation);
+				setObservationTitle(response.title);
+			})
+		});
+	}
 
-    const onAddObservation = () => {
-        setAddingObservation(true);
-    }
+	useEffect(() => {
+		if (!view && !edit) {
+			const {
+				photoId,
+				photo,
+				answer1,
+				answer2,
+				answer3,
+				userId,
+			} = state;
+			setPhoto({
+				photoId,
+				photo,
+				answer1,
+				answer2,
+				answer3,
+			})
+		} else {
+			fetchObservation();
+		}
+	}, []);
 
-    const handleObservationTextChange = (value) => {
-        setObservationText(value);
-    }
 
-    const onCancel = () => {
-        setAddingObservation(false);
-    }
+	const modules = {
+		toolbar: [
+			[{ font: [] }],
+			[{ header: [1, 2, 3, 4, 5, 6, false] }],
+			["bold", "italic", "underline", "strike"],
+			[{ color: [] }, { background: [] }],
+			[{ script: "sub" }, { script: "super" }],
+			["blockquote", "code-block"],
+			[{ list: "ordered" }, { list: "bullet" }],
+			[{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+			["link", "image", "video"],
+			["clean"],
+		],
+	}
 
-    const onSave = () => {
-        createObservation({
-            photoId,
-            userId,
-            observation: observationText,
-        })
-        setAddingObservation(false);
-    }
+	const onAddObservation = () => {
+		setAddingObservation(true);
+	}
 
-    return (
-        <DashboardLayout>
-            <DashboardNavbar onArrowClick={() => navigate(-1)} />
-            <MDBox mb={2} />
-            <Grid container spacing={1} sx={{ width: '1600px' }}>
-                <Grid item xs={12} md={12} xl={6} sx={{ display: "flex", height: 400 }}>
-                    <ImageInfoCard
-                        answer1={answer1}
-                        answer2={answer2}
-                        answer3={answer3}
-                        shadow
-                        photoSrc={`data:image/jpeg;base64,${photo.replaceAll('"', '')}`}
-                    />
-                </Grid>
-            </Grid>
-            {!addingObservation && <div style={{ padding: '16px 0' }}>
-                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={() => onAddObservation()}>
-                    Añadir observacion
-                </MDButton>
-            </div>}
-            {addingObservation &&
-                <div>
-                    <MDBox p={2} style={{ padding: '24px 0' }}>
-                        <Grid >
-                            <div>
-                                <ReactQuill
-                                    modules={modules}
-                                    style={{ width: '80%', background: 'white' }}
-                                    theme="snow"
-                                    onChange={handleObservationTextChange}
-                                />
-                            </div>
-                        </Grid>
-                    </MDBox>
-                    <div style={{ padding: '16px 0' }}>
-                        <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={() => onSave()}>
-                            Guardar
-                        </MDButton>
-                        <MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => onCancel()}>
-                            Cancelar
-                        </MDButton>
-                    </div>
-                </div>
-            }
-        </DashboardLayout>
-    );
+	const handleObservationTextChange = (value) => {
+		setObservationText(value);
+	}
+
+	const onCancel = () => {
+		if (!edit && !view) {
+			setAddingObservation(false);
+		} else {
+			navigate(`/user/${photo.userId}`,
+				{
+					state: {
+						tab: 1
+					}
+				}
+			);
+		}
+	}
+
+	const onSave = () => {
+		if (!edit) {
+			createObservation({
+				title: observationTitle,
+				photoId: photo.photoId,
+				userId: photo.userId,
+				observation: observationText,
+			}).then(response => {
+				navigate(`/user/${photo.userId}`,
+					{
+						state: {
+							tab: 1
+						}
+					}
+				);
+			});
+			setAddingObservation(false);
+		} else {
+			editObservationAPI({
+				title: observationTitle,
+				photoId: photo.photoId,
+				userId: photo.userId,
+				observation: observationText,
+				observationId: imageId,
+			}).then(response => {
+				navigate(`/user/${photo.userId}`,
+					{
+						state: {
+							tab: 1
+						}
+					}
+				);
+			});
+		}
+	}
+
+	return (
+		<DashboardLayout>
+			<DashboardNavbar onArrowClick={() =>
+				(view || edit) ?
+					navigate(`/user/${photo.userId}`,
+						{
+							state: {
+								tab: 1
+							}
+						}
+					)
+					: navigate(-1)} />
+			<MDBox mb={2} />
+			<Grid container spacing={1} sx={{ width: '1600px' }}>
+				<Grid item xs={12} md={12} xl={6} sx={{ display: "flex", height: 400 }}>
+					<ImageInfoCard
+						answer1={photo.answer1}
+						answer2={photo.answer2}
+						answer3={photo.answer3}
+						shadow
+						photoSrc={`data:image/jpeg;base64,${(photo.photo).replaceAll('"', '')}`}
+					/>
+				</Grid>
+			</Grid>
+			{!addingObservation && !view && !edit && <div style={{ padding: '16px 0' }}>
+				<MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={() => onAddObservation()}>
+					Añadir observacion
+				</MDButton>
+			</div>}
+			<Divider style={{
+				width: '45%',
+				borderColor: 'black',
+				borderWidth: 'thin',
+			}} />
+			Observación:
+			{(addingObservation || edit || view) &&
+				<div>
+					<TextField
+						style={{ width: '45%', marginTop: '16px' }}
+						id="standard-basic"
+						label="Titulo"
+						variant="standard"
+						onChange={(e) => setObservationTitle(e.target.value)}
+						InputProps={{
+							readOnly: view,
+						}}
+						value={observationTitle}
+					/>
+					<MDBox p={2} style={{ padding: '24px 0' }}>
+						<Grid >
+							<div>
+								<ReactQuill
+									value={observationText}
+									modules={!view ? modules : {}}
+									style={{ width: '80%', background: 'white' }}
+									theme="snow"
+									onChange={handleObservationTextChange}
+									readOnly={view}
+								/>
+							</div>
+						</Grid>
+					</MDBox>
+					{!view &&
+						<div style={{ padding: '16px 0' }}>
+							<MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={() => onSave()}>
+								Guardar
+							</MDButton>
+							<MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => onCancel()}>
+								Cancelar
+							</MDButton>
+						</div>
+					}
+				</div>
+			}
+		</DashboardLayout >
+	);
 };
 
 export default UserImage;

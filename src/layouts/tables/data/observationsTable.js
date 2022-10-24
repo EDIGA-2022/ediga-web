@@ -70,38 +70,38 @@ function GetObservations(userId) {
       rows.map((row) => {
         return {
           title: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => navigate("/viewObservation/" + row.observationId )}>
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => row.photoObservation ? navigate(`/image/${row.observationId}?view=true`) : navigate("/viewObservation/" + row.observationId)}>
               {row.title}
             </MDTypography>
           ),
           text: (
             <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-              {extractContent(row.text).slice(0,25) + "..."}
+              {extractContent(row.text).slice(0, 25) + "..."}
             </MDTypography>
           ),
           createdBy: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" style={{cursor: 'default'}}>
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" style={{ cursor: 'default' }}>
               Maria Rodriguez
             </MDTypography>
           ),
           createdAt: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" style={{cursor: 'default'}}>
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" style={{ cursor: 'default' }}>
               {moment(row.createdAt).locale('es').format('LLL')}
             </MDTypography>
           ),
           updatedAt: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" style={{cursor: 'default'}}>
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" style={{ cursor: 'default' }}>
               {moment(row.updatedAt).locale('es').format('LLL')}
             </MDTypography>
           ),
           accions: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => navigate("/editObservation/" + row.observationId )}>
-            <Tooltip title="Editar">
-              <IconButton>
-                <EditIcon/>
-              </IconButton>
-            </Tooltip>
-          </MDTypography> 
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => row.photoObservation ? navigate(`/image/${row.observationId}?edit=true`) : navigate("/editObservation/" + row.observationId)}>
+              <Tooltip title="Editar">
+                <IconButton>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            </MDTypography>
           ),
         }
       })

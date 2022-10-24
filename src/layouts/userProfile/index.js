@@ -36,14 +36,11 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
 import ProfilePhotosList from "examples/Lists/ProfilePhotosList";
-import Card from "@mui/material/Card";
-import MDTypography from "components/MDTypography";
-import MDButton from "components/MDButton";
 
 // Images
 import React from "react";
 import 'react-quill/dist/quill.snow.css';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 // API requests
 import getUserProfile from "../../api/getUserProfile"
@@ -52,6 +49,7 @@ const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 function User() {
   const { userId } = useParams();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
@@ -78,18 +76,14 @@ function User() {
           setUser(newUser);
         });
     }
-    fetchUser()
+    fetchUser();
+    if (state) {
+      const {
+        tab
+      } = state;
+      setTabValue(tab);
+    }
   }, []);
-
-  const navigateToCreateNewObservation = () => {
-    // 👇️ navigate to /navigateToCreateNewObservation
-    navigate("/createNewObservation/" + userId);
-  };
-
-  const navigateToEditObservation = () => {
-    // 👇️ navigate to /navigateToCreateNewObservation
-    navigate("/editObservation/" + userId);
-  };
 
   return (
     <DashboardLayout>
@@ -128,7 +122,7 @@ function User() {
         </Grid>
       </MDBox>}
       {tabValue === 1 &&
-          <Tables type={"observations"} userId={userId} />
+        <Tables type={"observations"} userId={userId} />
       }
     </DashboardLayout>
   );
