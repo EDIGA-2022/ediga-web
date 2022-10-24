@@ -70,7 +70,7 @@ function GetObservations(userId) {
       rows.map((row) => {
         return {
           title: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => row.photoObservation ? navigate(`/image/${row.observationId}?view=true`) : navigate("/viewObservation/" + row.observationId)}>
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => row.photoId ? navigate(`/image/${row.observationId}?view=true`) : navigate("/viewObservation/" + row.observationId)}>
               {row.title}
             </MDTypography>
           ),
@@ -95,7 +95,7 @@ function GetObservations(userId) {
             </MDTypography>
           ),
           accions: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => row.photoObservation ? navigate(`/image/${row.observationId}?edit=true`) : navigate("/editObservation/" + row.observationId)}>
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => row.photoId ? navigate(`/image/${row.observationId}?edit=true`) : navigate("/editObservation/" + row.observationId)}>
               <Tooltip title="Editar">
                 <IconButton>
                   <EditIcon />

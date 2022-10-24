@@ -206,50 +206,52 @@ function UserImage() {
 					Añadir observacion
 				</MDButton>
 			</div>}
-			<Divider style={{
-				width: '45%',
-				borderColor: 'black',
-				borderWidth: 'thin',
-			}} />
-			Observación:
 			{(addingObservation || edit || view) &&
-				<div>
-					<TextField
-						style={{ width: '45%', marginTop: '16px' }}
-						id="standard-basic"
-						label="Titulo"
-						variant="standard"
-						onChange={(e) => setObservationTitle(e.target.value)}
-						InputProps={{
-							readOnly: view,
-						}}
-						value={observationTitle}
-					/>
-					<MDBox p={2} style={{ padding: '24px 0' }}>
-						<Grid >
-							<div>
-								<ReactQuill
-									value={observationText}
-									modules={!view ? modules : {}}
-									style={{ width: '80%', background: 'white' }}
-									theme="snow"
-									onChange={handleObservationTextChange}
-									readOnly={view}
-								/>
+				<>
+					<Divider style={{
+						width: '45%',
+						borderColor: 'black',
+						borderWidth: 'thin',
+					}} />
+					Observación:
+					<div>
+						<TextField
+							style={{ width: '45%', marginTop: '16px' }}
+							id="standard-basic"
+							label="Titulo"
+							variant="standard"
+							onChange={(e) => setObservationTitle(e.target.value)}
+							InputProps={{
+								readOnly: view,
+							}}
+							value={observationTitle}
+						/>
+						<MDBox p={2} style={{ padding: '24px 0' }}>
+							<Grid >
+								<div>
+									<ReactQuill
+										value={observationText}
+										modules={!view ? modules : {}}
+										style={{ width: '80%', background: 'white' }}
+										theme="snow"
+										onChange={handleObservationTextChange}
+										readOnly={view}
+									/>
+								</div>
+							</Grid>
+						</MDBox>
+						{!view &&
+							<div style={{ padding: '16px 0' }}>
+								<MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={() => onSave()}>
+									Guardar
+								</MDButton>
+								<MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => onCancel()}>
+									Cancelar
+								</MDButton>
 							</div>
-						</Grid>
-					</MDBox>
-					{!view &&
-						<div style={{ padding: '16px 0' }}>
-							<MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={() => onSave()}>
-								Guardar
-							</MDButton>
-							<MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => onCancel()}>
-								Cancelar
-							</MDButton>
-						</div>
-					}
-				</div>
+						}
+					</div>
+				</>
 			}
 		</DashboardLayout >
 	);
