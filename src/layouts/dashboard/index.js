@@ -24,7 +24,6 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
-import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
 // Data
@@ -48,7 +47,9 @@ import MDAlert from "components/MDAlert";
 function Dashboard() {
   // total users variable
   const [totalUsers, setTotalUsers] = useState(0);
-
+  const [averageTime, setAverageTime] = useState(0);
+  const [trackedUsers, setTrackedUsers] = useState(0);
+  const [instagramPercentage, setInstagramPercentage] = useState(0);
   const [gendersBarChartData, setGendersBarChartData] = useState({ labels: [], datasets: [] });
   const [countriesBarChartData, setCountriesBarChartData] = useState({ labels: [], datasets: [] });
   const [agesBarChartData, setAgesBarChartData] = useState({ labels: [], datasets: [] });
@@ -121,10 +122,15 @@ function Dashboard() {
     getMetrics().then((response) => {
       if (response.ok) {
         response.json().then(r => {
-          setTotalUsers(r.totalUsers)
+          setTotalUsers(r.totalUsers);
+          setAverageTime(r.averageHours);
+          setInstagramPercentage(r.instagramPercentage);
           setCountriesInChart(r.countries);
           setGendersInChart(r.userGenders);
           setAgesInChart(r.userAges);
+          setTrackedUsers(r.trackedUsers);
+
+
           setData(true);
         })
       }
@@ -157,13 +163,13 @@ function Dashboard() {
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
-                icon="leaderboard"
-                title="Today's Users"
-                count="2,300"
+                icon="access_time"
+                title="Tiempo promedio de uso diario"
+                count={averageTime + " hora(s)"}
                 percentage={{
                   color: "success",
-                  amount: "+3%",
-                  label: "than last month",
+                  amount: "",
+                  label: "Promedio de uso de varias sesiones",
                 }}
               />
             </MDBox>
@@ -172,13 +178,13 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="success"
-                icon="store"
-                title="Revenue"
-                count="34k"
+                icon="phone_android"
+                title="Usuarios rastreados"
+                count={trackedUsers}
                 percentage={{
                   color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
+                  // amount: "+1%",
+                  label: "Usan la aplicación en segundo plano",
                 }}
               />
             </MDBox>
@@ -187,13 +193,13 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="primary"
-                icon="person_add"
-                title="Followers"
-                count="+91"
+                icon="alternate_email"
+                title="Cuentas de instagram registradas"
+                count={instagramPercentage + "%"}
                 percentage={{
                   color: "success",
                   amount: "",
-                  label: "Just updated",
+                  label: "Usuarios que dieron su instagram",
                 }}
               />
             </MDBox>
@@ -206,8 +212,8 @@ function Dashboard() {
                 {data && <ReportsBarChart
                   color="success"
                   title="Usuarios por país"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
+                  // description="Last Campaign Performance"
+                  date="Datos actualizados recientemente"
                   chart={countriesBarChartData}
                 />}
               </MDBox>
@@ -218,8 +224,8 @@ function Dashboard() {
                 {data && <ReportsBarChart
                   color="info"
                   title="Géneros"
-                  description="Last Campaign Performance"
-                  date="just updated"
+                  // description="Last Campaign Performance"
+                  date="Datos actualizados recientemente"
                   chart={gendersBarChartData}
                 />}
               </MDBox>
@@ -229,8 +235,8 @@ function Dashboard() {
                 <ReportsBarChart
                   color="secondary"
                   title="Edades"
-                  description="Last Campaign Performance"
-                  date="just updated"
+                  // description="Last Campaign Performance"
+                  date="Datos actualizados recientemente"
                   chart={agesBarChartData}
                 />
                 {/* <ReportsLineChart
