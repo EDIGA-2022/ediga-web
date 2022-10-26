@@ -42,6 +42,7 @@ import Footer from "examples/Footer";
 import editDiaryEntryAPI from "../../api/editDiaryEntry";
 import getDiaryEntryAPI from "../../api/getDiaryEntry";
 import { useNavigate, useParams } from "react-router-dom";
+import Quill from 'quill'
 
 function EditDiaryEntry() {
   
@@ -112,16 +113,25 @@ function EditDiaryEntry() {
 
 }, []);
 
+const Link = Quill.import('formats/link');
+Link.sanitize = function(url) {
+  // quill by default creates relative links if scheme is missing.
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    return `http://${url}`
+  }
+  return url;
+}
+
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+       <DashboardNavbar onArrowClick={() => navigate(-2)} />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={1} justifyContent="center">
           <Grid item xs={12} lg={11}>
             <Card>
               <MDBox p={2}>
-                <MDTypography variant="h5">Nueva entrada de diario de campo</MDTypography>
+                <MDTypography variant="h5">Editar entrada de diario de campo</MDTypography>
               </MDBox>
               <MDBox p={2}>
               <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitDiaryEntry}>

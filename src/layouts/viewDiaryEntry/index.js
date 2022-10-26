@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -39,14 +39,20 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
 // API requests
-import createDiaryEntryAPI from "../../api/createDiaryEntry";
+import editDiaryEntryAPI from "../../api/editDiaryEntry";
+import getDiaryEntryAPI from "../../api/getDiaryEntry";
 import { useNavigate, useParams } from "react-router-dom";
 import Quill from 'quill'
+import htmlDocx from 'html-docx-js/dist/html-docx';
+import { saveAs } from 'file-saver'
 
-function CreateNewDiaryEntry() {
+function ViewDiaryEntry() {
   
-  const { itemId } = useParams();
+  //const { itemId } = useParams();
+  const itemId = "1223cc56-2b54-42ca-8551-cc057756e38d";
   const [entry, setEntry] = useState('');
+  const [userId, setUserId] = useState('');
+  const [diaryEntryId, setDiaryEntryId] = useState('');
   const [jsonResponseMessage, setJsonResponseMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
@@ -67,39 +73,36 @@ function CreateNewDiaryEntry() {
     ],
 }
 
-  const jsonError = (name) => (
-    <MDTypography variant="body2" color="white">
-      Error: {name}.
-    </MDTypography>
-  );
+  useEffect(function effectFunction() {
 
-  const jsonSuccess = () => (
-    <MDTypography variant="body2" color="white">
-      Se ha creado una nueva entrada de diario de campo.
-    </MDTypography>
-  );
-
-  const submitDiaryEntry = async () => {
-    const data = {
-      userId : itemId,
-      entry: entry,
-   }
-   createDiaryEntryAPI(data).then(response => {
-    setIsSuccess(response.ok);
-    setShowMsg(true);
-    response.json().then(msg => {
-      setJsonResponseMessage(msg.message);
-    })
-   });
-  }
-
-  const Link = Quill.import('formats/link');
-  Link.sanitize = function(url) {
-    // quill by default creates relative links if scheme is missing.
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      return `http://${url}`
+    async function fetchDiaryEntry() {
+        await getDiaryEntryAPI(itemId).then(res => {
+          res.json().then(response => {
+            setDiaryEntryId(itemId);
+            setUserId(response.userId);
+            setEntry(response.entry);
+          })
+        });
     }
-    return url;
+
+    fetchDiaryEntry();
+
+}, []);
+
+const Link = Quill.import('formats/link');
+Link.sanitize = function(url) {
+  // quill by default creates relative links if scheme is missing.
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    return `http://${url}`
+  }
+  return url;
+}
+
+function exportToWord(e) {
+    (async () => {
+        var converted = await htmlDocx.asBlob(entry,{ type: 'application/octet-stream' });
+        saveAs(converted, 'entradaDiarioCampo.docx');
+    })();
   }
 
   return (
@@ -110,10 +113,10 @@ function CreateNewDiaryEntry() {
           <Grid item xs={12} lg={11}>
             <Card>
               <MDBox p={2}>
-                <MDTypography variant="h5">Nueva entrada de diario de campo</MDTypography>
+                <MDTypography variant="h5">Entrada de diario de campo</MDTypography>
               </MDBox>
               <MDBox p={2}>
-              <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitDiaryEntry}>
+              <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={exportToWord}>
                     Exportar .docx
                 </MDButton>
             </MDBox>
@@ -121,33 +124,19 @@ function CreateNewDiaryEntry() {
                 <Grid container spacing={1} justifyContent="center">
                     <Grid item xs={12} lg={12}> 
                         <MDBox p={1}>
-                        <ReactQuill
-                                    modules={modules}
-                                    style={{ width: '90%', height: 700,background: 'white' }}
-                                    theme="snow"
-                                    onChange={setEntry}
-                                />
+                        <ReactQuill    
+                            value={entry}
+                            readOnly={true}
+                            style={{ width: '90%', height: 700,background: 'white' }}
+                            theme={"bubble"} />
                         </MDBox>
                     </Grid>
                 </Grid> 
                 <MDBox p={3}></MDBox>            
               </form>
-              {showMsg &&!isSuccess && <MDBox pt={2} px={2}>
-                <MDAlert color="error">
-                  {jsonError(jsonResponseMessage)}
-                </MDAlert>
-              </MDBox>}
-             {showMsg && isSuccess && <MDBox pt={2} px={2}>
-                <MDAlert color="success">
-                  {jsonSuccess()}
-                </MDAlert>
-              </MDBox>}
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitDiaryEntry}>
-                    Crear entrada
-                </MDButton>
                 <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
-                    Cancelar
+                    Volver
                 </MDButton>
               </MDBox>
             </Card>
@@ -159,4 +148,4 @@ function CreateNewDiaryEntry() {
   );
 }
 
-export default CreateNewDiaryEntry;
+export default ViewDiaryEntry;

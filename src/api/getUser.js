@@ -4,6 +4,7 @@ function getUser(userId) {
   return fetch(`${API_URL}/api/user/${userId}`, {
     method: "GET",
     headers: {
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
       "Content-type": "application/json; charset=UTF-8"
     }
   })  

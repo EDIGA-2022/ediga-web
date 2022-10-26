@@ -61,6 +61,11 @@ function Tables(props) {
     navigate('/editDiaryEntry/' + props.userId);
   };
 
+  const navigateToViewDiaryEntry = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/viewDiaryEntry/' + props.userId);
+  };
+
   return (
     <div>
       <MDBox pt={6} pb={3}>
@@ -89,6 +94,9 @@ function Tables(props) {
                 </MDButton>}
                 {props.type === 'other' && <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={props.type === 'other' ? navigateToEditDiaryEntry : ''}>
                   editar entrada campo
+                </MDButton>}
+                {props.type === 'other' && <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={props.type === 'other' ? navigateToViewDiaryEntry : ''}>
+                  ver entrada campo
                 </MDButton>}
               </MDBox>
               <MDBox pt={3}>

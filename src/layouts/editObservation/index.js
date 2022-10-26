@@ -41,8 +41,9 @@ import Footer from "examples/Footer";
 // API requests 
 import editObservationAPI from "../../api/editObservation";
 import getObservationAPI from "../../api/getObservation";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
 import moment from 'moment';
+import Quill from 'quill'
 
 function EditObservation() {
   
@@ -155,10 +156,20 @@ const convertBase64 = (file) => {
 }
 
 
+const Link = Quill.import('formats/link');
+Link.sanitize = function(url) {
+  // quill by default creates relative links if scheme is missing.
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    return `http://${url}`
+  }
+  return url;
+}
+
+
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+       <DashboardNavbar onArrowClick={() => navigate(-2)} />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={11}>
@@ -272,7 +283,7 @@ const convertBase64 = (file) => {
                         />
                         </MDBox>
                         <MDBox>
-                        {selectedImage && (
+                        {selectedImage && photo && (
                         <div>
                           <img style={{width: 400, height: 400}} src={`${photo}`}/>
                           </div>)}
@@ -287,16 +298,14 @@ const convertBase64 = (file) => {
                 </MDAlert>
               </MDBox>}
              {showMsg && isSuccess && <MDBox pt={2} px={2}>
-                <MDAlert color="success">
-                  {jsonSuccess()}
-                </MDAlert>
+              {navigate(-1)} 
               </MDBox>}
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitObservation}>
                     Editar observación
                 </MDButton>
                 <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
-                    Cancelar
+                  Volver
                 </MDButton>
               </MDBox>
             </Card>
