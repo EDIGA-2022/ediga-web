@@ -4,8 +4,9 @@ function getUserPhotos(userId) {
   const userPhotos = fetch(`${API_URL}/api/users/${userId}`, {
     method: "GET",
     headers: {
-      "Content-type": "application/json; charset=UTF-8"
-    }
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      'Content-Type': 'application/json'
+    },
   })
     .then((response) => response.json());
   return userPhotos;

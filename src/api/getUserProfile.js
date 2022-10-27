@@ -4,8 +4,9 @@ function getUserProfile(userId) {
   return fetch(`${API_URL}/api/user/profile/${userId}`, {
     method: "GET",
     headers: {
-      "Content-type": "application/json; charset=UTF-8"
-    }
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      'Content-Type': 'application/json'
+    },
   })
   // .then((response) => response.json());
   // return users;
