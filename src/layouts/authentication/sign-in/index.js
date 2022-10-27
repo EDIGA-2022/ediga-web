@@ -89,7 +89,7 @@ function Basic() {
             setLoading(false);
             setShowSetPassword(true);
           } else {
-            navigate("/users");
+            navigate("/dashboard");
           }
         })
       } else {

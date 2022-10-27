@@ -24,19 +24,121 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
-import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
 // Data
-import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
+
 import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 
 // Dashboard components
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 
+import { useState, useEffect } from "react";
+
+// import metricsApi 
+import { getMetrics } from "../../api/getMetrics"
+import MDAlert from "components/MDAlert";
+
+
+
+
+
 function Dashboard() {
+  // total users variable
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [averageTime, setAverageTime] = useState(0);
+  const [trackedUsers, setTrackedUsers] = useState(0);
+  const [instagramPercentage, setInstagramPercentage] = useState(0);
+  const [gendersBarChartData, setGendersBarChartData] = useState({ labels: [], datasets: [] });
+  const [countriesBarChartData, setCountriesBarChartData] = useState({ labels: [], datasets: [] });
+  const [agesBarChartData, setAgesBarChartData] = useState({ labels: [], datasets: [] });
+
+  const [data, setData] = useState(false);
+
+
+
+  function setCountriesInChart(countries) {
+    var labels = [];
+    var datasets = {
+      label: "Usuarios",
+      data: [],
+    };
+    countries.forEach(element => {
+      labels.push(element.country);
+      datasets.data.push(element.amount);
+    });
+
+    setCountriesBarChartData({
+      labels: labels,
+      datasets: datasets,
+    });
+  }
+
+  function setAgesInChart(ages) {
+    var labels = [];
+    var datasets = {
+      label: "Usuarios",
+      data: [],
+    };
+    ages.forEach(element => {
+      labels.push(element.age);
+      datasets.data.push(element.amount);
+    });
+
+    setAgesBarChartData({
+      labels: labels,
+      datasets: datasets,
+    });
+  }
+
+  function setGendersInChart(genders) {
+    var labels = [];
+    var datasets = {
+      label: "Cantidad",
+      data: [],
+    };
+
+    var otherGenders = 0;
+    genders.forEach(element => {
+      if (element.genderCode !== 6) {
+        labels.push(element.gender);
+        datasets.data.push(element.amount);
+      } else {
+        otherGenders += element.amount;
+      }
+    });
+    labels.push("Otros");
+    datasets.data.push(otherGenders);
+    setGendersBarChartData({
+      labels: labels,
+      datasets: datasets,
+    });
+  }
   const { sales, tasks } = reportsLineChartData;
+
+  useEffect(() => {
+
+    getMetrics().then((response) => {
+      if (response.ok) {
+        response.json().then(r => {
+          setTotalUsers(r.totalUsers);
+          setAverageTime(r.averageHours);
+          setInstagramPercentage(r.instagramPercentage);
+          setCountriesInChart(r.countries);
+          setGendersInChart(r.userGenders);
+          setAgesInChart(r.userAges);
+          setTrackedUsers(r.trackedUsers);
+
+
+          setData(true);
+        })
+      }
+    });
+
+
+  }, []);
+
 
   return (
     <DashboardLayout>
@@ -47,13 +149,13 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="dark"
-                icon="weekend"
-                title="Bookings"
-                count={281}
+                icon="person"
+                title="Cantidad de usuarios"
+                count={totalUsers}
                 percentage={{
                   color: "success",
-                  amount: "+55%",
-                  label: "than lask week",
+                  // amount: "+55%",
+                  label: "Usuarios de todos los países",
                 }}
               />
             </MDBox>
@@ -61,13 +163,13 @@ function Dashboard() {
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
-                icon="leaderboard"
-                title="Today's Users"
-                count="2,300"
+                icon="access_time"
+                title="Tiempo promedio de uso diario"
+                count={averageTime + " hora(s)"}
                 percentage={{
                   color: "success",
-                  amount: "+3%",
-                  label: "than last month",
+                  amount: "",
+                  label: "Promedio de uso de varias sesiones",
                 }}
               />
             </MDBox>
@@ -76,13 +178,13 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="success"
-                icon="store"
-                title="Revenue"
-                count="34k"
+                icon="phone_android"
+                title="Usuarios rastreados"
+                count={trackedUsers}
                 percentage={{
                   color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
+                  // amount: "+1%",
+                  label: "Usan la aplicación en segundo plano",
                 }}
               />
             </MDBox>
@@ -91,13 +193,13 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="primary"
-                icon="person_add"
-                title="Followers"
-                count="+91"
+                icon="alternate_email"
+                title="Cuentas de instagram registradas"
+                count={instagramPercentage + "%"}
                 percentage={{
                   color: "success",
                   amount: "",
-                  label: "Just updated",
+                  label: "Usuarios que dieron su instagram",
                 }}
               />
             </MDBox>
@@ -107,18 +209,37 @@ function Dashboard() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
-                <ReportsBarChart
+                {data && <ReportsBarChart
+                  color="success"
+                  title="Usuarios por país"
+                  // description="Last Campaign Performance"
+                  date="Datos actualizados recientemente"
+                  chart={countriesBarChartData}
+                />}
+              </MDBox>
+            </Grid>
+
+            <Grid item xs={12} md={6} lg={4}>
+              <MDBox mb={3}>
+                {data && <ReportsBarChart
                   color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
-                  chart={reportsBarChartData}
-                />
+                  title="Géneros"
+                  // description="Last Campaign Performance"
+                  date="Datos actualizados recientemente"
+                  chart={gendersBarChartData}
+                />}
               </MDBox>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
-                <ReportsLineChart
+                <ReportsBarChart
+                  color="secondary"
+                  title="Edades"
+                  // description="Last Campaign Performance"
+                  date="Datos actualizados recientemente"
+                  chart={agesBarChartData}
+                />
+                {/* <ReportsLineChart
                   color="success"
                   title="daily sales"
                   description={
@@ -128,18 +249,7 @@ function Dashboard() {
                   }
                   date="updated 4 min ago"
                   chart={sales}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
-                  date="just updated"
-                  chart={tasks}
-                />
+                /> */}
               </MDBox>
             </Grid>
           </Grid>

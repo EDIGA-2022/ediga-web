@@ -2,7 +2,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 function setPassword(password) {
   return fetch(`${API_URL}/api/password-reset`, {
-    credentials: 'include',
     method: "POST",
     body: JSON.stringify({
       password: password
