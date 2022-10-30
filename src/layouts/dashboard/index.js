@@ -53,6 +53,9 @@ function Dashboard() {
   const [gendersBarChartData, setGendersBarChartData] = useState({ labels: [], datasets: [] });
   const [countriesBarChartData, setCountriesBarChartData] = useState({ labels: [], datasets: [] });
   const [agesBarChartData, setAgesBarChartData] = useState({ labels: [], datasets: [] });
+  const [middleFormAnswers, setMiddleFormAnswers] = useState({});
+  const [endFormAnswers, setEndFormAnswers] = useState({});
+
 
   const [data, setData] = useState(false);
 
@@ -129,8 +132,8 @@ function Dashboard() {
           setGendersInChart(r.userGenders);
           setAgesInChart(r.userAges);
           setTrackedUsers(r.trackedUsers);
-
-
+          setMiddleFormAnswers(r.middleFormAnswers);
+          setEndFormAnswers(r.endFormAnswers);
           setData(true);
         })
       }
@@ -257,7 +260,7 @@ function Dashboard() {
         <MDBox> 
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={8}>
-              <Projects />
+              <Projects middleQuestions={middleFormAnswers} finalQuestions={endFormAnswers}/>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <OrdersOverview />
