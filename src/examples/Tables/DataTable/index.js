@@ -47,6 +47,7 @@ function DataTable({
   pagination,
   isSorted,
   noEndBorder,
+  onSearchChangeTable,
 }) {
   const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 10;
   const entries = entriesPerPage.entries
@@ -113,7 +114,8 @@ function DataTable({
 
   // Search input state handle
   const onSearchChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
+    onSearchChangeTable(value)
+    // setGlobalFilter(value || undefined);
   }, 100);
 
   // A function that sets the sorted value for the table

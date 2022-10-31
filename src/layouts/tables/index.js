@@ -14,36 +14,38 @@ Coded by www.creative-tim.com
 */
 
 // @mui material components
-import Grid from "@mui/material/Grid";
+import AddIcon from '@mui/icons-material/Add';
 import Card from "@mui/material/Card";
-
+import Grid from "@mui/material/Grid";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-
-// Material Dashboard 2 React example components
-import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
-import DataTable from "examples/Tables/DataTable";
-
-// Data
-import usersTable from "layouts/tables/data/usersTable";
-import observationsTable from "layouts/tables/data/observationsTable";
-import diaryEntriesTable from "layouts/tables/data/diaryEntriesTable";
-
 // Button, Navigation
 import MDButton from "components/MDButton";
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { column } from "stylis";
-
+import MDTypography from "components/MDTypography";
+import ExportUsersXLS from "components/shared/exportUsersXLS";
+import Footer from "examples/Footer";
+import DataTable from "examples/Tables/DataTable";
+import diaryEntriesTable from "layouts/tables/data/diaryEntriesTable";
+import observationsTable from "layouts/tables/data/observationsTable";
+// Data
+import usersTable from "layouts/tables/data/usersTable";
+import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 function Tables(props) {
+  var columns = useState([]);
+  var csvData = useState([]);
+  var rows = useState([]);
+  const [searchText, setSearchText] = useState('');
   let title;
-  let columns;
-  let rows;
   let obj;
   let onClick;
+
+  const onSearchChangeTable = (value) => {
+    console.log('index', value)
+    setSearchText(value)
+  };
+
   const navigate = useNavigate();
 
   const navigateToCreateNewUser = () => {
@@ -61,22 +63,13 @@ function Tables(props) {
     navigate('/createDiaryEntry/' + props.userId);
   };
 
-  const navigateToEditDiaryEntry = () => {
-    // 👇️ navigate to /navigateToCreateNewUser
-    navigate('/editDiaryEntry/' + props.userId);
-  };
-
-  const navigateToViewDiaryEntry = () => {
-    // 👇️ navigate to /navigateToCreateNewUser
-    navigate('/viewDiaryEntry/' + props.userId);
-  };
-
   switch (props.type) {
     case 'users':
       title = 'Sujetos';
-      obj = usersTable();
+      obj = usersTable(searchText);
       columns = obj.columns;
       rows = obj.rows;
+      csvData = obj.csvData;
       onClick = navigateToCreateNewUser;
       break;
     case 'observations':
@@ -114,13 +107,22 @@ function Tables(props) {
                 coloredShadow="info"
                 style={{ display: "flex" }}
               >
-                <MDTypography variant="h6" color="white">
-                  {title}
-                </MDTypography>
-                <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
-                  +
-                </MDButton>
-              </MDBox>
+                <Grid container justifyContent="flex-end">
+                  <Grid item xs={10}>
+                    <MDTypography variant="h6" color="white">
+                      {title}
+                    </MDTypography>
+                  </Grid>
+                  {props.type === 'users' && <Grid item xs>
+                    <ExportUsersXLS csvData={csvData} fileName="DataSujetos" />
+                  </Grid>}
+                  <Grid item xs>
+                    <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
+                      <AddIcon />
+                    </MDButton>
+                  </Grid>
+                </Grid>
+              </MDBox >
               <MDBox pt={3}>
                 <DataTable
                   table={{ columns, rows }}
@@ -128,14 +130,16 @@ function Tables(props) {
                   entriesPerPage={false}
                   showTotalEntries={false}
                   noEndBorder
+                  canSearch={props.type === 'users'}
+                  onSearchChangeTable={onSearchChangeTable}
                 />
               </MDBox>
-            </Card>
-          </Grid>
-        </Grid>
-      </MDBox>
+            </Card >
+          </Grid >
+        </Grid >
+      </MDBox >
       <Footer />
-    </div>
+    </div >
   );
 }
 

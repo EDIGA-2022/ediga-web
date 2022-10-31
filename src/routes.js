@@ -69,11 +69,10 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Usuarios",
-    key: "tables",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    name: "Sujetos",
+    key: "user-table",
+    icon: <Icon fontSize="small">group</Icon>,
     route: "/users",
-
     component:
       <DashboardLayout>
         <Tables type={"users"} />

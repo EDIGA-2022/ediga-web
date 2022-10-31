@@ -43,7 +43,7 @@ function ProfilePhotosList({ title, photos, shadow, userId }) {
       </MDBox>
       <MDBox p={2}>
         <ImageList sx={{ width: 400, height: 400 }} cols={3} rowHeight={164}>
-          {photos.map((item) => (
+          {photos && photos.map((item) => (
             <ImageListItem
               style={{ cursor: 'pointer', marginRight: '20px' }}
               key={item.photo}
