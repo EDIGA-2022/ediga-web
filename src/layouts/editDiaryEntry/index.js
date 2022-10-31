@@ -45,9 +45,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import Quill from 'quill'
 
 function EditDiaryEntry() {
-  
-  //const { itemId } = useParams();
-  const itemId = "1223cc56-2b54-42ca-8551-cc057756e38d";
+
+  const { itemId } = useParams();
   const [entry, setEntry] = useState('');
   const [userId, setUserId] = useState('');
   const [diaryEntryId, setDiaryEntryId] = useState('');
@@ -58,18 +57,18 @@ function EditDiaryEntry() {
 
   const modules = {
     toolbar: [
-        [{ font: [] }],
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        ["bold", "italic", "underline", "strike"],
-        [{ color: [] }, { background: [] }],
-        [{ script: "sub" }, { script: "super" }],
-        ["blockquote", "code-block"],
-        [{ list: "ordered" }, { list: "bullet" }],
-        [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
-        ["link", "image", "video"],
-        ["clean"],
+      [{ font: [] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }],
+      [{ script: "sub" }, { script: "super" }],
+      ["blockquote", "code-block"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+      ["link", "image", "video"],
+      ["clean"],
     ],
-}
+  }
 
   const jsonError = (name) => (
     <MDTypography variant="body2" color="white">
@@ -85,47 +84,47 @@ function EditDiaryEntry() {
 
   const submitDiaryEntry = async () => {
     const data = {
-      entryId : itemId,
+      entryId: itemId,
       entry: entry,
-   }
-   editDiaryEntryAPI(data).then(response => {
-    setIsSuccess(response.ok);
-    setShowMsg(true);
-    response.json().then(msg => {
-      setJsonResponseMessage(msg.message);
-    })
-   });
+    }
+    editDiaryEntryAPI(data).then(response => {
+      setIsSuccess(response.ok);
+      setShowMsg(true);
+      response.json().then(msg => {
+        setJsonResponseMessage(msg.message);
+      })
+    });
   }
 
   useEffect(function effectFunction() {
 
     async function fetchDiaryEntry() {
-        await getDiaryEntryAPI(itemId).then(res => {
-          res.json().then(response => {
-            setDiaryEntryId(itemId);
-            setUserId(response.userId);
-            setEntry(response.entry);
-          })
-        });
+      await getDiaryEntryAPI(itemId).then(res => {
+        res.json().then(response => {
+          setDiaryEntryId(itemId);
+          setUserId(response.userId);
+          setEntry(response.entry);
+        })
+      });
     }
 
     fetchDiaryEntry();
 
-}, []);
+  }, []);
 
-const Link = Quill.import('formats/link');
-Link.sanitize = function(url) {
-  // quill by default creates relative links if scheme is missing.
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    return `http://${url}`
+  const Link = Quill.import('formats/link');
+  Link.sanitize = function (url) {
+    // quill by default creates relative links if scheme is missing.
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return `http://${url}`
+    }
+    return url;
   }
-  return url;
-}
 
 
   return (
     <DashboardLayout>
-       <DashboardNavbar onArrowClick={() => navigate(-2)} />
+      <DashboardNavbar onArrowClick={() => navigate(-2)} />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={1} justifyContent="center">
           <Grid item xs={12} lg={11}>
@@ -134,42 +133,38 @@ Link.sanitize = function(url) {
                 <MDTypography variant="h5">Editar entrada de diario de campo</MDTypography>
               </MDBox>
               <MDBox p={2}>
-              <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitDiaryEntry}>
-                    Exportar .docx
+                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={submitDiaryEntry}>
+                  Exportar .docx
                 </MDButton>
-            </MDBox>
+              </MDBox>
               <form>
                 <Grid container spacing={1} justifyContent="center">
-                    <Grid item xs={12} lg={12}> 
-                        <MDBox p={1}>
-                        <ReactQuill
-                                    modules={modules}
-                                    value={entry}
-                                    style={{ width: '90%', height: 700,background: 'white' }}
-                                    theme="snow"
-                                    onChange={setEntry}
-                                />
-                        </MDBox>
-                    </Grid>
-                </Grid> 
-                <MDBox p={3}></MDBox>            
+                  <Grid item xs={12} lg={12}>
+                    <MDBox p={1}>
+                      <ReactQuill
+                        modules={modules}
+                        value={entry}
+                        style={{ width: '90%', height: 700, background: 'white' }}
+                        theme="snow"
+                        onChange={setEntry}
+                      />
+                    </MDBox>
+                  </Grid>
+                </Grid>
+                <MDBox p={3}></MDBox>
               </form>
-              {showMsg &&!isSuccess && <MDBox pt={2} px={2}>
+              {showMsg && !isSuccess && <MDBox pt={2} px={2}>
                 <MDAlert color="error">
                   {jsonError(jsonResponseMessage)}
                 </MDAlert>
               </MDBox>}
-             {showMsg && isSuccess && <MDBox pt={2} px={2}>
-                <MDAlert color="success">
-                  {jsonSuccess()}
-                </MDAlert>
-              </MDBox>}
+              {showMsg && isSuccess && navigate(-1)}
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitDiaryEntry}>
-                    Editar entrada
+                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={submitDiaryEntry}>
+                  Editar entrada
                 </MDButton>
-                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
-                    Cancelar
+                <MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
+                  Cancelar
                 </MDButton>
               </MDBox>
             </Card>

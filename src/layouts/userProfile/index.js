@@ -131,7 +131,7 @@ function User() {
           <Tables type={"observations"} userId={userId} />
       }
       {tabValue === 2 &&
-          <Tables type={"other"} userId={userId} />
+          <Tables type={"diaryEntries"} userId={userId} />
       }
     </DashboardLayout>
   );

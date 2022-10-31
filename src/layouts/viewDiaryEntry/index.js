@@ -48,8 +48,7 @@ import { saveAs } from 'file-saver'
 
 function ViewDiaryEntry() {
   
-  //const { itemId } = useParams();
-  const itemId = "1223cc56-2b54-42ca-8551-cc057756e38d";
+  const { itemId } = useParams();
   const [entry, setEntry] = useState('');
   const [userId, setUserId] = useState('');
   const [diaryEntryId, setDiaryEntryId] = useState('');

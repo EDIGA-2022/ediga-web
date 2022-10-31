@@ -30,15 +30,20 @@ import DataTable from "examples/Tables/DataTable";
 // Data
 import usersTable from "layouts/tables/data/usersTable";
 import observationsTable from "layouts/tables/data/observationsTable";
+import diaryEntriesTable from "layouts/tables/data/diaryEntriesTable";
 
 // Button, Navigation
 import MDButton from "components/MDButton";
-import {Routes, Route, useNavigate} from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { column } from "stylis";
 
 
 function Tables(props) {
-  const { columns, rows } = props.type === 'users' ? usersTable() : observationsTable(props.userId);
-  const title = props.type === 'users' ? 'Usuarios' : "Observaciones";
+  let title;
+  let columns;
+  let rows;
+  let obj;
+  let onClick;
   const navigate = useNavigate();
 
   const navigateToCreateNewUser = () => {
@@ -66,6 +71,32 @@ function Tables(props) {
     navigate('/viewDiaryEntry/' + props.userId);
   };
 
+  switch (props.type) {
+    case 'users':
+      title = 'Sujetos';
+      obj = usersTable();
+      columns = obj.columns;
+      rows = obj.rows;
+      onClick = navigateToCreateNewUser;
+      break;
+    case 'observations':
+      title = 'Observaciones';
+      obj = observationsTable(props.userId);
+      columns = obj.columns;
+      rows = obj.rows;
+      onClick = navigateToCreateNewObservation;
+      break;
+    case 'diaryEntries':
+      title = 'Diario de campo';
+      obj = diaryEntriesTable(props.userId);
+      columns = obj.columns;
+      rows = obj.rows;
+      onClick = navigateToCreateNewDiaryEntry;
+      break;
+    default:
+      break;
+  }
+
   return (
     <div>
       <MDBox pt={6} pb={3}>
@@ -86,18 +117,9 @@ function Tables(props) {
                 <MDTypography variant="h6" color="white">
                   {title}
                 </MDTypography>
-                <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={props.type === 'users' ? navigateToCreateNewUser : navigateToCreateNewObservation}>
+                <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
                   +
                 </MDButton>
-                {props.type === 'other' && <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={props.type === 'other' ? navigateToCreateNewDiaryEntry : ''}>
-                  entrada campo
-                </MDButton>}
-                {props.type === 'other' && <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={props.type === 'other' ? navigateToEditDiaryEntry : ''}>
-                  editar entrada campo
-                </MDButton>}
-                {props.type === 'other' && <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={props.type === 'other' ? navigateToViewDiaryEntry : ''}>
-                  ver entrada campo
-                </MDButton>}
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
