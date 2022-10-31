@@ -58,8 +58,10 @@ function GetUsers(searchText) {
           setRows(r);
           setAllRows(r); 
         });
-        
       } else {
+        if (response.status === 401) {
+          navigate("/authentication/sign-in");
+        }
         return Promise.reject(response);
       }
     })

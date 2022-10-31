@@ -64,7 +64,6 @@ function Basic() {
   const [showSetPassword, setShowSetPassword] = useState(false);
   const [name, setName] = useState('');
 
-  const [user, setUser] = useState({});
   const navigate = useNavigate();
 
 
@@ -72,7 +71,6 @@ function Basic() {
     setShowSetPassword(false);
     navigate("/users");
   }
-
 
   function login(event) {
     setLoading(true);
@@ -85,13 +83,13 @@ function Basic() {
     loginApi(email, password).then(response => {
       if (response.ok) {
         response.json().then(r => {
-          setUser(r.user);
-          if (user.firstLogIn) {
-            setName(user.name);
+          localStorage.setItem("token", r.token)
+          if (r.user.firstLogIn) {
+            setName(r.user.name);
             setLoading(false);
             setShowSetPassword(true);
           } else {
-            navigate("/users");
+            navigate("/dashboard");
           }
         })
       } else {

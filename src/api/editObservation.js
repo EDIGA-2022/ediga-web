@@ -1,8 +1,9 @@
 const API_URL = process.env.REACT_APP_API_URL;
 
-function createUser(data) {
-    return fetch(`${API_URL}/api/createUser`, {
-    method: 'POST',
+function editObservation(data) {
+
+    return fetch(`${API_URL}/api/observation`, {
+    method: 'PUT',
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("token")}`,
       'Content-Type': 'application/json'
@@ -11,4 +12,5 @@ function createUser(data) {
    })
 }
 
-module.exports = createUser;
+module.exports = editObservation;
+

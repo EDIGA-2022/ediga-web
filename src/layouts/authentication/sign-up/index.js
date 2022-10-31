@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useCallback, useState } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -37,6 +37,8 @@ import FormError from "components/shared/formError/formError"
 
 import registerApi from "../../../api/register";
 import MDAlert from "components/MDAlert";
+import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -56,6 +58,7 @@ function Cover() {
     }
   };
 
+  const navigate = useNavigate();
   const [errors, setErrors] = useState('')
   const [passwordError, setPasswordError] = useState('');
 
@@ -82,6 +85,9 @@ function Cover() {
         cleanForm();
         setLoading(false);
       } else {
+        if (response.status === 401) {
+          navigate("/authentication/sign-in");
+        }
         response.json().then(r => {
           setErrors({ serverError: r.message });
           setLoading(false);
@@ -97,10 +103,19 @@ function Cover() {
     setSubmitted(false);
   }
 
+  function redirectToLogin() {
+    if (localStorage.getItem("token")) {
+      return true
+    }
+    // navigate to sign in
+    navigate("/authentication/sign-in");
+
+  }
+
 
   return (
     <CoverLayout>
-      <Card>
+      {redirectToLogin() && <Card>
         <MDBox
           variant="gradient"
           bgColor="info"
@@ -147,7 +162,7 @@ function Cover() {
 
           </MDBox>
         </MDBox>
-      </Card>
+      </Card>}
     </CoverLayout>
   );
 }

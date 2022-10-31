@@ -42,9 +42,18 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import User from "layouts/userProfile";
+import Logout from "layouts/authentication/logout";
 import CreateNewUser from "layouts/createNewUser"
 import EditUser from "layouts/editUser"
 import UserImage from "layouts/userImage"
+import CreateNewObservation from "layouts/createNewObservation"
+import EditObservation from "layouts/editObservation"
+import ViewObservation from "layouts/viewObservation"
+import CreateDiaryEntry from "layouts/createDiaryEntry"
+import EditDiaryEntry from "layouts/editDiaryEntry"
+import ViewDiaryEntry from "layouts/viewDiaryEntry"
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -52,7 +61,7 @@ import Icon from "@mui/material/Icon";
 const routes = [
   {
     type: "collapse",
-    name: "Dashboard",
+    name: "Métricas",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
@@ -64,7 +73,10 @@ const routes = [
     key: "user-table",
     icon: <Icon fontSize="small">group</Icon>,
     route: "/users",
-    component: <Tables type='Users'/>,
+    component:
+      <DashboardLayout>
+        <Tables type={"users"} />
+      </DashboardLayout>,
   },
   {
     type: "collapse",
@@ -76,7 +88,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign In",
+    name: "Iniciar sesión",
     key: "sign-in",
     icon: <Icon fontSize="small">login</Icon>,
     route: "/authentication/sign-in",
@@ -84,12 +96,21 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign Up",
+    name: "Registrar investigador",
     key: "sign-up",
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
   },
+  {
+    type: "collapse",
+    name: "Cerrar sesión",
+    key: "logout",
+    icon: <Icon fontSize="small">logout</Icon>,
+    route: "/authentication/logout",
+    component: <Logout />,
+  },
+  
   {
     collapse: [
       {
@@ -123,6 +144,54 @@ const routes = [
         icon: <Icon fontSize="small">userImage</Icon>,
         route: "/image/:imageId",
         component: <UserImage />,
+      },
+      {
+        type: "collapse",
+        name: "Create New Observation",
+        key: "createNewObservation",
+        icon: <Icon fontSize="small">createNewObservation</Icon>,
+        route: "/createNewObservation/:itemId",
+        component: <CreateNewObservation />,
+      },
+      {
+        type: "collapse",
+        name: "Edit Observation",
+        key: "editObservation",
+        icon: <Icon fontSize="small">editObservation</Icon>,
+        route: "/editObservation/:itemId",
+        component: <EditObservation />,
+      },
+      {
+        type: "collapse",
+        name: "View Observation",
+        key: "viewObservation",
+        icon: <Icon fontSize="small">viewObservation</Icon>,
+        route: "/viewObservation/:itemId",
+        component: <ViewObservation />,
+      },
+      {
+        type: "collapse",
+        name: "Create diary entry",
+        key: "createDiaryEntry",
+        icon: <Icon fontSize="small">createDiaryEntry</Icon>,
+        route: "/createDiaryEntry/:itemId",
+        component: <CreateDiaryEntry />,
+      },
+      {
+        type: "collapse",
+        name: "Edit diary entry",
+        key: "editDiaryEntry",
+        icon: <Icon fontSize="small">editDiaryEntry</Icon>,
+        route: "/editDiaryEntry/:itemId",
+        component: <EditDiaryEntry />,
+      },
+      {
+        type: "collapse",
+        name: "View diary entry",
+        key: "viewDiaryEntry",
+        icon: <Icon fontSize="small">viewDiaryEntry</Icon>,
+        route: "/viewDiaryEntry/:itemId",
+        component: <ViewDiaryEntry />,
       }
     ]
   }

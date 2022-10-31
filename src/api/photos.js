@@ -4,7 +4,6 @@ function getUserPhotos(userId) {
   const userPhotos = fetch(`${API_URL}/api/users/${userId}`, {
     method: "GET",
     headers: {
-      "access-control-allow-origin": "*",
       "Content-type": "application/json; charset=UTF-8"
     }
   })

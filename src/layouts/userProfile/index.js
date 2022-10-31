@@ -14,6 +14,7 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from "react";
+import Tables from "../tables";
 
 
 // @mui material components
@@ -39,7 +40,7 @@ import ProfilePhotosList from "examples/Lists/ProfilePhotosList";
 // Images
 import React from "react";
 import 'react-quill/dist/quill.snow.css';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 // API requests
 import getUserProfile from "../../api/getUserProfile"
@@ -48,6 +49,7 @@ const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 function User() {
   const { userId } = useParams();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
@@ -74,12 +76,18 @@ function User() {
           setUser(newUser);
         });
     }
-    fetchUser()
+    fetchUser();
+    if (state) {
+      const {
+        tab
+      } = state;
+      setTabValue(tab);
+    }
   }, []);
 
   return (
     <DashboardLayout>
-      <DashboardNavbar onArrowClick={() => navigate(-2)}/>
+      <DashboardNavbar onArrowClick={() => navigate(-2)} />
       <MDBox mb={2} />
       <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
         <Tab label="App ediga" />
@@ -104,10 +112,21 @@ function User() {
             <Divider orientation="vertical" sx={{ mx: 0 }} />
           </Grid>
           <Grid item xs={12} xl={6}>
-            <ProfilePhotosList title="Imagenes" photos={user.photos} shadow={true} />
+            <ProfilePhotosList
+              title="Imagenes"
+              photos={user.photos}
+              shadow={true}
+              userId={userId}
+            />
           </Grid>
         </Grid>
       </MDBox>}
+      {tabValue === 1 &&
+        <Tables type={"observations"} userId={userId} />
+      }
+      {tabValue === 2 &&
+          <Tables type={"diaryEntries"} userId={userId} />
+      }
     </DashboardLayout>
   );
 };

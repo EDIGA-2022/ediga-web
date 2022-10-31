@@ -31,29 +31,39 @@ import DataTable from "examples/Tables/DataTable";
 
 // Data
 import usersTable from "layouts/tables/data/usersTable";
+import observationsTable from "layouts/tables/data/observationsTable";
+import diaryEntriesTable from "layouts/tables/data/diaryEntriesTable";
 
 // Button, Navigation
 import MDButton from "components/MDButton";
-import {Routes, Route, useNavigate} from 'react-router-dom';
+
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useEffect, useState, useCallback } from "react";
+import { column } from "stylis";
 
 
 function Tables(props) {
-  var columns = useState([]);
-  var csvData = useState([]);
-  var rows = useState([]);
+  var [columns, setColumns] = useState([]);
+  var [csvData, setCsvData] = useState([]);
+  var [rows, setRows] = useState([]);
   const [searchText, setSearchText] = useState('');
-  
-  switch (props.type) {
-    case 'Users':
-      ({columns, rows, csvData} = usersTable(searchText));
-  }
+  let title;
+  // let columns;
+  // let rows;
+  let obj;
+  let onClick;
+
+  // switch (props.type) {
+  //   case 'Users':
+  //     ({columns, rows, csvData} = usersTable(searchText));
+  // }
 
   const onSearchChangeTable = (value) => {
     console.log('index', value)
     setSearchText(value)
   };
-  
+
+
   const navigate = useNavigate();
 
   const navigateToCreateNewUser = () => {
@@ -61,9 +71,55 @@ function Tables(props) {
     navigate('/createNewUser');
   };
 
+  const navigateToCreateNewObservation = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/createNewObservation/' + props.userId);
+  };
+
+  const navigateToCreateNewDiaryEntry = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/createDiaryEntry/' + props.userId);
+  };
+
+  const navigateToEditDiaryEntry = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/editDiaryEntry/' + props.userId);
+  };
+
+  const navigateToViewDiaryEntry = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/viewDiaryEntry/' + props.userId);
+  };
+
+  switch (props.type) {
+    case 'users':
+      title = 'Sujetos';
+      obj = usersTable(searchText);
+      setColumns(obj.columns);
+      setRows(obj.rows);
+      setCsvData(obj.csvData);
+      onClick = navigateToCreateNewUser;
+      break;
+    case 'observations':
+      title = 'Observaciones';
+      obj = observationsTable(props.userId);
+      setColumns(obj.columns);
+      setRows(obj.rows);
+      onClick = navigateToCreateNewObservation;
+      break;
+    case 'diaryEntries':
+      title = 'Diario de campo';
+      obj = diaryEntriesTable(props.userId);
+      setColumns(obj.columns);
+      setRows(obj.rows);
+      onClick = navigateToCreateNewDiaryEntry;
+      break;
+    default:
+      break;
+  }
+
   return (
-    <DashboardLayout>
-      {/* <DashboardNavbar /> */}
+    <div>
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
@@ -79,26 +135,23 @@ function Tables(props) {
                 coloredShadow="info"
                 style={{ display: "flex" }}
               >
-                {props.type === 'Users' && (
-                <>
                 <Grid container justifyContent="flex-end">
                   <Grid item xs={10}>
                     <MDTypography variant="h6" color="white">
-                      Usuarios
+                      {title}
                     </MDTypography>
+
                   </Grid>
                   <Grid item xs>
                     <ExportUsersXLS csvData={csvData} fileName="DataSujetos" />
                   </Grid>
                   <Grid item xs>
-                    <MDButton variant="outlined" color="white" size="small" onClick={navigateToCreateNewUser}>
-                      <AddIcon/>
+                    <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
+                      <AddIcon />
                     </MDButton>
                   </Grid>
                 </Grid>
-                </>
-                )}
-              </MDBox>
+              </MDBox >
               <MDBox pt={3}>
                 <DataTable
                   table={{ columns, rows }}
@@ -110,12 +163,12 @@ function Tables(props) {
                   onSearchChangeTable={onSearchChangeTable}
                 />
               </MDBox>
-            </Card>
-          </Grid>
-        </Grid>
-      </MDBox>
+            </Card >
+          </Grid >
+        </Grid >
+      </MDBox >
       <Footer />
-    </DashboardLayout>
+    </div >
   );
 }
 
