@@ -75,10 +75,14 @@ function ProfileInfoCard({
   values1.push(genre);
   values1.push(country);
   values1.push(yearsOld);
-  values2.push(middleForm.answer1);
-  values2.push(middleForm.answer2);
-  values3.push(endForm.answer1);
-  values3.push(endForm.answer2);
+  if (middleForm) {
+    values2.push(middleForm.answer1);
+    values2.push(middleForm.answer2);
+  }
+  if (endForm) {
+    values3.push(endForm.answer1);
+    values3.push(endForm.answer2);
+  }
 
   // Render the card info items
   function renderItems(labels, values) {
