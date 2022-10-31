@@ -41,14 +41,15 @@ import Footer from "examples/Footer";
 // API requests
 import createObservationAPI from "../../api/createObservation";
 import { useNavigate, useParams } from "react-router-dom";
+import Quill from 'quill'
 
 function CreateNewObservation() {
   
   const { itemId } = useParams();
   const [title, setTitle] = useState('');
   const [type, setType] = useState('1');
-  const [likes, setLikes] = useState('');
-  const [comments, setComments] = useState('');
+  const [likes, setLikes] = useState(0);
+  const [comments, setComments] = useState(0);
   const [date, setDate] = useState('');
   const [music, setMusic] = useState('');
   const [hasMusic, setHasMusic] = useState(false);
@@ -123,10 +124,20 @@ function CreateNewObservation() {
     })
   }
 
+  const Link = Quill.import('formats/link');
+  Link.sanitize = function(url) {
+    // quill by default creates relative links if scheme is missing.
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return `http://${url}`
+    }
+    return url;
+  }
+
+
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+       <DashboardNavbar onArrowClick={() => navigate(-2)} />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={11}>
@@ -255,16 +266,14 @@ function CreateNewObservation() {
                 </MDAlert>
               </MDBox>}
              {showMsg && isSuccess && <MDBox pt={2} px={2}>
-                <MDAlert color="success">
-                  {jsonSuccess()}
-                </MDAlert>
+                  {navigate(-1)} 
               </MDBox>}
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitObservation}>
                     Crear observación
                 </MDButton>
                 <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
-                    Cancelar
+                  Volver
                 </MDButton>
               </MDBox>
             </Card>

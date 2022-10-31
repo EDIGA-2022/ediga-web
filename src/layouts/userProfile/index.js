@@ -124,6 +124,9 @@ function User() {
       {tabValue === 1 &&
         <Tables type={"observations"} userId={userId} />
       }
+      {tabValue === 2 &&
+          <Tables type={"diaryEntries"} userId={userId} />
+      }
     </DashboardLayout>
   );
 };

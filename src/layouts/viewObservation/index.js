@@ -113,7 +113,7 @@ const convertBase64 = (file) => {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <DashboardNavbar onArrowClick={() => navigate(-2)} />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={11}>
@@ -220,7 +220,7 @@ const convertBase64 = (file) => {
                         
                         </MDBox>
                         <MDBox>
-                        {selectedImage && (
+                        {selectedImage && photo && (
                         <div>
                           <img style={{width: 400, height: 400}} src={`${photo}`}/>
                           </div>)}

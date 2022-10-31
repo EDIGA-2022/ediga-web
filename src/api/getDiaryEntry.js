@@ -1,7 +1,7 @@
 const API_URL = process.env.REACT_APP_API_URL;
 
-function getUser(userId) {
-  return fetch(`${API_URL}/api/user/${userId}`, {
+function getDiaryEntry(entryId) {
+  return fetch(`${API_URL}/api/diaryEntry/${entryId}`, {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -10,4 +10,4 @@ function getUser(userId) {
   })  
 }
 
-module.exports = getUser;
+module.exports = getDiaryEntry;
