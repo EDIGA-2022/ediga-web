@@ -43,20 +43,20 @@ function selectGenderColor(gender) {
       case "Otro":
         return "primary"
       default:
-        return "Dark" 
+        return "dark" 
     }
 };
 
-function GetUsers() {
+function GetUsers(searchText) {
   const [rows, setRows] = useState([]);
-  const [loadingRows, setLoadingRows] = useState(false);
+  const [allRows, setAllRows] = useState([]);
 
   const fetchAllUsers = async () => {
-    setLoadingRows(true);
     getUsers().then((response) => {
       if (response.ok) {
         response.json().then((r) => {
-          setRows(r); 
+          setRows(r);
+          setAllRows(r); 
         });
         
       } else {
@@ -66,25 +66,40 @@ function GetUsers() {
     .catch((e) => {
       console.log('error',e);
     })
-    .finally(() => {
-      setLoadingRows(false);
-    });
   }
-  
+
+  const filterRows = (searchText) => {
+    let filteredRows = [];
+    if (searchText === '') {
+      filteredRows = allRows;
+    } else {
+      filteredRows = allRows.filter((row) => {
+        return (
+          row.instagramProfile.toLowerCase().startsWith(searchText.toLowerCase()) ||
+          row.instagramProfile.toLowerCase().includes(searchText.toLowerCase())
+        );
+      });
+    }
+    setRows(filteredRows);
+  };
   
   useEffect(() => {
     fetchAllUsers();
   }, []);
 
+  useEffect(() => {
+    filterRows(searchText);
+  }, [searchText]);
+
  const navigate = useNavigate();
 
   return {
     columns: [
-      { Header: "usuario", accessor: "alias", width: "30%", align: "left" },
+      { Header: "sujeto", accessor: "alias", width: "30%", align: "left" },
       { Header: "edad", accessor: "yearsOld", align: "left" },
       { Header: "genero", accessor: "gender", align: "center" },
       { Header: "pais", accessor: "country", align: "center" },
-      { Header: "acciones", accessor: "accions", align: "center" },
+      { Header: "acciones", accessor: "actions", align: "center" },
     ],
     rows: 
       rows.map((row)=> {
@@ -115,7 +130,7 @@ function GetUsers() {
               { row.country }
           </MDTypography>
           ),
-          accions: (
+          actions: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => navigate("/editUser/" + row.userId )}>
             <Tooltip title="Editar">
               <IconButton>
@@ -125,7 +140,9 @@ function GetUsers() {
           </MDTypography> 
           ),
         }
-      })
+      }),
+    csvData: 
+     rows
   };
 }
 

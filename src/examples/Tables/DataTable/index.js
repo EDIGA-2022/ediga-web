@@ -47,6 +47,7 @@ function DataTable({
   pagination,
   isSorted,
   noEndBorder,
+  onSearchChangeTable,
 }) {
   const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 10;
   const entries = entriesPerPage.entries
@@ -54,9 +55,6 @@ function DataTable({
     : ["5", "10", "15", "20", "25"];
   const columns = useMemo(() => table.columns, [table]);
   const data = useMemo(() => table.rows, [table]);
-  console.log("table",table)
-  console.log("data", data)
-  console.log("columns", columns)
 
   const tableInstance = useTable(
     { columns, data, initialState: { pageIndex: 0 } },
@@ -116,7 +114,8 @@ function DataTable({
 
   // Search input state handle
   const onSearchChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
+    onSearchChangeTable(value)
+    // setGlobalFilter(value || undefined);
   }, 100);
 
   // A function that sets the sorted value for the table

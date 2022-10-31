@@ -16,10 +16,12 @@ Coded by www.creative-tim.com
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import AddIcon from '@mui/icons-material/Add';
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
+import ExportUsersXLS from "components/shared/exportUsersXLS";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -33,10 +35,25 @@ import usersTable from "layouts/tables/data/usersTable";
 // Button, Navigation
 import MDButton from "components/MDButton";
 import {Routes, Route, useNavigate} from 'react-router-dom';
+import { useEffect, useState, useCallback } from "react";
 
 
-function Tables() {
-  const { columns, rows } = usersTable();
+function Tables(props) {
+  var columns = useState([]);
+  var csvData = useState([]);
+  var rows = useState([]);
+  const [searchText, setSearchText] = useState('');
+  
+  switch (props.type) {
+    case 'Users':
+      ({columns, rows, csvData} = usersTable(searchText));
+  }
+
+  const onSearchChangeTable = (value) => {
+    console.log('index', value)
+    setSearchText(value)
+  };
+  
   const navigate = useNavigate();
 
   const navigateToCreateNewUser = () => {
@@ -46,7 +63,7 @@ function Tables() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      {/* <DashboardNavbar /> */}
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
@@ -62,12 +79,25 @@ function Tables() {
                 coloredShadow="info"
                 style={{ display: "flex" }}
               >
-                <MDTypography variant="h6" color="white">
-                  Usuarios
-                </MDTypography>
-                <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={navigateToCreateNewUser}>
-                  +
-                </MDButton>
+                {props.type === 'Users' && (
+                <>
+                <Grid container justifyContent="flex-end">
+                  <Grid item xs={10}>
+                    <MDTypography variant="h6" color="white">
+                      Usuarios
+                    </MDTypography>
+                  </Grid>
+                  <Grid item xs>
+                    <ExportUsersXLS csvData={csvData} fileName="DataSujetos" />
+                  </Grid>
+                  <Grid item xs>
+                    <MDButton variant="outlined" color="white" size="small" onClick={navigateToCreateNewUser}>
+                      <AddIcon/>
+                    </MDButton>
+                  </Grid>
+                </Grid>
+                </>
+                )}
               </MDBox>
               <MDBox pt={3}>
                 <DataTable
@@ -76,6 +106,8 @@ function Tables() {
                   entriesPerPage={false}
                   showTotalEntries={false}
                   noEndBorder
+                  canSearch={true}
+                  onSearchChangeTable={onSearchChangeTable}
                 />
               </MDBox>
             </Card>
