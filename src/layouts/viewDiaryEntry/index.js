@@ -97,10 +97,10 @@ Link.sanitize = function(url) {
   return url;
 }
 
-function exportToWord(e) {
+  function exportToWord(e) {
     (async () => {
-        var converted = await htmlDocx.asBlob(entry,{ type: 'application/octet-stream' });
-        saveAs(converted, 'entradaDiarioCampo.docx');
+      const converted = htmlDocx.asBlob(entry);
+      saveAs(converted, 'entradaDiarioCampo.docx');
     })();
   }
 
@@ -122,11 +122,11 @@ function exportToWord(e) {
               <form>
                 <Grid container spacing={1} justifyContent="center">
                     <Grid item xs={12} lg={12}> 
-                        <MDBox p={1}>
+                        <MDBox p={4}>
                         <ReactQuill    
                             value={entry}
                             readOnly={true}
-                            style={{ width: '90%', height: 700,background: 'white' }}
+                            style={{ width: '90%', height: 500,background: 'white' }}
                             theme={"bubble"} />
                         </MDBox>
                     </Grid>

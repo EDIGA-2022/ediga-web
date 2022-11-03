@@ -31,7 +31,8 @@ import MDButton from "components/MDButton";
 import Switch from '@mui/material/Switch';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
+import htmlDocx from 'html-docx-js/dist/html-docx'
+import { saveAs } from 'file-saver'
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -102,6 +103,13 @@ function CreateNewDiaryEntry() {
     return url;
   }
 
+  function exportToWord(e) {
+    (async () => {
+      const converted = htmlDocx.asBlob(entry);
+      saveAs(converted, 'entradaDiarioCampo.docx');
+    })();
+  }
+
   return (
     <DashboardLayout>
       <DashboardNavbar onArrowClick={() => navigate(-2)} />
@@ -113,21 +121,21 @@ function CreateNewDiaryEntry() {
                 <MDTypography variant="h5">Nueva entrada de diario de campo</MDTypography>
               </MDBox>
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={submitDiaryEntry}>
+                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={exportToWord}>
                   Exportar .docx
                 </MDButton>
               </MDBox>
               <form>
                 <Grid container spacing={1} justifyContent="center">
                   <Grid item xs={12} lg={12}>
-                    <MDBox p={1}>
-                      <ReactQuill
-                        modules={modules}
-                        style={{ width: '90%', height: 700, background: 'white' }}
-                        theme="snow"
-                        onChange={setEntry}
-                      />
-                    </MDBox>
+                      <MDBox p={4}>
+                        <ReactQuill
+                          modules={modules}
+                          style={{ width: '90%', height: 500, background: 'white' }}
+                          theme="snow"
+                          onChange={setEntry}
+                        />
+                      </MDBox>
                   </Grid>
                 </Grid>
                 <MDBox p={3}></MDBox>

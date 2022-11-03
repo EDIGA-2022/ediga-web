@@ -31,7 +31,8 @@ import MDButton from "components/MDButton";
 import Switch from '@mui/material/Switch';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
+import htmlDocx from 'html-docx-js/dist/html-docx'
+import { saveAs } from 'file-saver'
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -121,6 +122,12 @@ function EditDiaryEntry() {
     return url;
   }
 
+  function exportToWord(e) {
+    (async () => {
+      const converted = htmlDocx.asBlob(entry);
+      saveAs(converted, 'entradaDiarioCampo.docx');
+    })();
+  }
 
   return (
     <DashboardLayout>
@@ -133,18 +140,18 @@ function EditDiaryEntry() {
                 <MDTypography variant="h5">Editar entrada de diario de campo</MDTypography>
               </MDBox>
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={submitDiaryEntry}>
+                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={exportToWord}>
                   Exportar .docx
                 </MDButton>
               </MDBox>
               <form>
                 <Grid container spacing={1} justifyContent="center">
                   <Grid item xs={12} lg={12}>
-                    <MDBox p={1}>
+                    <MDBox p={4}>
                       <ReactQuill
                         modules={modules}
                         value={entry}
-                        style={{ width: '90%', height: 700, background: 'white' }}
+                        style={{ width: '90%', height: 500, background: 'white' }}
                         theme="snow"
                         onChange={setEntry}
                       />

@@ -49,8 +49,7 @@
     "stylis-plugin-rtl": "2.1.1",
     "web-vitals": "2.1.4",
     "yup": "0.32.11",
-    "xlsx": "^0.18.2",
-    "file-saver": "^2.0.5"
+    "xlsx": "^0.18.2"
   },
   "scripts": {
     "start": "react-scripts start",
