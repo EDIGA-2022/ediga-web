@@ -47,7 +47,7 @@ function selectGenderColor(gender) {
     }
 };
 
-function GetUsers(searchText) {
+function GetUsers(searchText, gender, country, age) {
   const [rows, setRows] = useState([]);
   const [allRows, setAllRows] = useState([]);
 
@@ -70,18 +70,32 @@ function GetUsers(searchText) {
     })
   }
 
-  const filterRows = (searchText) => {
+  const filterRows = (searchText, gender, country, age) => {
     let filteredRows = [];
     if (searchText === '') {
       filteredRows = allRows;
     } else {
       filteredRows = allRows.filter((row) => {
         return (
-          row.instagramProfile.toLowerCase().startsWith(searchText.toLowerCase()) ||
-          row.instagramProfile.toLowerCase().includes(searchText.toLowerCase())
+          (row.instagramProfile && row.instagramProfile.toLowerCase().startsWith(searchText.toLowerCase())) ||
+          (row.instagramProfile &&row.instagramProfile.toLowerCase().includes(searchText.toLowerCase())) ||
+          (row.alias && row.alias.toLowerCase().includes(searchText.toLowerCase()))
         );
       });
     }
+
+    if (gender) {
+      filteredRows = filteredRows.filter((row) => row.gender === gender)
+    }
+
+    if (country) {
+      filteredRows = filteredRows.filter((row) => row.country === country)
+    }
+
+    if (age) {
+      filteredRows = filteredRows.filter((row) => row.yearsOld === age)
+    }
+
     setRows(filteredRows);
   };
   
@@ -90,8 +104,10 @@ function GetUsers(searchText) {
   }, []);
 
   useEffect(() => {
-    filterRows(searchText);
-  }, [searchText]);
+    filterRows(searchText, gender, country, age);
+  }, [searchText, gender, country, age]);
+
+
 
  const navigate = useNavigate();
 

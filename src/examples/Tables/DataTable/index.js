@@ -14,6 +14,7 @@ Coded by www.creative-tim.com
 */
 
 import { useMemo, useEffect, useState } from "react";
+import * as React from 'react';
 
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
@@ -34,6 +35,11 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDPagination from "components/MDPagination";
+import MDButton from "components/MDButton";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 // Material Dashboard 2 React example components
 import DataTableHeadCell from "examples/Tables/DataTable/DataTableHeadCell";
@@ -48,6 +54,12 @@ function DataTable({
   isSorted,
   noEndBorder,
   onSearchChangeTable,
+  setCountry,
+  setGender,
+  setAge,
+  country,
+  gender,
+  age,
 }) {
   const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 10;
   const entries = entriesPerPage.entries
@@ -147,43 +159,129 @@ function DataTable({
     entriesEnd = pageSize * (pageIndex + 1);
   }
 
+  const handleChangeGender = (event) => {
+    setGender(event.target.value);
+  };
+
+  const handleChangeCountry = (event) => {
+    setCountry(event.target.value);
+  };
+
+  const handleChangeAge = (event) => {
+    setAge(event.target.value);
+  };
+
   return (
     <TableContainer sx={{ boxShadow: "none" }}>
       {entriesPerPage || canSearch ? (
-        <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-          {entriesPerPage && (
-            <MDBox display="flex" alignItems="center">
-              <Autocomplete
-                disableClearable
-                value={pageSize.toString()}
-                options={entries}
-                onChange={(event, newValue) => {
-                  setEntriesPerPage(parseInt(newValue, 10));
-                }}
-                size="small"
-                sx={{ width: "5rem" }}
-                renderInput={(params) => <MDInput {...params} />}
-              />
-              <MDTypography variant="caption" color="secondary">
-                &nbsp;&nbsp;entries per page
-              </MDTypography>
-            </MDBox>
-          )}
-          {canSearch && (
-            <MDBox width="12rem" ml="auto">
-              <MDInput
-                placeholder="Search..."
-                value={search}
-                size="small"
-                fullWidth
-                onChange={({ currentTarget }) => {
-                  setSearch(search);
-                  onSearchChange(currentTarget.value);
-                }}
-              />
-            </MDBox>
-          )}
-        </MDBox>
+        <>
+          <MDBox display="flex" alignItems="center" p={2}>
+            {entriesPerPage && (
+              <MDBox display="flex" alignItems="center">
+                <Autocomplete
+                  disableClearable
+                  value={pageSize.toString()}
+                  options={entries}
+                  onChange={(event, newValue) => {
+                    setEntriesPerPage(parseInt(newValue, 10));
+                  }}
+                  size="small"
+                  sx={{ width: "5rem" }}
+                  renderInput={(params) => <MDInput {...params} />}
+                />
+                <MDTypography variant="caption" color="secondary">
+                  &nbsp;&nbsp;entries per page
+                </MDTypography>
+              </MDBox>
+            )}
+            {canSearch && (
+              <div>
+                <FormControl sx={{ mt: 1, mb: 1, mr: 1, minWidth: 175 }} size="small">
+                  <InputLabel id="demo-simple-select-label">Género</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={gender}
+                    label="Genero"
+                    onChange={handleChangeGender}
+                    style={{ height: '37px' }}
+                  >
+                    <MenuItem value={0}>Todos</MenuItem>
+                    <MenuItem value={'Mujer cis'}>Mujer cis</MenuItem>
+                    <MenuItem value={'Hombre cis'}>Hombre cis</MenuItem>
+                    <MenuItem value={'Mujer trans'}>Mujer trans</MenuItem>
+                    <MenuItem value={'Hombre trans'}>Hombre trans</MenuItem>
+                    <MenuItem value={'No binario'}>No binario</MenuItem>
+                    <MenuItem value={'Otro'}>Otro</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ m: 1, minWidth: 175 }} size="small">
+                  <InputLabel id="demo-simple-select-label">País</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={country}
+                    label="País"
+                    onChange={handleChangeCountry}
+                    style={{ height: '37px' }}
+                  >
+                    <MenuItem value={0}>Todos</MenuItem>
+                    <MenuItem value={'Mexico'}>Mexico</MenuItem>
+                    <MenuItem value={'Uruguay'}>Uruguay</MenuItem>
+                    <MenuItem value={'España'}>España</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ m: 1, minWidth: 175 }} size="small">
+                  <InputLabel id="demo-simple-select-label">Edad</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={age}
+                    label="Edad"
+                    onChange={handleChangeAge}
+                    style={{ height: '37px' }}
+                  >
+                    <MenuItem value={0}>Todos</MenuItem>
+                    <MenuItem value={13}>13</MenuItem>
+                    <MenuItem value={14}>14</MenuItem>
+                    <MenuItem value={15}>15</MenuItem>
+                    <MenuItem value={16}>16</MenuItem>
+                    <MenuItem value={17}>17</MenuItem>
+
+                  </Select>
+                </FormControl>
+              </div>
+            )}
+            {canSearch && (
+              <MDBox width="30%">
+                <MDInput
+                  placeholder="Buscar por alias o nombre de instagram..."
+                  value={search}
+                  size="small"
+                  fullWidth
+                  onChange={({ currentTarget }) => {
+                    setSearch(search);
+                    onSearchChange(currentTarget.value);
+                  }}
+                />
+              </MDBox>
+            )}
+          </MDBox>
+          <MDButton
+            variant="outlined"
+            color="info"
+            style={{ margin: "0 16px", height: '37px' }}
+            onClick={() => {
+              setSearch('');
+              onSearchChange('');
+              setAge(0);
+              setCountry(0);
+              setGender(0);
+            }}
+          >
+            Limpiar filtros
+          </MDButton>
+        </>
       ) : null}
       <Table {...getTableProps()}>
         <MDBox component="thead">

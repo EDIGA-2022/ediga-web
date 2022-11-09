@@ -80,15 +80,13 @@ function User() {
     fetchUser()
   }, []);
 
-  console.log("user", user, user.photos)
-
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox mb={2} />
       {/* <Header> */}
       <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
-        <Tab label={"App ediga"} />
+        <Tab label="App ediga" />
         <Tab label="Observaciones" />
         <Tab label="Diario de campo" />
       </Tabs>

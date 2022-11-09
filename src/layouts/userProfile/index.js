@@ -43,7 +43,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 // API requests
-import getUserProfile from "../../api/getUserProfile"
+import getUserProfile from "../../api/getUserProfile";
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 function User() {
@@ -125,7 +125,7 @@ function User() {
         <Tables type={"observations"} userId={userId} />
       }
       {tabValue === 2 &&
-          <Tables type={"diaryEntries"} userId={userId} />
+        <Tables type={"diaryEntries"} userId={userId} />
       }
     </DashboardLayout>
   );

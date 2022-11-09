@@ -97,6 +97,7 @@ function UserImage() {
 				answer1,
 				answer2,
 				answer3,
+				userId,
 			})
 		} else {
 			fetchObservation();
@@ -152,7 +153,7 @@ function UserImage() {
 				navigate(`/user/${photo.userId}`,
 					{
 						state: {
-							tab: 1
+							tab: 0
 						}
 					}
 				);
