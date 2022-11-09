@@ -53,7 +53,7 @@ function ProfilePhotosList({ title, photos, shadow, userId }) {
                   {
                     state: {
                       photoId: item.photoId,
-                      userId,
+                      userId: item.userId,
                       photo: JSON.stringify(item.photo),
                       answer1: item.answer1,
                       answer2: item.answer2,
