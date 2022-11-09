@@ -272,8 +272,6 @@ function DataTable({
             color="info"
             style={{ margin: "0 16px", height: '37px' }}
             onClick={() => {
-              setSearch('');
-              onSearchChange('');
               setAge(0);
               setCountry(0);
               setGender(0);
