@@ -41,6 +41,7 @@ import Tables from "layouts/tables";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import EditEdigaUser from "layouts/editEdigaUser";
 import User from "layouts/userProfile";
 import Logout from "layouts/authentication/logout";
 import CreateNewUser from "layouts/createNewUser"
@@ -98,6 +99,17 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Sección de administrador",
+    key: "admin",
+    icon: <Icon fontSize="small">settings</Icon>,
+    route: "/admin/",
+    component:
+    <DashboardLayout>
+      <Tables type={"edigaUsers"} />
+    </DashboardLayout>,
+  },
+  {
+    type: "collapse",
     name: "Cerrar sesión",
     key: "logout",
     icon: <Icon fontSize="small">logout</Icon>,
@@ -130,6 +142,14 @@ const routes = [
         icon: <Icon fontSize="small">editUser</Icon>,
         route: "/editUser/:itemId",
         component: <EditUser />,
+      },
+      {
+        type: "collapse",
+        name: "Editar investigador",
+        key: "edit-ediga-user",
+        icon: <Icon fontSize="small">assignment</Icon>,
+        route: "/edigaUser/:userId",
+        component: <EditEdigaUser />,
       },
       {
         type: "collapse",

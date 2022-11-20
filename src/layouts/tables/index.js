@@ -30,6 +30,7 @@ import DataTable from "examples/Tables/DataTable";
 // Data
 import usersTable from "layouts/tables/data/usersTable";
 import observationsTable from "layouts/tables/data/observationsTable";
+import edigaUsersTable from "layouts/tables/data/edigaUsersTable";
 
 // Button, Navigation
 import MDButton from "components/MDButton";
@@ -37,13 +38,17 @@ import {Routes, Route, useNavigate} from 'react-router-dom';
 
 
 function Tables(props) {
-  const { columns, rows } = props.type === 'users' ? usersTable() : observationsTable(props.userId);
-  const title = props.type === 'users' ? 'Usuarios' : "Observaciones";
+  const { columns, rows } = props.type === 'users' ? usersTable() : props.type === 'edigaUsers'? edigaUsersTable(): observationsTable(props.userId);
+  const title = props.type === 'users' ? 'Usuarios' : props.type === 'edigaUsers' ? "Usuarios Ediga" : "Observaciones";
   const navigate = useNavigate();
 
   const navigateToCreateNewUser = () => {
     // 👇️ navigate to /navigateToCreateNewUser
-    navigate('/createNewUser');
+    if (props.type === 'edigaUsers') {
+      navigate('/authentication/sign-up');
+    } else {
+      navigate('/createNewUser');
+    }
   };
 
   return (

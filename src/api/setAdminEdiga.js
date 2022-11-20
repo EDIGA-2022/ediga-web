@@ -1,19 +1,15 @@
 const API_URL = process.env.REACT_APP_API_URL;
 
-function register(name, email, password, isAdmin) {
-  return fetch(`${API_URL}/api/register`, {
+export async function setAdminEdiga(userId, admin) {
+  return fetch(`${API_URL}/api/setAdminEdiga`, {
     method: "POST",
     body: JSON.stringify({
-      name: name,
-      email: email,
-      password: password,
-      isAdmin: isAdmin,
+      userId: userId,
+      admin: admin
     }),
     headers: {
       "Content-type": "application/json; charset=UTF-8",
       "Authorization": `Bearer ${localStorage.getItem("token")}`,
     }
-  });
-}
-
-module.exports = register;
+  })
+};
