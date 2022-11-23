@@ -19,17 +19,18 @@ import { useState, useEffect } from "react";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
+import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
-import MDAvatar from "components/MDAvatar";
 import MDBadge from "components/MDBadge";
 
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ConfirmIcon from '@mui/icons-material/Delete';
+
 import { IconButton, Tooltip } from '@mui/material';
-import profilePhoto from "assets/images/profile-photo.jpg";
 import { getEdigaUsers } from "../../../api/getEdigaUsers";
 import { setAdminEdiga } from "../../../api/setAdminEdiga";
-
-
+import { deleteEdigaUser } from "../../../api/deleteEdigaUser";
 
 function adminColor(isAdmin) {
   if (isAdmin) {
@@ -39,9 +40,14 @@ function adminColor(isAdmin) {
 };
 
 
+
 function EdigaUsers() {
   const [rows, setRows] = useState([]);
   const [loadingRows, setLoadingRows] = useState(false);
+
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
+  // const [userIdToDelete, setUserIdToDelete] = useState(null);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
 
   const fetchAllUsers = async () => {
     setLoadingRows(true);
@@ -67,6 +73,7 @@ function EdigaUsers() {
         response.json().then((r) => {
           console.log(r);
           fetchAllUsers();
+          console.log("show confirm button", showDeleteButton);
         });
       } else {
         if (response.status === 401) {
@@ -80,6 +87,27 @@ function EdigaUsers() {
     navigate(`/edigaUser/${user.edigaUserId}`);
   }
 
+  const deleteUser = (user) => {
+    deleteEdigaUser(user.edigaUserId).then((response) => {
+      if (response.ok) {
+        response.json().then(async (r) => {
+          await fetchAllUsers();
+        });
+      } else {
+        console.log("no eliminado");
+      }
+    });
+  }
+
+  const requestConfirmation = (user) => {
+    setShowDeleteButton(true);
+    setUserIdToDelete(user.edigaUserId);
+    setTimeout(function () {
+      setShowDeleteButton(false);
+    }, 5000);
+  }
+
+
   useEffect(() => {
     fetchAllUsers();
   }, []);
@@ -91,6 +119,8 @@ function EdigaUsers() {
       { Header: "usuario", accessor: "name", width: "30%", align: "left" },
       { Header: "rol", accessor: "role", align: "left" },
       { Header: "cambiar rol", accessor: "actions", align: "center" },
+      { Header: "eliminar", accessor: "delete", align: "center" },
+
     ],
     rows:
       rows.map((user) => {
@@ -113,7 +143,7 @@ function EdigaUsers() {
             </MDBox>
           ),
           actions: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={()=> edit(user)}>
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => edit(user)}>
               <Tooltip title="Editar">
                 <IconButton>
                   <EditIcon />
@@ -121,8 +151,22 @@ function EdigaUsers() {
               </Tooltip>
             </MDTypography>
           ),
+
+          delete: (
+            <MDTypography component="a" variant="caption" color="text" fontWeight="medium" onClick={() => requestConfirmation(user)}>
+              {(!showDeleteButton || user.edigaUserId != userIdToDelete) && <Tooltip title="Eliminar usuario">
+                <IconButton>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>}
+              {showDeleteButton && user.edigaUserId === userIdToDelete && <MDButton color="error" onClick={()=> deleteUser(user)}>Eliminar</MDButton>}
+
+            </MDTypography>
+          ),
+
         }
       })
+
   };
 }
 
