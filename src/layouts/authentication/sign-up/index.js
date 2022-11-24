@@ -44,8 +44,6 @@ import MDAlert from "components/MDAlert";
 import { useNavigate } from 'react-router-dom';
 
 
-
-
 function Cover() {
 
   const [name, setName] = useState('');
@@ -55,7 +53,7 @@ function Cover() {
   const emailChange = (e) => setEmail(e.target.value);
 
   const [role, setRole] = useState('researcher');
-  
+
   const [password, setPassword] = useState('');
   const passwordChange = (e) => {
     setPassword(e.target.value)
@@ -64,11 +62,21 @@ function Cover() {
     }
   };
 
+  const [country, setCountry] = useState('');
+
+
+
   let isAdmin = false;
 
   const roles = [
     { label: 'Investigador', code: "researcher" },
     { label: 'Administrador', code: "admin" },
+  ];
+
+  const countries = [
+    { label: 'México', country: "MX" },
+    { label: 'España', country: "ES" },
+    { label: 'Uruguay', country: "UY" },
   ];
 
   const navigate = useNavigate();
@@ -95,7 +103,7 @@ function Cover() {
     if (role === 'admin') {
       isAdmin = true;
     }
-    registerApi(name, email, password, isAdmin).then(response => {
+    registerApi(name, email, password, isAdmin, country).then(response => {
       if (response.ok) {
         setSuccess(true);
         cleanForm();
@@ -162,15 +170,26 @@ function Cover() {
               {password && passwordError && submitted && <FormError text={passwordError}></FormError>}
               {!password && submitted && <FormError text="Este campo es obligatorio"></FormError>}
             </MDBox>
+            <MDBox mb={2}>
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={countries}
+                sx={{ width: "100%" }}
+                onChange={(event, value) => setCountry(value.country)}
+                renderInput={(params) => <TextField {...params} label="País" />}
+              />
+            </MDBox>
             <MDBox mb={1}>
               <Autocomplete
                 disablePortal
                 id="combo-box-demo"
                 options={roles}
                 sx={{ width: "100%" }}
-                onChange= {(e, value) => {
+                onChange={(e, value) => {
                   console.log(e, value)
-                  setRole(value.code)}}
+                  setRole(value.code)
+                }}
                 renderInput={(params) => <TextField {...params} label="Asigna un rol" />}
               />
             </MDBox>
