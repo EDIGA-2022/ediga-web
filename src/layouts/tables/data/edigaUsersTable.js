@@ -30,7 +30,7 @@ import { IconButton, Tooltip } from '@mui/material';
 import { getEdigaUsers } from "../../../api/getEdigaUsers";
 import { setAdminEdiga } from "../../../api/setAdminEdiga";
 import { deleteEdigaUser } from "../../../api/deleteEdigaUser";
-import {useGlobalState} from "../../../state";
+import {useGlobalState} from "../../../App";
 
 function adminColor(isAdmin) {
   if (isAdmin) {
