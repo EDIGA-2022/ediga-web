@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // react-router-dom components
 import { Link, Navigate } from "react-router-dom";
@@ -39,13 +39,15 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import Spinner from "components/shared/spinner/spinner"
 import FormError from "components/shared/formError/formError"
 
-import registerApi from "../../../api/register";
+
 import MDAlert from "components/MDAlert";
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from "react-router-dom";
+import getEdigaUserApi from "../../api/getEdigaUser";
+import editEdigaUser from "../../api/editEdigaUser";
 
 
 function Cover() {
-
+  const { userId } = useParams();
   const [name, setName] = useState('');
   const nameChange = (e) => setName(e.target.value);
 
@@ -54,90 +56,82 @@ function Cover() {
 
   const [role, setRole] = useState('researcher');
 
-  const [password, setPassword] = useState('');
-  const passwordChange = (e) => {
-    setPassword(e.target.value)
-    if (password.length > 6) {
-      setPasswordError('');
+  useEffect(function effectFunction() {
+    async function fetchEdigaUser() {
+      await getEdigaUserApi(userId).then(res => {
+        res.json().then(response => {
+          setName(response.user.name);
+          setEmail(response.user.email);
+          if (response.user.isAdmin) {
+            setRole('admin');
+          } else {
+            setRole('researcher');
+          }
+        })
+      })
     }
-  };
 
-  const [country, setCountry] = useState('');
+    fetchEdigaUser();
+  }, []);
 
-
-
-  let isAdmin = false;
 
   const roles = [
     { label: 'Investigador', code: "researcher" },
     { label: 'Administrador', code: "admin" },
   ];
 
-  const countries = [
-    { label: 'México', country: "MX" },
-    { label: 'España', country: "ES" },
-    { label: 'Uruguay', country: "UY" },
-  ];
-
   const navigate = useNavigate();
   const [errors, setErrors] = useState('')
-  const [passwordError, setPasswordError] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  function register(event) {
+
+  function edit(event) {
     setLoading(true);
     setSubmitted(true);
-    if (!name || !password || !email) {
-      setErrors({ email: !email, password: !password, name: !name });
+    if (!name || !email) {
+      setErrors({ email: !email, name: !name });
       setLoading(false);
       return;
     }
-    if (password.length <= 6) {
-      setPasswordError('La contraseña debe tener al menos 7 caracteres.');
-      setLoading(false);
-      return;
-    }
+    setEmail(email)
+    setName(name)
+    let isAdmin;
+    console.log("role", role)
     if (role === 'admin') {
       isAdmin = true;
+    } else {
+      isAdmin = false;
     }
-    registerApi(name, email, password, isAdmin, country).then(response => {
-      if (response.ok) {
+    console.log("Antesde editar", userId, name, email, isAdmin);
+    editEdigaUser(userId, name, email, isAdmin).then(res => {
+      if (res.status === 200) {
         setSuccess(true);
-        cleanForm();
         setLoading(false);
+        setTimeout(() => {
+          navigate('/admin/');
+        }, 2000);
       } else {
-        if (response.status === 401) {
-          navigate("/authentication/sign-in");
-        }
-        response.json().then(r => {
-          setErrors({ serverError: r.message });
-          setLoading(false);
-        });
+        setErrors({ email: true, password: true, name: true });
+        setSuccess(false);
+        setLoading(false);
       }
     })
   }
 
-  function cleanForm() {
-    setEmail("");
-    setName("");
-    setPassword("");
-    setSubmitted(false);
-  }
-
-  function redirectToLogin() {
-    if (localStorage.getItem("token")) {
-      return true
+  function setRoleInForm() {
+    if (role === 'admin') {
+      return 'Administrador';
+    } else {
+      return 'Investigador';
     }
-    // navigate to sign in
-    navigate("/authentication/sign-in");
-
   }
+
   return (
     <CoverLayout>
-      {redirectToLogin() && <Card>
+      <Card>
         <MDBox
           variant="gradient"
           bgColor="info"
@@ -150,42 +144,29 @@ function Cover() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Registra un nuevo investigador
+            Editar investigador
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             {submitted && errors.serverError && <MDAlert p={0.5} color="error" style={{ fontWeight: "normal", fontSize: "14px" }}>{errors.serverError}</MDAlert>}
-            {success && <MDAlert p={0.5} color="success" style={{ fontWeight: "normal", fontSize: "14px" }}>Usuario creado exitosamente</MDAlert>}
+            {success && <MDAlert p={0.5} color="success" style={{ fontWeight: "normal", fontSize: "14px" }}>Usuario editado exitosamente</MDAlert>}
             <MDBox mb={2}>
-              <MDInput type="text" label="Nombre" variant="standard" fullWidth onChange={nameChange} disabled={loading} />
+              <MDInput type="text" label="Nombre" variant="standard" fullWidth value={name} onChange={nameChange} disabled={loading} />
               {!name && submitted && <FormError text="Este campo es obligatorio"></FormError>}
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth onChange={emailChange} disabled={loading} />
+              <MDInput type="email" label="Email" variant="standard" fullWidth value={email} onChange={emailChange} disabled={loading} />
               {!email && submitted && <FormError text="Este campo es obligatorio"></FormError>}
             </MDBox>
-            <MDBox mb={2}>
-              <MDInput type="password" label="Contraseña" variant="standard" fullWidth onChange={passwordChange} disabled={loading} />
-              {password && passwordError && submitted && <FormError text={passwordError}></FormError>}
-              {!password && submitted && <FormError text="Este campo es obligatorio"></FormError>}
-            </MDBox>
-            <MDBox mb={2}>
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={countries}
-                sx={{ width: "100%" }}
-                onChange={(event, value) => setCountry(value.country)}
-                renderInput={(params) => <TextField {...params} label="País" />}
-              />
-            </MDBox>
+
             <MDBox mb={1}>
               <Autocomplete
                 disablePortal
                 id="combo-box-demo"
                 options={roles}
                 sx={{ width: "100%" }}
+                value={setRoleInForm()}
                 onChange={(e, value) => {
                   console.log(e, value)
                   setRole(value.code)
@@ -194,14 +175,9 @@ function Cover() {
               />
             </MDBox>
 
-            <MDBox mb={1} textAlign="center">
-              <MDTypography variant="button" color="text">
-                El usuario deberá cambiar la contraseña al iniciar sesión
-              </MDTypography>
-            </MDBox>
             <MDBox mt={1} mb={1}>
-              {!loading && <MDButton variant="gradient" color="info" fullWidth onClick={register}>
-                Registrar
+              {!loading && <MDButton variant="gradient" color="info" fullWidth onClick={edit}>
+                Editar
               </MDButton>}
               {loading && <Spinner></Spinner>}
             </MDBox>
@@ -213,7 +189,7 @@ function Cover() {
             </MDBox>
           </MDBox>
         </MDBox>
-      </Card>}
+      </Card>
     </CoverLayout>
   );
 }

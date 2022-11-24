@@ -32,8 +32,12 @@ import observationsTable from "layouts/tables/data/observationsTable";
 // Data
 import exportPhotos from "../../api/exportPhotos";
 import usersTable from "layouts/tables/data/usersTable";
+
+import observationsTable from "layouts/tables/data/observationsTable";
+import edigaUsersTable from "layouts/tables/data/edigaUsersTable";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+
 
 function Tables(props) {
   var columns = useState([]);
@@ -52,11 +56,18 @@ function Tables(props) {
     setSearchText(value)
   };
 
+function Tables(props) {
+  const { columns, rows } = props.type === 'users' ? usersTable() : props.type === 'edigaUsers'? edigaUsersTable(): observationsTable(props.userId);
+  const title = props.type === 'users' ? 'Usuarios' : props.type === 'edigaUsers' ? "Usuarios Ediga" : "Observaciones";
   const navigate = useNavigate();
 
   const navigateToCreateNewUser = () => {
     // 👇️ navigate to /navigateToCreateNewUser
-    navigate('/createNewUser');
+    if (props.type === 'edigaUsers') {
+      navigate('/authentication/sign-up');
+    } else {
+      navigate('/createNewUser');
+    }
   };
 
   const navigateToCreateNewObservation = () => {

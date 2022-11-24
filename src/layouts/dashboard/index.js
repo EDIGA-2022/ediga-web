@@ -53,6 +53,9 @@ function Dashboard() {
   const [gendersBarChartData, setGendersBarChartData] = useState({ labels: [], datasets: [] });
   const [countriesBarChartData, setCountriesBarChartData] = useState({ labels: [], datasets: [] });
   const [agesBarChartData, setAgesBarChartData] = useState({ labels: [], datasets: [] });
+  const [middleFormAnswers, setMiddleFormAnswers] = useState({});
+  const [endFormAnswers, setEndFormAnswers] = useState({});
+
 
   const [data, setData] = useState(false);
 
@@ -129,8 +132,8 @@ function Dashboard() {
           setGendersInChart(r.userGenders);
           setAgesInChart(r.userAges);
           setTrackedUsers(r.trackedUsers);
-
-
+          setMiddleFormAnswers(r.middleFormAnswers);
+          setEndFormAnswers(r.endFormAnswers);
           setData(true);
         })
       }
@@ -143,7 +146,7 @@ function Dashboard() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox py={3}>
+      {data && <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
@@ -209,25 +212,25 @@ function Dashboard() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
-                {data && <ReportsBarChart
+                <ReportsBarChart
                   color="success"
                   title="Usuarios por país"
                   // description="Last Campaign Performance"
                   date="Datos actualizados recientemente"
                   chart={countriesBarChartData}
-                />}
+                />
               </MDBox>
             </Grid>
 
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
-                {data && <ReportsBarChart
+                <ReportsBarChart
                   color="info"
                   title="Géneros"
                   // description="Last Campaign Performance"
                   date="Datos actualizados recientemente"
                   chart={gendersBarChartData}
-                />}
+                />
               </MDBox>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -254,17 +257,17 @@ function Dashboard() {
             </Grid>
           </Grid>
         </MDBox>
-        <MDBox>
+        <MDBox> 
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={8}>
-              <Projects />
+              <Projects middleQuestions={middleFormAnswers} finalQuestions={endFormAnswers}/>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <OrdersOverview />
             </Grid>
           </Grid>
         </MDBox>
-      </MDBox>
+      </MDBox> }
       <Footer />
     </DashboardLayout>
   );
