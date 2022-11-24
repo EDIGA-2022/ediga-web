@@ -47,8 +47,11 @@ import SetPasswordForm from "../set-password/index"
 
 import { useNavigate } from 'react-router-dom';
 
+import { useGlobalState } from "../../../App";
 
 function Basic() {
+
+
 
   const [email, setEmail] = useState('');
   const emailChange = (e) => setEmail(e.target.value);
@@ -66,6 +69,7 @@ function Basic() {
 
   const navigate = useNavigate();
 
+  const [isAdmin, setIsAdmin] = useGlobalState('isAdmin');
 
   const childToParent = (childdata) => {
     setShowSetPassword(false);
@@ -84,6 +88,8 @@ function Basic() {
       if (response.ok) {
         response.json().then(r => {
           localStorage.setItem("token", r.token)
+          localStorage.setItem("isAdmin", r.user.isAdmin);
+          setIsAdmin(r.user.isAdmin)
           if (r.user.firstLogIn) {
             setName(r.user.name);
             setLoading(false);

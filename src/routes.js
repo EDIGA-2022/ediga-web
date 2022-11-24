@@ -52,7 +52,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 // @mui icons
 import Icon from "@mui/material/Icon";
 
-const routes = [
+export const adminRoutes = [
   {
     type: "collapse",
     name: "Métricas",
@@ -83,22 +83,6 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Iniciar sesión",
-    key: "sign-in",
-    icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/sign-in",
-    component: <SignIn />,
-  },
-  {
-    type: "collapse",
-    name: "Registrar investigador",
-    key: "sign-up",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/authentication/sign-up",
-    component: <SignUp />,
-  },
-  {
-    type: "collapse",
     name: "Sección de administrador",
     key: "admin",
     icon: <Icon fontSize="small">settings</Icon>,
@@ -119,6 +103,14 @@ const routes = [
   
   {
     collapse: [
+      {
+        type: "collapse",
+        name: "Iniciar sesión",
+        key: "sign-in",
+        icon: <Icon fontSize="small">login</Icon>,
+        route: "/authentication/sign-in",
+        component: <SignIn />,
+      },
       {
         type: "collapse",
         name: "User profile",
@@ -145,6 +137,14 @@ const routes = [
       },
       {
         type: "collapse",
+        name: "Registrar investigador",
+        key: "sign-up",
+        icon: <Icon fontSize="small">assignment</Icon>,
+        route: "/authentication/sign-up",
+        component: <SignUp />,
+      },
+      {
+        type: "collapse",
         name: "Editar investigador",
         key: "edit-ediga-user",
         icon: <Icon fontSize="small">assignment</Icon>,
@@ -163,4 +163,88 @@ const routes = [
   }
 ];
 
-export default routes;
+export const commonRoutes = [
+  {
+    type: "collapse",
+    name: "Métricas",
+    key: "dashboard",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/dashboard",
+    component: <Dashboard />,
+  },
+  {
+    type: "collapse",
+    name: "Usuarios",
+    key: "tables",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/users",
+
+    component:
+      <DashboardLayout>
+        <Tables type={"users"} />
+      </DashboardLayout>,
+  },
+  {
+    type: "collapse",
+    name: "Profile",
+    key: "profile",
+    icon: <Icon fontSize="small">person</Icon>,
+    route: "/profile",
+    component: <Profile />,
+  },
+
+  {
+    type: "collapse",
+    name: "Cerrar sesión",
+    key: "logout",
+    icon: <Icon fontSize="small">logout</Icon>,
+    route: "/authentication/logout",
+    component: <Logout />,
+  },
+  
+  {
+    collapse: [
+      {
+        type: "collapse",
+        name: "Iniciar sesión",
+        key: "sign-in",
+        icon: <Icon fontSize="small">login</Icon>,
+        route: "/authentication/sign-in",
+        component: <SignIn />,
+      },
+      {
+        type: "collapse",
+        name: "User profile",
+        key: "userProfile",
+        icon: <Icon fontSize="small">receipt_long</Icon>,
+        route: "/user/:userId",
+        component: <User />,
+      },
+      {
+        type: "collapse",
+        name: "Create New User",
+        key: "createNewUser",
+        icon: <Icon fontSize="small">createNewUser</Icon>,
+        route: "/createNewUser",
+        component: <CreateNewUser />,
+      },
+      {
+        type: "collapse",
+        name: "Edit User",
+        key: "editUser",
+        icon: <Icon fontSize="small">editUser</Icon>,
+        route: "/editUser/:itemId",
+        component: <EditUser />,
+      },      
+      {
+        type: "collapse",
+        name: "User image",
+        key: "userImage",
+        icon: <Icon fontSize="small">userImage</Icon>,
+        route: "/image/:imageId",
+        component: <UserImage />,
+      }
+    ]
+  }
+];
+

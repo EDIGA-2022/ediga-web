@@ -45,16 +45,22 @@ import Spinner from "components/shared/spinner/spinner"
 import SetPasswordForm from "../set-password/index"
 
 import { useNavigate } from 'react-router-dom';
+import {useGlobalState} from "../../../App";
 
 
 function Basic() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useGlobalState("isAdmin");
+
 
 
   function logout(event) {
     setLoading(true);
     localStorage.removeItem("token");
+    localStorage.removeItem("isAdmin");
+    setIsAdmin(false);
+    
     setLoading(false);
     navigate("/authentication/sign-in");
   }
