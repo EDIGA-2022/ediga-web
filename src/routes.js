@@ -47,7 +47,14 @@ import Logout from "layouts/authentication/logout";
 import CreateNewUser from "layouts/createNewUser"
 import EditUser from "layouts/editUser"
 import UserImage from "layouts/userImage"
+import CreateNewObservation from "layouts/createNewObservation"
+import EditObservation from "layouts/editObservation"
+import ViewObservation from "layouts/viewObservation"
+import CreateDiaryEntry from "layouts/createDiaryEntry"
+import EditDiaryEntry from "layouts/editDiaryEntry"
+import ViewDiaryEntry from "layouts/viewDiaryEntry"
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -63,11 +70,10 @@ export const adminRoutes = [
   },
   {
     type: "collapse",
-    name: "Usuarios",
-    key: "tables",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    name: "Sujetos",
+    key: "user-table",
+    icon: <Icon fontSize="small">group</Icon>,
     route: "/users",
-
     component:
       <DashboardLayout>
         <Tables type={"users"} />
@@ -243,6 +249,54 @@ export const commonRoutes = [
         icon: <Icon fontSize="small">userImage</Icon>,
         route: "/image/:imageId",
         component: <UserImage />,
+      },
+      {
+        type: "collapse",
+        name: "Create New Observation",
+        key: "createNewObservation",
+        icon: <Icon fontSize="small">createNewObservation</Icon>,
+        route: "/createNewObservation/:itemId",
+        component: <CreateNewObservation />,
+      },
+      {
+        type: "collapse",
+        name: "Edit Observation",
+        key: "editObservation",
+        icon: <Icon fontSize="small">editObservation</Icon>,
+        route: "/editObservation/:itemId",
+        component: <EditObservation />,
+      },
+      {
+        type: "collapse",
+        name: "View Observation",
+        key: "viewObservation",
+        icon: <Icon fontSize="small">viewObservation</Icon>,
+        route: "/viewObservation/:itemId",
+        component: <ViewObservation />,
+      },
+      {
+        type: "collapse",
+        name: "Create diary entry",
+        key: "createDiaryEntry",
+        icon: <Icon fontSize="small">createDiaryEntry</Icon>,
+        route: "/createDiaryEntry/:itemId",
+        component: <CreateDiaryEntry />,
+      },
+      {
+        type: "collapse",
+        name: "Edit diary entry",
+        key: "editDiaryEntry",
+        icon: <Icon fontSize="small">editDiaryEntry</Icon>,
+        route: "/editDiaryEntry/:itemId",
+        component: <EditDiaryEntry />,
+      },
+      {
+        type: "collapse",
+        name: "View diary entry",
+        key: "viewDiaryEntry",
+        icon: <Icon fontSize="small">viewDiaryEntry</Icon>,
+        route: "/viewDiaryEntry/:itemId",
+        component: <ViewDiaryEntry />,
       }
     ]
   }

@@ -14,28 +14,47 @@ Coded by www.creative-tim.com
 */
 
 // @mui material components
-import Grid from "@mui/material/Grid";
+import AddIcon from '@mui/icons-material/Add';
 import Card from "@mui/material/Card";
-
+import Grid from "@mui/material/Grid";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
-
-// Material Dashboard 2 React example components
-import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
-import DataTable from "examples/Tables/DataTable";
-
-// Data
-import usersTable from "layouts/tables/data/usersTable";
-import observationsTable from "layouts/tables/data/observationsTable";
-import edigaUsersTable from "layouts/tables/data/edigaUsersTable";
-
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 // Button, Navigation
 import MDButton from "components/MDButton";
-import {Routes, Route, useNavigate} from 'react-router-dom';
+import MDTypography from "components/MDTypography";
+import ExportUsersXLS from "components/shared/exportUsersXLS";
+import Footer from "examples/Footer";
+import DataTable from "examples/Tables/DataTable";
+import diaryEntriesTable from "layouts/tables/data/diaryEntriesTable";
+import observationsTable from "layouts/tables/data/observationsTable";
+// Data
+import exportPhotos from "../../api/exportPhotos";
+import usersTable from "layouts/tables/data/usersTable";
 
+import observationsTable from "layouts/tables/data/observationsTable";
+import edigaUsersTable from "layouts/tables/data/edigaUsersTable";
+import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+
+
+function Tables(props) {
+  var columns = useState([]);
+  var csvData = useState([]);
+  var rows = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [gender, setGender] = useState(0);
+  const [country, setCountry] = useState(0);
+  const [age, setAge] = useState(0);
+
+  let title;
+  let obj;
+  let onClick;
+
+  const onSearchChangeTable = (value) => {
+    setSearchText(value)
+  };
 
 function Tables(props) {
   const { columns, rows } = props.type === 'users' ? usersTable() : props.type === 'edigaUsers'? edigaUsersTable(): observationsTable(props.userId);
@@ -50,6 +69,49 @@ function Tables(props) {
       navigate('/createNewUser');
     }
   };
+
+  const navigateToCreateNewObservation = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/createNewObservation/' + props.userId);
+  };
+
+  const navigateToCreateNewDiaryEntry = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/createDiaryEntry/' + props.userId);
+  };
+
+  switch (props.type) {
+    case 'users':
+      title = 'Sujetos';
+      obj = usersTable(searchText, gender, country, age);
+      columns = obj.columns;
+      rows = obj.rows;
+      csvData = obj.csvData;
+      onClick = navigateToCreateNewUser;
+      break;
+    case 'observations':
+      title = 'Observaciones';
+      obj = observationsTable(props.userId);
+      columns = obj.columns;
+      rows = obj.rows;
+      onClick = navigateToCreateNewObservation;
+      break;
+    case 'diaryEntries':
+      title = 'Diario de campo';
+      obj = diaryEntriesTable(props.userId);
+      columns = obj.columns;
+      rows = obj.rows;
+      onClick = navigateToCreateNewDiaryEntry;
+      break;
+    default:
+      break;
+  }
+
+  const onExportPhotos = () => {
+    exportPhotos().then(response => {
+      console.log("response", response)
+    });
+  }
 
   return (
     <div>
@@ -68,13 +130,28 @@ function Tables(props) {
                 coloredShadow="info"
                 style={{ display: "flex" }}
               >
-                <MDTypography variant="h6" color="white">
-                  {title}
-                </MDTypography>
-                <MDButton variant="outlined" color="white" size="small"  style={{ marginLeft: "auto" }} onClick={navigateToCreateNewUser}>
-                  +
-                </MDButton>
-              </MDBox>
+                <Grid container justifyContent="flex-end">
+                  <Grid item xs={9}>
+                    <MDTypography variant="h6" color="white">
+                      {title}
+                    </MDTypography>
+                  </Grid>
+                  {/* {props.type === 'users' && <Grid item xs>
+                    <MDButton variant="outlined" color="white" size="small" onClick={() => onExportPhotos()}>
+                      <ImageOutlinedIcon />
+                      <FileDownloadOutlinedIcon />
+                    </MDButton>
+                  </Grid>} */}
+                  {props.type === 'users' && <Grid item xs>
+                    <ExportUsersXLS csvData={csvData} fileName="DataSujetos" />
+                  </Grid>}
+                  <Grid item xs>
+                    <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
+                      <AddIcon />
+                    </MDButton>
+                  </Grid>
+                </Grid>
+              </MDBox >
               <MDBox pt={3}>
                 <DataTable
                   table={{ columns, rows }}
@@ -82,14 +159,22 @@ function Tables(props) {
                   entriesPerPage={false}
                   showTotalEntries={false}
                   noEndBorder
+                  canSearch={props.type === 'users'}
+                  onSearchChangeTable={onSearchChangeTable}
+                  setCountry={setCountry}
+                  setGender={setGender}
+                  setAge={setAge}
+                  gender={gender}
+                  country={country}
+                  age={age}
                 />
               </MDBox>
-            </Card>
-          </Grid>
-        </Grid>
-      </MDBox>
+            </Card >
+          </Grid >
+        </Grid >
+      </MDBox >
       <Footer />
-    </div>
+    </div >
   );
 }
 

@@ -43,7 +43,7 @@ function ProfilePhotosList({ title, photos, shadow, userId }) {
       </MDBox>
       <MDBox p={2}>
         <ImageList sx={{ width: 400, height: 400 }} cols={3} rowHeight={164}>
-          {photos.map((item) => (
+          {photos && photos.map((item) => (
             <ImageListItem
               style={{ cursor: 'pointer', marginRight: '20px' }}
               key={item.photo}
@@ -53,7 +53,7 @@ function ProfilePhotosList({ title, photos, shadow, userId }) {
                   {
                     state: {
                       photoId: item.photoId,
-                      userId,
+                      userId: item.userId,
                       photo: JSON.stringify(item.photo),
                       answer1: item.answer1,
                       answer2: item.answer2,

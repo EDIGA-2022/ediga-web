@@ -43,20 +43,20 @@ function selectGenderColor(gender) {
       case "Otro":
         return "primary"
       default:
-        return "Dark" 
+        return "dark" 
     }
 };
 
-function GetUsers() {
+function GetUsers(searchText, gender, country, age) {
   const [rows, setRows] = useState([]);
-  const [loadingRows, setLoadingRows] = useState(false);
+  const [allRows, setAllRows] = useState([]);
 
   const fetchAllUsers = async () => {
-    setLoadingRows(true);
     getUsers().then((response) => {
       if (response.ok) {
         response.json().then((r) => {
           setRows(r);
+          setAllRows(r); 
         });
       } else {
         if (response.status === 401) {
@@ -65,28 +65,59 @@ function GetUsers() {
         return Promise.reject(response);
       }
     })
-      .catch((e) => {
-        console.log('error', e);
-      })
-      .finally(() => {
-        setLoadingRows(false);
-      });
+    .catch((e) => {
+      console.log('error',e);
+    })
   }
 
+  const filterRows = (searchText, gender, country, age) => {
+    let filteredRows = [];
+    if (searchText === '') {
+      filteredRows = allRows;
+    } else {
+      filteredRows = allRows.filter((row) => {
+        return (
+          (row.instagramProfile && row.instagramProfile.toLowerCase().startsWith(searchText.toLowerCase())) ||
+          (row.instagramProfile &&row.instagramProfile.toLowerCase().includes(searchText.toLowerCase())) ||
+          (row.alias && row.alias.toLowerCase().includes(searchText.toLowerCase()))
+        );
+      });
+    }
 
+    if (gender) {
+      filteredRows = filteredRows.filter((row) => row.gender === gender)
+    }
+
+    if (country) {
+      filteredRows = filteredRows.filter((row) => row.country === country)
+    }
+
+    if (age) {
+      filteredRows = filteredRows.filter((row) => row.yearsOld === age)
+    }
+
+    setRows(filteredRows);
+  };
+  
   useEffect(() => {
     fetchAllUsers();
   }, []);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    filterRows(searchText, gender, country, age);
+  }, [searchText, gender, country, age]);
+
+
+
+ const navigate = useNavigate();
 
   return {
     columns: [
-      { Header: "usuario", accessor: "alias", width: "30%", align: "left" },
+      { Header: "sujeto", accessor: "alias", width: "30%", align: "left" },
       { Header: "edad", accessor: "yearsOld", align: "left" },
       { Header: "genero", accessor: "gender", align: "center" },
       { Header: "pais", accessor: "country", align: "center" },
-      { Header: "acciones", accessor: "accions", align: "center" },
+      { Header: "acciones", accessor: "actions", align: "center" },
     ],
     rows: 
       rows.map((row)=> {
@@ -117,7 +148,7 @@ function GetUsers() {
               { row.country }
           </MDTypography>
           ),
-          accions: (
+          actions: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => navigate("/editUser/" + row.userId )}>
             <Tooltip title="Editar">
               <IconButton>
@@ -127,7 +158,9 @@ function GetUsers() {
           </MDTypography> 
           ),
         }
-      })
+      }),
+    csvData: 
+     rows
   };
 }
 

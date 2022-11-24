@@ -36,7 +36,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 
 // API requests
 import editUserAPI from "../../api/editUser"
@@ -131,7 +131,7 @@ function EditUser() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+       <DashboardNavbar onArrowClick={() => navigate("/users")} />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={8}>
@@ -202,9 +202,7 @@ function EditUser() {
                 </MDAlert>
               </MDBox>}
              {showMsg && isSuccess && <MDBox pt={2} px={2}>
-                <MDAlert color="success">
-                  {jsonSuccess()}
-                </MDAlert>
+              <Navigate to="/users"/>
               </MDBox>}
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitUser}>

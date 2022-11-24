@@ -1,7 +1,7 @@
 const API_URL = process.env.REACT_APP_API_URL;
 
-export async function getUserObservations(userId) {
-  return fetch(`${API_URL}/api/observations/user/${userId}`, {
+function getDiaryEntry(entryId) {
+  return fetch(`${API_URL}/api/diaryEntry/${entryId}`, {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -9,3 +9,5 @@ export async function getUserObservations(userId) {
     }
   })  
 }
+
+module.exports = getDiaryEntry;

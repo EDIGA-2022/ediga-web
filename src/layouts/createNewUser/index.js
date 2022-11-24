@@ -38,7 +38,7 @@ import Footer from "examples/Footer";
 
 // API requests
 import createUserAPI from "../../api/createUser";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 function CreateNewUser() {
   
@@ -105,7 +105,7 @@ function CreateNewUser() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+       <DashboardNavbar onArrowClick={() => navigate("/users")} />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={8}>
@@ -180,9 +180,7 @@ function CreateNewUser() {
                 </MDAlert>
               </MDBox>}
              {showMsg && isSuccess && <MDBox pt={2} px={2}>
-                <MDAlert color="success">
-                  {jsonSuccess()}
-                </MDAlert>
+                <Navigate to="/users" />
               </MDBox>}
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitUser}>

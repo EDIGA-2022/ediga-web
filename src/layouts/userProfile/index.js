@@ -40,15 +40,16 @@ import ProfilePhotosList from "examples/Lists/ProfilePhotosList";
 // Images
 import React from "react";
 import 'react-quill/dist/quill.snow.css';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 // API requests
-import getUserProfile from "../../api/getUserProfile"
+import getUserProfile from "../../api/getUserProfile";
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 function User() {
   const { userId } = useParams();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
@@ -75,7 +76,13 @@ function User() {
           setUser(newUser);
         });
     }
-    fetchUser()
+    fetchUser();
+    if (state) {
+      const {
+        tab
+      } = state;
+      setTabValue(tab);
+    }
   }, []);
 
   return (
@@ -115,7 +122,10 @@ function User() {
         </Grid>
       </MDBox>}
       {tabValue === 1 &&
-          <Tables type={"observations"} userId={userId} />
+        <Tables type={"observations"} userId={userId} />
+      }
+      {tabValue === 2 &&
+        <Tables type={"diaryEntries"} userId={userId} />
       }
     </DashboardLayout>
   );
