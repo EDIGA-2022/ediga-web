@@ -248,17 +248,6 @@ function Dashboard() {
                   date="Datos actualizados recientemente"
                   chart={agesBarChartData}
                 />
-                {/* <ReportsLineChart
-                  color="success"
-                  title="daily sales"
-                  description={
-                    <>
-                      (<strong>+15%</strong>) increase in today sales.
-                    </>
-                  }
-                  date="updated 4 min ago"
-                  chart={sales}
-                /> */}
               </MDBox>
             </Grid>
           </Grid>

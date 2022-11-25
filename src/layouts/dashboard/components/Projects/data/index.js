@@ -60,8 +60,10 @@ export default function data(middleQuestions, finalQuestions) {
       { Header: "pregunta", accessor: "questions", width: "45%", align: "left" },
       { Header: "respuestas", accessor: "answers", width: "10%", align: "left" },
       { Header: "respuesta mas popular", accessor: "popular", align: "center" },
-      { Header: "completion", accessor: "completion", align: "center" },
+      { Header: "respondidas", accessor: "completion", align: "center" },
     ],
+
+
     
 
     rows: (middleQuestions ?? []).concat(finalQuestions ?? []).map((question) => {
@@ -75,7 +77,7 @@ export default function data(middleQuestions, finalQuestions) {
         ),
         completion: (
           <MDBox width="8rem" textAlign="left">
-            <MDProgress value={60} color="info" variant="gradient" label={false} />
+            <MDProgress value={question.completionPercentage} color="info" variant="gradient" label={false} />
           </MDBox>
         ),
       };
