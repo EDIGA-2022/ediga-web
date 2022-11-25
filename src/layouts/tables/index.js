@@ -55,127 +55,130 @@ function Tables(props) {
     setSearchText(value)
   };
 
-  function Tables(props) {
-    const { columns, rows } = props.type === 'users' ? usersTable() : props.type === 'edigaUsers' ? edigaUsersTable() : observationsTable(props.userId);
-    const title = props.type === 'users' ? 'Usuarios' : props.type === 'edigaUsers' ? "Usuarios Ediga" : "Observaciones";
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const navigateToCreateNewUser = () => {
-      // 👇️ navigate to /navigateToCreateNewUser
-      if (props.type === 'edigaUsers') {
-        navigate('/authentication/sign-up');
-      } else {
-        navigate('/createNewUser');
-      }
-    };
+  const navigateToCreateNewUser = () => {
+    navigate('/createNewUser');
+  };
 
-    const navigateToCreateNewObservation = () => {
-      // 👇️ navigate to /navigateToCreateNewUser
-      navigate('/createNewObservation/' + props.userId);
-    };
+  const navigateToCreateNewObservation = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/createNewObservation/' + props.userId);
+  };
 
-    const navigateToCreateNewDiaryEntry = () => {
-      // 👇️ navigate to /navigateToCreateNewUser
-      navigate('/createDiaryEntry/' + props.userId);
-    };
+  const navigateToCreateNewDiaryEntry = () => {
+    // 👇️ navigate to /navigateToCreateNewUser
+    navigate('/createDiaryEntry/' + props.userId);
+  };
 
-    switch (props.type) {
-      case 'users':
-        title = 'Sujetos';
-        obj = usersTable(searchText, gender, country, age);
-        columns = obj.columns;
-        rows = obj.rows;
-        csvData = obj.csvData;
-        onClick = navigateToCreateNewUser;
-        break;
-      case 'observations':
-        title = 'Observaciones';
-        obj = observationsTable(props.userId);
-        columns = obj.columns;
-        rows = obj.rows;
-        onClick = navigateToCreateNewObservation;
-        break;
-      case 'diaryEntries':
-        title = 'Diario de campo';
-        obj = diaryEntriesTable(props.userId);
-        columns = obj.columns;
-        rows = obj.rows;
-        onClick = navigateToCreateNewDiaryEntry;
-        break;
-      default:
-        break;
-    }
+  const navigateToEdigaUserTable = () => {
+    navigate('/authentication/sign-up');
+  };
 
-    const onExportPhotos = () => {
-      exportPhotos().then(response => {
-        console.log("response", response)
-      });
-    }
+  switch (props.type) {
+    case 'users':
+      title = 'Sujetos';
+      obj = usersTable(searchText, gender, country, age);
+      columns = obj.columns;
+      rows = obj.rows;
+      csvData = obj.csvData;
+      onClick = navigateToCreateNewUser;
+      break;
+    case 'observations':
+      title = 'Observaciones';
+      obj = observationsTable(props.userId);
+      columns = obj.columns;
+      rows = obj.rows;
+      onClick = navigateToCreateNewObservation;
+      break;
+    case 'diaryEntries':
+      title = 'Diario de campo';
+      obj = diaryEntriesTable(props.userId);
+      columns = obj.columns;
+      rows = obj.rows;
+      onClick = navigateToCreateNewDiaryEntry;
+      break;
+    case 'edigaUsers':
+      title = 'Usuarios Ediga';
+      obj = edigaUsersTable();
+      columns = obj.columns;
+      rows = obj.rows;
+      onClick = navigateToEdigaUserTable;
+      break;
+    default:
+      break;
+  }
 
-    return (
-      <div>
-        <MDBox pt={6} pb={3}>
-          <Grid container spacing={6}>
-            <Grid item xs={12}>
-              <Card>
-                <MDBox
-                  mx={2}
-                  mt={-3}
-                  py={3}
-                  px={2}
-                  variant="gradient"
-                  bgColor="info"
-                  borderRadius="lg"
-                  coloredShadow="info"
-                  style={{ display: "flex" }}
-                >
-                  <Grid container justifyContent="flex-end">
-                    <Grid item xs={9}>
-                      <MDTypography variant="h6" color="white">
-                        {title}
-                      </MDTypography>
-                    </Grid>
-                    {/* {props.type === 'users' && <Grid item xs>
+  const onExportPhotos = () => {
+    exportPhotos().then(response => {
+      console.log("response", response)
+    });
+  }
+
+  return (
+    <div>
+      <MDBox pt={6} pb={3}>
+        <Grid container spacing={6}>
+          <Grid item xs={12}>
+            <Card>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                coloredShadow="info"
+                style={{ display: "flex" }}
+              >
+                <Grid container justifyContent="flex-end">
+                  <Grid item xs={9}>
+                    <MDTypography variant="h6" color="white">
+                      {title}
+                    </MDTypography>
+                  </Grid>
+                  {/* {props.type === 'users' && <Grid item xs>
                     <MDButton variant="outlined" color="white" size="small" onClick={() => onExportPhotos()}>
                       <ImageOutlinedIcon />
                       <FileDownloadOutlinedIcon />
                     </MDButton>
                   </Grid>} */}
-                    {props.type === 'users' && <Grid item xs>
-                      <ExportUsersXLS csvData={csvData} fileName="DataSujetos" />
-                    </Grid>}
-                    <Grid item xs>
-                      <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
-                        <AddIcon />
-                      </MDButton>
-                    </Grid>
+                  {props.type === 'users' && <Grid item xs>
+                    <ExportUsersXLS csvData={csvData} fileName="DataSujetos" />
+                  </Grid>}
+                  <Grid item xs>
+                    <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
+                      <AddIcon />
+                    </MDButton>
                   </Grid>
-                </MDBox >
-                <MDBox pt={3}>
-                  <DataTable
-                    table={{ columns, rows }}
-                    isSorted={false}
-                    entriesPerPage={false}
-                    showTotalEntries={false}
-                    noEndBorder
-                    canSearch={props.type === 'users'}
-                    onSearchChangeTable={onSearchChangeTable}
-                    setCountry={setCountry}
-                    setGender={setGender}
-                    setAge={setAge}
-                    gender={gender}
-                    country={country}
-                    age={age}
-                  />
-                </MDBox>
-              </Card >
-            </Grid >
+                </Grid>
+              </MDBox >
+              <MDBox pt={3}>
+                <DataTable
+                  table={{ columns, rows }}
+                  isSorted={false}
+                  entriesPerPage={false}
+                  showTotalEntries={false}
+                  noEndBorder
+                  canSearch={props.type === 'users'}
+                  onSearchChangeTable={onSearchChangeTable}
+                  setCountry={setCountry}
+                  setGender={setGender}
+                  setAge={setAge}
+                  gender={gender}
+                  country={country}
+                  age={age}
+                />
+              </MDBox>
+            </Card >
           </Grid >
-        </MDBox >
-        <Footer />
-      </div >
-    );
-  }
+        </Grid >
+      </MDBox >
+      <Footer />
+    </div >
+  );
 }
+
 
 export default Tables;
