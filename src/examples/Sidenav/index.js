@@ -47,11 +47,15 @@ import {
   setWhiteSidenav,
 } from "context";
 
+import { useGlobalState } from "../../App";
+
+
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const location = useLocation();
   const collapseName = location.pathname.replace("/", "");
+  const [user, setUser] = useGlobalState('user');
 
   let textColor = "white";
 
@@ -169,8 +173,19 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             <MDTypography component="h6" variant="button" fontWeight="medium" color={textColor}>
               {brandName}
             </MDTypography>
+
           </MDBox>
         </MDBox>
+        {true && <MDBox mt={2}>
+
+          <MDTypography component="h6" variant="button" fontWeight="normal"  color={textColor}>
+            {user.name}
+          </MDTypography>
+          <MDTypography component="h6" variant="button" fontWeight="normal" color={textColor}>
+            {user.email}
+          </MDTypography>
+        </MDBox>}
+
       </MDBox>
       <Divider
         light={

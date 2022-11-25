@@ -64,15 +64,12 @@ function EdigaUsersTable(props) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   // const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
-  const isAdmin = useGlobalState("isAdmin");
 
   const fetchAllUsers = async () => {
-    console.log("ACA", isAdmin)
     setLoadingRows(true);
     getEdigaUsers().then((response) => {
       if (response.ok) {
         response.json().then((r) => {
-          console.log(r);
           setRows(r.users);
           setLoadingRows(false);
         });
@@ -94,8 +91,6 @@ function EdigaUsersTable(props) {
         response.json().then(async (r) => {
           await fetchAllUsers();
         });
-      } else {
-        console.log("no eliminado");
       }
     });
   }
@@ -198,11 +193,11 @@ function EdigaUsersTable(props) {
                       {title}
                     </MDTypography>
                   </Grid>
-                  <Grid item xs>
-                    <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
-                      <AddIcon />
-                    </MDButton>
-                  </Grid>
+
+                  <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
+                    <AddIcon />
+                  </MDButton>
+
                 </Grid>
               </MDBox >
               <MDBox pt={3}>

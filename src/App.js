@@ -55,7 +55,7 @@ import brandDark from "assets/images/ediga-icon.png";
 import {createGlobalState} from "react-hooks-global-state";
 
 export const {useGlobalState} = createGlobalState({
-  isAdmin: localStorage.getItem("isAdmin") === "true",
+  user: JSON.parse(localStorage.getItem("user")) ?? null,
 });
 
 export default function App() {
@@ -101,7 +101,7 @@ export default function App() {
   };
 
   // Get isAdmin from states
-  const [isAdmin, setIsAdmin] = useGlobalState("isAdmin");
+  const [user, setUser] = useGlobalState("user");
 
   // Change the openConfigurator state
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
@@ -161,7 +161,7 @@ export default function App() {
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
             brandName="EDIGA Dashboard"
-            routes={isAdmin ? adminRoutes : commonRoutes}
+            routes={user?.isAdmin ? adminRoutes : commonRoutes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
@@ -170,10 +170,10 @@ export default function App() {
         </>
       )}
       {layout === "vr" && <Configurator />}
-      {!isAdmin && <Routes>
+      {!user?.isAdmin && <Routes>
         {getRoutes(commonRoutes)}
       </Routes>}
-      {isAdmin && <Routes>
+      {user?.isAdmin && <Routes>
         {getRoutes(adminRoutes)}
       </Routes>}
     </ThemeProvider>

@@ -39,6 +39,7 @@ import { useState, useEffect } from "react";
 // import metricsApi 
 import { getMetrics } from "../../api/getMetrics"
 import MDAlert from "components/MDAlert";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -59,6 +60,7 @@ function Dashboard() {
 
   const [data, setData] = useState(false);
 
+  const navigate = useNavigate();
 
 
   function setCountriesInChart(countries) {
@@ -136,6 +138,10 @@ function Dashboard() {
           setEndFormAnswers(r.endFormAnswers);
           setData(true);
         })
+      } else {
+        if (response.status === 401) {
+          navigate("/authentication/sign-in");
+        }
       }
     });
 
@@ -257,17 +263,17 @@ function Dashboard() {
             </Grid>
           </Grid>
         </MDBox>
-        <MDBox> 
+        <MDBox>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={8}>
-              <Projects middleQuestions={middleFormAnswers} finalQuestions={endFormAnswers}/>
+              <Projects middleQuestions={middleFormAnswers} finalQuestions={endFormAnswers} />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <OrdersOverview />
             </Grid>
           </Grid>
         </MDBox>
-      </MDBox> }
+      </MDBox>}
       <Footer />
     </DashboardLayout>
   );

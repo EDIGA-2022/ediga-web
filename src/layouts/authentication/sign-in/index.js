@@ -69,7 +69,7 @@ function Basic() {
 
   const navigate = useNavigate();
 
-  const [isAdmin, setIsAdmin] = useGlobalState('isAdmin');
+  const [user, setUser] = useGlobalState('user');
 
   const childToParent = (childdata) => {
     setShowSetPassword(false);
@@ -88,8 +88,9 @@ function Basic() {
       if (response.ok) {
         response.json().then(r => {
           localStorage.setItem("token", r.token)
-          localStorage.setItem("isAdmin", r.user.isAdmin);
-          setIsAdmin(r.user.isAdmin)
+          localStorage.setItem("user", JSON.stringify(r.user));
+          
+          setUser(r.user);
           if (r.user.firstLogIn) {
             setName(r.user.name);
             setLoading(false);

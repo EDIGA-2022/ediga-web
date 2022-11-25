@@ -51,16 +51,15 @@ import {useGlobalState} from "../../../App";
 function Basic() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useGlobalState("isAdmin");
+  const [user, setUser] = useGlobalState("user");
 
 
 
   function logout(event) {
     setLoading(true);
     localStorage.removeItem("token");
-    localStorage.removeItem("isAdmin");
-    setIsAdmin(false);
-    
+    localStorage.removeItem("user");
+    setUser(null);
     setLoading(false);
     navigate("/authentication/sign-in");
   }

@@ -55,9 +55,6 @@ export default function data(middleQuestions, finalQuestions) {
     </MDBox>;
   }
 
-
-
-
   return {
     columns: [
       { Header: "pregunta", accessor: "questions", width: "45%", align: "left" },
@@ -65,8 +62,9 @@ export default function data(middleQuestions, finalQuestions) {
       { Header: "respuesta mas popular", accessor: "popular", align: "center" },
       { Header: "completion", accessor: "completion", align: "center" },
     ],
+    
 
-    rows: middleQuestions.concat(finalQuestions).map((question) => {
+    rows: (middleQuestions ?? []).concat(finalQuestions ?? []).map((question) => {
       return {
         questions: <Question name={question.question} />,
         answers: answers(question.answers),
