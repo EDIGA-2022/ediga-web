@@ -58,6 +58,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import EdigaUsersTable from "layouts/tables/data/edigaUsersTable";
 
 export const adminRoutes = [
   {
@@ -95,7 +96,7 @@ export const adminRoutes = [
     route: "/admin/",
     component:
     <DashboardLayout>
-      <Tables type={"edigaUsers"} />
+      <EdigaUsersTable/>
     </DashboardLayout>,
   },
   {

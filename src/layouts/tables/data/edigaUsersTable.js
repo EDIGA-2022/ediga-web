@@ -28,9 +28,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { IconButton, Tooltip } from '@mui/material';
 import { getEdigaUsers } from "../../../api/getEdigaUsers";
-import { setAdminEdiga } from "../../../api/setAdminEdiga";
 import { deleteEdigaUser } from "../../../api/deleteEdigaUser";
-import {useGlobalState} from "../../../App";
+import { useGlobalState } from "../../../App";
+import AddIcon from '@mui/icons-material/Add';
+import Card from "@mui/material/Card";
+import Grid from "@mui/material/Grid";
+import DataTable from "examples/Tables/DataTable";
+import Footer from "examples/Footer";
+
 
 function adminColor(isAdmin) {
   if (isAdmin) {
@@ -51,7 +56,8 @@ function countryColor(country) {
 
 
 
-function EdigaUsers() {
+function EdigaUsersTable(props) {
+
   const [rows, setRows] = useState([]);
   const [loadingRows, setLoadingRows] = useState(false);
 
@@ -69,23 +75,6 @@ function EdigaUsers() {
           console.log(r);
           setRows(r.users);
           setLoadingRows(false);
-        });
-      } else {
-        if (response.status === 401) {
-          navigate("/authentication/sign-in");
-        }
-      }
-    });
-  }
-
-  const updateRole = async (userId, isAdmin) => {
-    setLoadingRows(true);
-    setAdminEdiga(userId, isAdmin).then((response) => {
-      if (response.ok) {
-        response.json().then((r) => {
-          console.log(r);
-          fetchAllUsers();
-          console.log("show confirm button", showDeleteButton);
         });
       } else {
         if (response.status === 401) {
@@ -119,74 +108,121 @@ function EdigaUsers() {
     }, 9000);
   }
 
-
   useEffect(() => {
     fetchAllUsers();
   }, []);
 
+  var columns = [
+    { Header: "usuario", accessor: "name", width: "30%", align: "left" },
+    { Header: "rol", accessor: "role", align: "left" },
+    { Header: "pais", accessor: "country", align: "center" },
+    { Header: "cambiar rol", accessor: "actions", align: "center" },
+    { Header: "eliminar", accessor: "delete", align: "center" },
+  ];
+  const title = 'Usuarios Ediga';
+  const onClick = () => {
+    navigate('/authentication/sign-up');
+  };
+
   const navigate = useNavigate();
 
-  return {
-    columns: [
-      { Header: "usuario", accessor: "name", width: "30%", align: "left" },
-      { Header: "rol", accessor: "role", align: "left" },
-      { Header: "pais", accessor: "country", align: "center" },
-      { Header: "cambiar rol", accessor: "actions", align: "center" },
-      { Header: "eliminar", accessor: "delete", align: "center" },
+  const createRows = (rows) => rows.map((user) => {
+    return {
+      name: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1}>
+            <MDTypography component="a" href="#" display="block" variant="button" fontWeight="medium">
+              {user.name}
+            </MDTypography>
+            <MDTypography component="a" href="#" display="block" variant="button" fontWeight="normal">
+              {user.email}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      role: (
+        <MDBox ml={-1}>
+          <MDBadge badgeContent={user.isAdmin ? "Administrador" : "Investigador"} color={adminColor(user.isAdmin)} variant="gradient" size="sm" />
+        </MDBox>
+      ),
+      country: (
+        <MDBox ml={-1}>
+          <MDBadge badgeContent={user.country === 'UY' ? "Uruguay" : user.country === 'MX' ? "México" : "España"} color={countryColor(user.country)} variant="gradient" size="sm" />
+        </MDBox>
+      ),
+      actions: (
+        <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => edit(user)}>
+          <Tooltip title="Editar">
+            <IconButton>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+        </MDTypography>
+      ),
 
+      delete: (
+        <MDTypography component="a" variant="caption" color="text" fontWeight="medium" onClick={() => requestConfirmation(user)}>
+          {(!showDeleteButton || user.edigaUserId != userIdToDelete) && <Tooltip title="Eliminar usuario">
+            <IconButton>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>}
+          {showDeleteButton && user.edigaUserId === userIdToDelete && <MDButton color="error" onClick={() => deleteUser(user)}>Eliminar</MDButton>}
 
-    ],
-    rows:
-      rows.map((user) => {
-        return {
-          name: (
-            <MDBox display="flex" alignItems="center" lineHeight={1}>
-              <MDBox lineHeight={1}>
-                <MDTypography component="a" href="#" display="block" variant="button" fontWeight="medium">
-                  {user.name}
-                </MDTypography>
-                <MDTypography component="a" href="#" display="block" variant="button" fontWeight="normal">
-                  {user.email}
-                </MDTypography>
+        </MDTypography>
+      ),
+
+    }
+  });
+
+  return (
+    <div>
+      <MDBox pt={6} pb={3}>
+        <Grid container spacing={6}>
+          <Grid item xs={12}>
+            <Card>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                coloredShadow="info"
+                style={{ display: "flex" }}
+              >
+                <Grid container justifyContent="flex-end">
+                  <Grid item xs={9}>
+                    <MDTypography variant="h6" color="white">
+                      {title}
+                    </MDTypography>
+                  </Grid>
+                  <Grid item xs>
+                    <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
+                      <AddIcon />
+                    </MDButton>
+                  </Grid>
+                </Grid>
+              </MDBox >
+              <MDBox pt={3}>
+                <DataTable
+                  table={{ columns, rows: createRows(rows) }}
+                  isSorted={false}
+                  entriesPerPage={false}
+                  showTotalEntries={false}
+                  noEndBorder
+                  canSearch={false}
+                />
               </MDBox>
-            </MDBox>
-          ),
-          role: (
-            <MDBox ml={-1}>
-              <MDBadge badgeContent={user.isAdmin ? "Administrador" : "Investigador"} color={adminColor(user.isAdmin)} variant="gradient" size="sm" />
-            </MDBox>
-          ),
-          country: (
-            <MDBox ml={-1}>
-              <MDBadge badgeContent={user.country === 'UY' ? "Uruguay" : user.country === 'MX'? "México" : "España"} color={countryColor(user.country)} variant="gradient" size="sm" />
-            </MDBox>
-          ),
-          actions: (
-            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => edit(user)}>
-              <Tooltip title="Editar">
-                <IconButton>
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
-            </MDTypography>
-          ),
-
-          delete: (
-            <MDTypography component="a" variant="caption" color="text" fontWeight="medium" onClick={() => requestConfirmation(user)}>
-              {(!showDeleteButton || user.edigaUserId != userIdToDelete) && <Tooltip title="Eliminar usuario">
-                <IconButton>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>}
-              {showDeleteButton && user.edigaUserId === userIdToDelete && <MDButton color="error" onClick={()=> deleteUser(user)}>Eliminar</MDButton>}
-
-            </MDTypography>
-          ),
-
-        }
-      })
-
-  };
+            </Card >
+          </Grid >
+        </Grid >
+      </MDBox >
+      <Footer />
+    </div >
+  );
 }
 
-export default EdigaUsers;
+
+export default EdigaUsersTable;

@@ -33,7 +33,6 @@ import observationsTable from "layouts/tables/data/observationsTable";
 import exportPhotos from "../../api/exportPhotos";
 import usersTable from "layouts/tables/data/usersTable";
 
-import edigaUsersTable from "layouts/tables/data/edigaUsersTable";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
@@ -71,9 +70,7 @@ function Tables(props) {
     navigate('/createDiaryEntry/' + props.userId);
   };
 
-  const navigateToEdigaUserTable = () => {
-    navigate('/authentication/sign-up');
-  };
+
 
   switch (props.type) {
     case 'users':
@@ -97,13 +94,6 @@ function Tables(props) {
       columns = obj.columns;
       rows = obj.rows;
       onClick = navigateToCreateNewDiaryEntry;
-      break;
-    case 'edigaUsers':
-      title = 'Usuarios Ediga';
-      obj = edigaUsersTable();
-      columns = obj.columns;
-      rows = obj.rows;
-      onClick = navigateToEdigaUserTable;
       break;
     default:
       break;
