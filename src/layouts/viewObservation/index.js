@@ -37,6 +37,8 @@ import 'react-quill/dist/quill.snow.css';
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+import htmlDocx from 'html-docx-js/dist/html-docx'
+import { saveAs } from 'file-saver'
 
 // API requests 
 import editObservationAPI from "../../api/editObservation";
@@ -107,9 +109,44 @@ const convertBase64 = (file) => {
       reject(error);
     }
   })
+};
+
+function exportToWord(e) {
+  (async () => {
+    var tipo = "";
+    if(type === "P"){
+      tipo = "Publicación";
+    }
+    else if(type === "S"){
+      tipo = "Historia";
+    }
+    else if(type === "R"){
+      tipo = "Reel";
+    }
+    else{
+      tipo = "Live";
+    }
+    var musica = "";
+    if(hasMusic){
+      musica = music;
+    }
+    else{
+      musica = "---";
+    }
+    const datosPrevios = "<p><br></p><p><br></p><h2>Datos de la observación</h2><p><strong>Tipo de publicación: </strong>" + tipo + 
+                        "<p><strong>Cantidad de likes: </strong>" + likes + 
+                        "<p><strong>Cantidad de comentarios: </strong>" + comments +
+                        "<p><strong>Fecha de publicación: </strong>" + date +
+                        "<p><strong>Música: </strong>" + musica + "</p>";
+    var img = "";
+    if(photo != ''){
+      img = "<p><img src=\"" + photo + "\"></p>";
+    }
+    const stringACovertir = datosPrevios + observation + img;
+    const converted = htmlDocx.asBlob(stringACovertir);
+    saveAs(converted, 'observacion.docx');
+  })();
 }
-
-
 
   return (
     <DashboardLayout>
@@ -230,8 +267,11 @@ const convertBase64 = (file) => {
                 <MDBox p={3}></MDBox>            
               </form>
               <MDBox p={2}>
+                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={exportToWord}>
+                  Exportar .docx
+                </MDButton>
                 <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
-                    Volver
+                    Volver 
                 </MDButton>
               </MDBox>
             </Card>

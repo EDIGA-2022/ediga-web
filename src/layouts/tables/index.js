@@ -25,6 +25,7 @@ import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
 import ExportUsersXLS from "components/shared/exportUsersXLS";
+import ExportDiaryEntries from "components/shared/exportDiaryEntries";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 import diaryEntriesTable from "layouts/tables/data/diaryEntriesTable";
@@ -136,6 +137,9 @@ function Tables(props) {
                   </Grid>} */}
                   {props.type === 'users' && <Grid item xs>
                     <ExportUsersXLS csvData={csvData} fileName="DataSujetos" />
+                  </Grid>}
+                  {props.type === 'diaryEntries' && <Grid item xs>
+                    <ExportDiaryEntries data={rows} fileName="entradasDeDiarioDeCampo" />
                   </Grid>}
                   <Grid item xs>
                     <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>

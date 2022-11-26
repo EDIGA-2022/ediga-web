@@ -35,6 +35,8 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import MDButton from "components/MDButton";
+import htmlDocx from 'html-docx-js/dist/html-docx'
+import { saveAs } from 'file-saver'
 
 // API requests
 import createObservation from "../../api/createObservation";
@@ -104,6 +106,22 @@ function UserImage() {
 		}
 	}, []);
 
+	function exportToWord(e) {
+		(async () => {
+		  const datosPrevios = "<p><br></p><p><br></p><h2>Respuestas del sujeto</h2><p><strong>Antes de subir esta imagen he reflexionado sobre la idea de mujer, hombre u otros que muestro hacia los demás: </strong>" + photo.answer1 + 
+							  "<p><strong>Con esta imagen expreso INTENCIONALMENTE mi identidad como chica, chico u otras identidades: </strong>" + photo.answer2 + 
+							  "<p><strong>En esta imagen me ajusto a lo que esperan de mí como chico, chica u otras identidades: </strong>" + photo.answer3 + "</p>";
+		  var img = "";
+		  if(photo.photo != ''){
+			img = "<p><img src=\"" + `data:image/jpeg;base64,${(photo.photo).replaceAll('"', '')}` + "\"></p>";
+		  }
+		  var observacionImagen = "<p><br></p><p><br></p><h2>Observación del investigador</h2><p><strong>Título: </strong>" + observationTitle + 
+		  						  "<p><strong>Texto: </strong>" + observationText + "</p>";
+		  const stringACovertir = datosPrevios + img + observacionImagen;
+		  const converted = htmlDocx.asBlob(stringACovertir);
+		  saveAs(converted, 'observacion.docx');
+		})();
+	  };
 
 	const modules = {
 		toolbar: [
@@ -248,6 +266,13 @@ function UserImage() {
 								</MDButton>
 								<MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => onCancel()}>
 									Cancelar
+								</MDButton>
+							</div>
+						}
+						{view &&
+							<div style={{ padding: '16px 0' }}>
+								<MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={exportToWord}>
+									Exportar .docx
 								</MDButton>
 							</div>
 						}
