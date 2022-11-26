@@ -44,7 +44,7 @@ import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
 
 // Material Dashboard 2 React routes
-import routes from "routes";
+import {adminRoutes, commonRoutes} from "routes";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -52,6 +52,11 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/ediga-icon.png";
 import brandDark from "assets/images/ediga-icon.png";
+import {createGlobalState} from "react-hooks-global-state";
+
+export const {useGlobalState} = createGlobalState({
+  user: JSON.parse(localStorage.getItem("user")) ?? null,
+});
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -95,6 +100,9 @@ export default function App() {
     }
   };
 
+  // Get isAdmin from states
+  const [user, setUser] = useGlobalState("user");
+
   // Change the openConfigurator state
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
 
@@ -114,11 +122,9 @@ export default function App() {
       if (route.collapse) {
         return getRoutes(route.collapse);
       }
-
       if (route.route) {
         return <Route exact path={route.route} element={route.component} key={route.key} />;
       }
-
       return null;
     });
 
@@ -155,7 +161,7 @@ export default function App() {
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
             brandName="EDIGA Dashboard"
-            routes={routes}
+            routes={user?.isAdmin ? adminRoutes : commonRoutes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
@@ -164,9 +170,12 @@ export default function App() {
         </>
       )}
       {layout === "vr" && <Configurator />}
-      <Routes>
-        {getRoutes(routes)}
-      </Routes>
+      {!user?.isAdmin && <Routes>
+        {getRoutes(commonRoutes)}
+      </Routes>}
+      {user?.isAdmin && <Routes>
+        {getRoutes(adminRoutes)}
+      </Routes>}
     </ThemeProvider>
   );
 }

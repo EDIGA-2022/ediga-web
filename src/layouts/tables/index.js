@@ -32,8 +32,10 @@ import observationsTable from "layouts/tables/data/observationsTable";
 // Data
 import exportPhotos from "../../api/exportPhotos";
 import usersTable from "layouts/tables/data/usersTable";
+
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+
 
 function Tables(props) {
   var columns = useState([]);
@@ -55,7 +57,6 @@ function Tables(props) {
   const navigate = useNavigate();
 
   const navigateToCreateNewUser = () => {
-    // 👇️ navigate to /navigateToCreateNewUser
     navigate('/createNewUser');
   };
 
@@ -68,6 +69,8 @@ function Tables(props) {
     // 👇️ navigate to /navigateToCreateNewUser
     navigate('/createDiaryEntry/' + props.userId);
   };
+
+
 
   switch (props.type) {
     case 'users':
@@ -166,5 +169,6 @@ function Tables(props) {
     </div >
   );
 }
+
 
 export default Tables;

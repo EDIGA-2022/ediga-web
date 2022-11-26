@@ -39,6 +39,7 @@ import { useState, useEffect } from "react";
 // import metricsApi 
 import { getMetrics } from "../../api/getMetrics"
 import MDAlert from "components/MDAlert";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -53,9 +54,13 @@ function Dashboard() {
   const [gendersBarChartData, setGendersBarChartData] = useState({ labels: [], datasets: [] });
   const [countriesBarChartData, setCountriesBarChartData] = useState({ labels: [], datasets: [] });
   const [agesBarChartData, setAgesBarChartData] = useState({ labels: [], datasets: [] });
+  const [middleFormAnswers, setMiddleFormAnswers] = useState({});
+  const [endFormAnswers, setEndFormAnswers] = useState({});
+
 
   const [data, setData] = useState(false);
 
+  const navigate = useNavigate();
 
 
   function setCountriesInChart(countries) {
@@ -129,10 +134,14 @@ function Dashboard() {
           setGendersInChart(r.userGenders);
           setAgesInChart(r.userAges);
           setTrackedUsers(r.trackedUsers);
-
-
+          setMiddleFormAnswers(r.middleFormAnswers);
+          setEndFormAnswers(r.endFormAnswers);
           setData(true);
         })
+      } else {
+        if (response.status === 401) {
+          navigate("/authentication/sign-in");
+        }
       }
     });
 
@@ -143,7 +152,7 @@ function Dashboard() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox py={3}>
+      {data && <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
@@ -209,25 +218,25 @@ function Dashboard() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
-                {data && <ReportsBarChart
+                <ReportsBarChart
                   color="success"
                   title="Usuarios por país"
                   // description="Last Campaign Performance"
                   date="Datos actualizados recientemente"
                   chart={countriesBarChartData}
-                />}
+                />
               </MDBox>
             </Grid>
 
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
-                {data && <ReportsBarChart
+                <ReportsBarChart
                   color="info"
                   title="Géneros"
                   // description="Last Campaign Performance"
                   date="Datos actualizados recientemente"
                   chart={gendersBarChartData}
-                />}
+                />
               </MDBox>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -239,32 +248,14 @@ function Dashboard() {
                   date="Datos actualizados recientemente"
                   chart={agesBarChartData}
                 />
-                {/* <ReportsLineChart
-                  color="success"
-                  title="daily sales"
-                  description={
-                    <>
-                      (<strong>+15%</strong>) increase in today sales.
-                    </>
-                  }
-                  date="updated 4 min ago"
-                  chart={sales}
-                /> */}
               </MDBox>
             </Grid>
           </Grid>
         </MDBox>
         <MDBox>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={8}>
-              <Projects />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <OrdersOverview />
-            </Grid>
-          </Grid>
+          <Projects middleQuestions={middleFormAnswers} finalQuestions={endFormAnswers} />
         </MDBox>
-      </MDBox>
+      </MDBox>}
       <Footer />
     </DashboardLayout>
   );
