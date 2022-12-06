@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App
 on:
   push:
     branches:
-      - main
+      - develop
   workflow_dispatch:
   
 env:
@@ -14,6 +14,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'             # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '16.x'                       # set this to the node version to use
   CI: false
+  REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
 jobs:
   build:
