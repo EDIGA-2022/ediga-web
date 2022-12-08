@@ -253,7 +253,7 @@ function CreateNewObservation() {
                     <MDBox>
                       {selectedImage && (
                         <div>
-                          <img style={{ width: 300, height: 400 }} src={`${photo}`} />
+                          <img style={{ width: '80%', aspectRatio: 1 }} src={`${photo}`} />
                         </div>)}
                     </MDBox>
                   </Grid>

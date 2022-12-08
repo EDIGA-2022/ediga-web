@@ -76,7 +76,7 @@ function ViewObservation() {
             setLikes(response.likes);
             setComments(response.comments);
             setMusic(response.music);
-            setDate(moment(new Date(response.date)).format("YYYY-MM-DD"));
+            setDate(response.date != null ? moment(new Date(response.date)).format("YYYY-MM-DD") : '');
             setHasMusic(response.hasMusic);
             setObservation(response.observation);
             setPhoto(response.edigaUserPhoto);
@@ -222,7 +222,7 @@ const convertBase64 = (file) => {
                         <MDBox>
                         {selectedImage && photo && (
                         <div>
-                          <img style={{width: 400, height: 400}} src={`${photo}`}/>
+                          <img style={{ width: '80%', aspectRatio: 1 }} src={`${photo}`}/>
                           </div>)}
                         </MDBox>
                     </Grid>
