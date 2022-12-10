@@ -75,7 +75,7 @@ function GetDiaryEntries(userId) {
 					),
 					createdBy: (
 						<MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" style={{ cursor: 'default' }}>
-							Maria Rodriguez
+							{row.createdBy}
 						</MDTypography>
 					),
 					createdAt: (
