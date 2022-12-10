@@ -231,7 +231,7 @@ function CreateNewObservation() {
                 <Grid container spacing={1} justifyContent="left">
                   <Grid item xs={4} lg={4}>
                     <MDBox p={1}>
-                      <ReactQuill theme="snow" value={observation} onChange={setObservation} style={{ width: 650, height: 300 }} />
+                      <ReactQuill theme="snow" value={observation} onChange={setObservation} style={{ width: '180%', height: 300, aspectRatio: 1 }} />
                     </MDBox>
                   </Grid>
                   <Grid item xs={4} lg={4}>
@@ -266,7 +266,13 @@ function CreateNewObservation() {
                 </MDAlert>
               </MDBox>}
               {showMsg && isSuccess && <MDBox pt={2} px={2}>
-                {navigate(-1)}
+                {navigate(`/user/${itemId}`,
+                      {
+                        state: {
+                          tab: 1
+                        }
+                      }
+                    )}
               </MDBox>}
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={submitObservation}>
