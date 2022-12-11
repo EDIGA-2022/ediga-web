@@ -64,7 +64,7 @@ export default function data(middleQuestions, finalQuestions) {
     ],
 
 
-    
+
 
     rows: (middleQuestions ?? []).concat(finalQuestions ?? []).map((question) => {
       return {
@@ -78,7 +78,12 @@ export default function data(middleQuestions, finalQuestions) {
         completion: (
           <MDBox width="8rem" textAlign="left">
             <MDProgress value={question.completionPercentage} color="info" variant="gradient" label={false} />
+            <MDTypography variant="caption" color="text" fontWeight="medium">
+              {question.completionPercentage}%
+            </MDTypography>
+
           </MDBox>
+
         ),
       };
     }),
