@@ -82,14 +82,6 @@ export const adminRoutes = [
   },
   {
     type: "collapse",
-    name: "Profile",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
-  },
-  {
-    type: "collapse",
     name: "Sección de administrador",
     key: "admin",
     icon: <Icon fontSize="small">settings</Icon>,
@@ -165,6 +157,54 @@ export const adminRoutes = [
         icon: <Icon fontSize="small">userImage</Icon>,
         route: "/image/:imageId",
         component: <UserImage />,
+      },
+      {
+        type: "collapse",
+        name: "Create New Observation",
+        key: "createNewObservation",
+        icon: <Icon fontSize="small">createNewObservation</Icon>,
+        route: "/createNewObservation/:itemId",
+        component: <CreateNewObservation />,
+      },
+      {
+        type: "collapse",
+        name: "Edit Observation",
+        key: "editObservation",
+        icon: <Icon fontSize="small">editObservation</Icon>,
+        route: "/editObservation/:itemId",
+        component: <EditObservation />,
+      },
+      {
+        type: "collapse",
+        name: "View Observation",
+        key: "viewObservation",
+        icon: <Icon fontSize="small">viewObservation</Icon>,
+        route: "/viewObservation/:itemId",
+        component: <ViewObservation />,
+      },
+      {
+        type: "collapse",
+        name: "Create diary entry",
+        key: "createDiaryEntry",
+        icon: <Icon fontSize="small">createDiaryEntry</Icon>,
+        route: "/createDiaryEntry/:itemId",
+        component: <CreateDiaryEntry />,
+      },
+      {
+        type: "collapse",
+        name: "Edit diary entry",
+        key: "editDiaryEntry",
+        icon: <Icon fontSize="small">editDiaryEntry</Icon>,
+        route: "/editDiaryEntry/:itemId",
+        component: <EditDiaryEntry />,
+      },
+      {
+        type: "collapse",
+        name: "View diary entry",
+        key: "viewDiaryEntry",
+        icon: <Icon fontSize="small">viewDiaryEntry</Icon>,
+        route: "/viewDiaryEntry/:itemId",
+        component: <ViewDiaryEntry />,
       }
     ]
   }
@@ -181,7 +221,7 @@ export const commonRoutes = [
   },
   {
     type: "collapse",
-    name: "Usuarios",
+    name: "Sujetos",
     key: "tables",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/users",
@@ -191,14 +231,7 @@ export const commonRoutes = [
         <Tables type={"users"} />
       </DashboardLayout>,
   },
-  {
-    type: "collapse",
-    name: "Profile",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
-  },
+
 
   {
     type: "collapse",
