@@ -200,16 +200,20 @@ function Cover() {
               </MDTypography>
             </MDBox>
             <MDBox mt={1} mb={1}>
-              {!loading && <MDButton variant="gradient" color="info" fullWidth onClick={register}>
+              {!loading && !success && <MDButton variant="gradient" color="info" fullWidth onClick={register}>
                 Registrar
               </MDButton>}
               {loading && <Spinner></Spinner>}
             </MDBox>
             <MDBox mt={1} mb={1}>
-              {!loading && <MDButton variant="gradient" color="error" fullWidth onClick={() => navigate("/admin")}>
+              {!loading && !success && <MDButton variant="gradient" color="error" fullWidth onClick={() => navigate("/admin")}>
                 Cancelar
               </MDButton>}
-              {loading && <Spinner></Spinner>}
+            </MDBox>
+            <MDBox mt={1} mb={1}>
+              {!loading && success && <MDButton variant="gradient" color="error" fullWidth onClick={() => navigate("/admin")}>
+                Volver
+              </MDButton>}
             </MDBox>
           </MDBox>
         </MDBox>

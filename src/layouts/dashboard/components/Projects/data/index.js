@@ -81,7 +81,6 @@ export default function data(middleQuestions, finalQuestions) {
             <MDTypography variant="caption" color="text" fontWeight="medium">
               {question.completionPercentage}%
             </MDTypography>
-
           </MDBox>
 
         ),
