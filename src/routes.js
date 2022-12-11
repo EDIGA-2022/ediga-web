@@ -223,7 +223,7 @@ export const commonRoutes = [
     type: "collapse",
     name: "Sujetos",
     key: "tables",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    icon: <Icon fontSize="small">group</Icon>,
     route: "/users",
 
     component:
