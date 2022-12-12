@@ -76,7 +76,7 @@ function ViewObservation() {
             setLikes(response.likes);
             setComments(response.comments);
             setMusic(response.music);
-            setDate(moment(new Date(response.date)).format("YYYY-MM-DD"));
+            setDate(response.date != null ? moment(new Date(response.date)).utc().format("YYYY-MM-DD") : '');
             setHasMusic(response.hasMusic);
             setObservation(response.observation);
             setPhoto(response.edigaUserPhoto);
@@ -209,7 +209,7 @@ const convertBase64 = (file) => {
                         <MDBox p={1}>
                                 <ReactQuill    value={observation}
                                               readOnly={true}
-                                              theme={"bubble"} style = {{width: 650, height: 300}}/>
+                                              theme={"bubble"} style = {{ width: '180%', height: 300, aspectRatio: 1 }}/>
                         </MDBox>
                     </Grid>
                     <Grid item xs={4} lg={4}>
@@ -222,7 +222,7 @@ const convertBase64 = (file) => {
                         <MDBox>
                         {selectedImage && photo && (
                         <div>
-                          <img style={{width: 400, height: 400}} src={`${photo}`}/>
+                          <img style={{ width: '80%', aspectRatio: 1 }} src={`${photo}`}/>
                           </div>)}
                         </MDBox>
                     </Grid>
@@ -230,8 +230,22 @@ const convertBase64 = (file) => {
                 <MDBox p={3}></MDBox>            
               </form>
               <MDBox p={2}>
-                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
-                    Volver
+              <MDButton
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  style={{ marginRight: "auto" }}
+                  onClick={() =>
+                    navigate(`/user/${userId}`,
+                      {
+                        state: {
+                          tab: 1
+                        }
+                      }
+                    )
+                  }
+                >
+                  Volver
                 </MDButton>
               </MDBox>
             </Card>

@@ -121,7 +121,7 @@ function EditObservation() {
           setLikes(response.likes);
           setComments(response.comments);
           setMusic(response.music);
-          setDate(moment(new Date(response.date)).format("YYYY-MM-DD"));
+          setDate(response.date != null ? moment(new Date(response.date)).utc().format("YYYY-MM-DD") : null);
           setHasMusic(response.hasMusic);
           setObservation(response.observation);
           setPhoto(response.edigaUserPhoto);
@@ -262,7 +262,7 @@ function EditObservation() {
                 <Grid container spacing={1} justifyContent="left">
                   <Grid item xs={4} lg={4}>
                     <MDBox p={1}>
-                      <ReactQuill theme="snow" value={observation} onChange={setObservation} style={{ width: 650, height: 300 }} />
+                      <ReactQuill theme="snow" value={observation} onChange={setObservation} style={{ width: '180%', height: 300, aspectRatio: 1 }} />
                     </MDBox>
                   </Grid>
                   <Grid item xs={4} lg={4}>
@@ -284,7 +284,7 @@ function EditObservation() {
                     <MDBox>
                       {selectedImage && photo && (
                         <div>
-                          <img style={{ width: 300 }} src={`${photo}`} />
+                          <img style={{ width: '80%', aspectRatio: 1 }}src={`${photo}`} />
                         </div>)}
                     </MDBox>
                   </Grid>
@@ -297,13 +297,33 @@ function EditObservation() {
                 </MDAlert>
               </MDBox>}
               {showMsg && isSuccess && <MDBox pt={2} px={2}>
-                {navigate(-1)}
+                {navigate(`/user/${userId}`,
+                      {
+                        state: {
+                          tab: 1
+                        }
+                      }
+                    )}
               </MDBox>}
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={submitObservation}>
                   Editar observación
                 </MDButton>
-                <MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
+                <MDButton
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  style={{ marginRight: "auto" }}
+                  onClick={() =>
+                    navigate(`/user/${userId}`,
+                      {
+                        state: {
+                          tab: 1
+                        }
+                      }
+                    )
+                  }
+                >
                   Volver
                 </MDButton>
               </MDBox>
