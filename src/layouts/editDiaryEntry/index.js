@@ -137,10 +137,10 @@ function EditDiaryEntry() {
           <Grid item xs={12} lg={11}>
             <Card>
               <MDBox p={2}>
-                <MDTypography variant="h5">Editar entrada de diario de campo</MDTypography>
+                <MDTypography variant="h5"  style={{ marginLeft: "16px" }} >Editar entrada de diario de campo</MDTypography>
               </MDBox>
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={exportToWord}>
+                <MDButton variant="outlined" color="info" size="small"  style={{ marginLeft: "16px" }}  onClick={exportToWord}>
                   Exportar .docx
                 </MDButton>
               </MDBox>
@@ -165,12 +165,24 @@ function EditDiaryEntry() {
                   {jsonError(jsonResponseMessage)}
                 </MDAlert>
               </MDBox>}
-              {showMsg && isSuccess && navigate(-1)}
+              {showMsg && isSuccess &&  navigate(`/user/${userId}`,
+                      {
+                        state: {
+                          tab: 2
+                        }
+                      }
+                    )}
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={submitDiaryEntry}>
+                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px", marginLeft: "16px"}} onClick={submitDiaryEntry}>
                   Editar entrada
                 </MDButton>
-                <MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
+                <MDButton variant="outlined" color="error" size="small" onClick={() =>  navigate(`/user/${userId}`,
+                      {
+                        state: {
+                          tab: 2
+                        }
+                      }
+                    )}>
                   Cancelar
                 </MDButton>
               </MDBox>

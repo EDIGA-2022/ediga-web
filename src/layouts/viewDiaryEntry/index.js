@@ -112,10 +112,10 @@ Link.sanitize = function(url) {
           <Grid item xs={12} lg={11}>
             <Card>
               <MDBox p={2}>
-                <MDTypography variant="h5">Entrada de diario de campo</MDTypography>
+                <MDTypography variant="h5" style={{ marginLeft: "16px" }}>Entrada de diario de campo</MDTypography>
               </MDBox>
               <MDBox p={2}>
-              <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={exportToWord}>
+              <MDButton variant="outlined" color="info" size="small"  style={{ marginLeft: "16px" }} onClick={exportToWord}>
                     Exportar .docx
                 </MDButton>
             </MDBox>
@@ -134,7 +134,13 @@ Link.sanitize = function(url) {
                 <MDBox p={3}></MDBox>            
               </form>
               <MDBox p={2}>
-                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
+                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto",  marginLeft: "16px" }} onClick={() =>  navigate(`/user/${userId}`,
+                      {
+                        state: {
+                          tab: 2
+                        }
+                      }
+                    )}>
                     Volver
                 </MDButton>
               </MDBox>
