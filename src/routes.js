@@ -82,14 +82,6 @@ export const adminRoutes = [
   },
   {
     type: "collapse",
-    name: "Profile",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
-  },
-  {
-    type: "collapse",
     name: "Sección de administrador",
     key: "admin",
     icon: <Icon fontSize="small">settings</Icon>,
@@ -191,15 +183,6 @@ export const commonRoutes = [
         <Tables type={"users"} />
       </DashboardLayout>,
   },
-  {
-    type: "collapse",
-    name: "Profile",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
-  },
-
   {
     type: "collapse",
     name: "Cerrar sesión",

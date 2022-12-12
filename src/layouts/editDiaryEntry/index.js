@@ -167,7 +167,7 @@ function EditDiaryEntry() {
               </MDBox>}
               {showMsg && isSuccess && navigate(-1)}
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "auto" }} onClick={submitDiaryEntry}>
+                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={submitDiaryEntry}>
                   Editar entrada
                 </MDButton>
                 <MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>

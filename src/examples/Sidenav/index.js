@@ -176,7 +176,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
           </MDBox>
         </MDBox>
-        {true && <MDBox mt={2}>
+        {user && <MDBox mt={2}>
 
           <MDTypography component="h6" variant="button" fontWeight="normal"  color={textColor}>
             {user.name}
