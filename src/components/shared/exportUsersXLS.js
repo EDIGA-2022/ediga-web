@@ -62,7 +62,7 @@ const ExportUsersXLS = ({ csvData, fileName }) => {
 
   return (
     <Tooltip title="Descargar datos Sujetos xlsx" placement="bottom">
-      <MDButton variant="outlined" color="white" size="small" onClick={() => exportToCSV()}>
+      <MDButton variant="outlined" color="white"  style={{ marginLeft: "auto" }} size="small" onClick={() => exportToCSV()}>
         <FileDownloadOutlinedIcon />
       </MDButton>
     </Tooltip>

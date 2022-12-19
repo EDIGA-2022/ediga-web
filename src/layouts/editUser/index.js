@@ -205,7 +205,7 @@ function EditUser() {
               <Navigate to="/users"/>
               </MDBox>}
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "auto" }} onClick={submitUser}>
+                <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "16px" }} onClick={submitUser}>
                     Confirmar edición
                 </MDButton>
                 <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>

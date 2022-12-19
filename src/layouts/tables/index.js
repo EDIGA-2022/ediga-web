@@ -17,6 +17,7 @@ Coded by www.creative-tim.com
 import AddIcon from '@mui/icons-material/Add';
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
+import Tooltip from '@mui/material/Tooltip';
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
@@ -49,6 +50,7 @@ function Tables(props) {
   let title;
   let obj;
   let onClick;
+  let tooltip;
 
   const onSearchChangeTable = (value) => {
     setSearchText(value)
@@ -80,6 +82,7 @@ function Tables(props) {
       rows = obj.rows;
       csvData = obj.csvData;
       onClick = navigateToCreateNewUser;
+      tooltip = 'Crear nuevo sujeto'
       break;
     case 'observations':
       title = 'Observaciones';
@@ -87,6 +90,7 @@ function Tables(props) {
       columns = obj.columns;
       rows = obj.rows;
       onClick = navigateToCreateNewObservation;
+      tooltip = 'Crear nueva observación'
       break;
     case 'diaryEntries':
       title = 'Diario de campo';
@@ -94,6 +98,7 @@ function Tables(props) {
       columns = obj.columns;
       rows = obj.rows;
       onClick = navigateToCreateNewDiaryEntry;
+      tooltip = 'Crear nueva entrada de diario'
       break;
     default:
       break;
@@ -134,14 +139,14 @@ function Tables(props) {
                       <FileDownloadOutlinedIcon />
                     </MDButton>
                   </Grid>} */}
-                  {props.type === 'users' && <Grid item xs>
+                  {props.type === 'users' && 
                     <ExportUsersXLS csvData={csvData} fileName="DataSujetos" />
-                  </Grid>}
-                  <Grid item xs>
+                  }       
+                  <Tooltip title={tooltip} placement="bottom">
                     <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
                       <AddIcon />
                     </MDButton>
-                  </Grid>
+                  </Tooltip>         
                 </Grid>
               </MDBox >
               <MDBox pt={3}>

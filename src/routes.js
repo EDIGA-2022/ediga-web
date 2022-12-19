@@ -231,8 +231,6 @@ export const commonRoutes = [
         <Tables type={"users"} />
       </DashboardLayout>,
   },
-
-
   {
     type: "collapse",
     name: "Cerrar sesión",
