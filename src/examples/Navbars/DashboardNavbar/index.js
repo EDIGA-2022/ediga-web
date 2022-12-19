@@ -62,11 +62,7 @@ function DashboardNavbar({ absolute, light, isMini, onArrowClick }) {
 
   useEffect(() => {
     // Setting the navbar type
-    if (fixedNavbar) {
-      setNavbarType("sticky");
-    } else {
-      setNavbarType("static");
-    }
+    setNavbarType("static");
 
     // A function that sets the transparent state of the navbar.
     function handleTransparentNavbar() {
@@ -77,7 +73,7 @@ function DashboardNavbar({ absolute, light, isMini, onArrowClick }) {
      The event listener that's calling the handleTransparentNavbar function when 
      scrolling the window.
     */
-    window.addEventListener("scroll", handleTransparentNavbar);
+    // window.addEventListener("scroll", handleTransparentNavbar);
 
     // Call the handleTransparentNavbar function to set the state with the initial value.
     handleTransparentNavbar();
