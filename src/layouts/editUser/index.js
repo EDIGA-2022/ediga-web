@@ -206,9 +206,10 @@ function EditUser() {
               </MDBox>}
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "16px" }} onClick={submitUser}>
-                    Confirmar edición
+                    Guardar
                 </MDButton>
-                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-2)}>
+                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => 
+                  {if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?')) navigate(`/users`)}}>
                     Cancelar
                 </MDButton>
               </MDBox>

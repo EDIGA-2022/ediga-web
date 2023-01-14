@@ -64,6 +64,7 @@ function EditObservation() {
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
   const navigate = useNavigate();
+  const [today, setToday] = useState(moment().format("YYYY-MM-DD"));
 
   function handleHasMusicChange() {
     if (hasMusic) {
@@ -73,6 +74,21 @@ function EditObservation() {
       setHasMusic(true);
     }
   };
+
+  const modules = {
+    toolbar: [
+      [{ font: [] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }],
+      [{ script: "sub" }, { script: "super" }],
+      ["blockquote", "code-block"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+      ["link", "image", "video"],
+      ["clean"],
+    ],
+  }
 
   const jsonError = (name) => (
     <MDTypography variant="body2" color="white">
@@ -241,6 +257,7 @@ function EditObservation() {
                           shrink: true,
                         }}
                         onChange={(e) => setDate(e.target.value)}
+                        inputProps={{max: today }}
                       />
                     </MDBox>
                     <MDBox p={1}>
@@ -259,16 +276,18 @@ function EditObservation() {
                   </Grid>
                   <MDBox p={2}></MDBox>
                 </Grid>
-                <Grid container spacing={1} justifyContent="left">
-                  <Grid item xs={4} lg={4}>
+                <Grid container spacing={2}>
+                  <Grid item xs={4.5} lg={4.5} justifyContent="left">
                     <MDBox p={1}>
-                      <ReactQuill theme="snow" value={observation} onChange={setObservation} style={{ width: '180%', height: 300, aspectRatio: 1 }} />
+                      <ReactQuill
+                        theme="snow" 
+                        modules={modules}
+                        value={observation} 
+                        onChange={setObservation} 
+                        style={{ width: '180%', height: 300, aspectRatio: 1 }} />
                     </MDBox>
                   </Grid>
-                  <Grid item xs={4} lg={4}>
-
-                  </Grid>
-                  <Grid item xs={4} lg={4}>
+                  <Grid item xs={4} lg={4} justifyContent="right"  style={{ marginLeft: '28%'}} >
                     <MDBox p={1}>
                       <TextField
                         id="edigaUserPhoto"
@@ -307,14 +326,14 @@ function EditObservation() {
               </MDBox>}
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={submitObservation}>
-                  Editar observación
+                  Guardar
                 </MDButton>
                 <MDButton
                   variant="outlined"
                   color="error"
                   size="small"
                   style={{ marginRight: "auto" }}
-                  onClick={() =>
+                  onClick={() => {if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?'))
                     navigate(`/user/${userId}`,
                       {
                         state: {
@@ -322,9 +341,9 @@ function EditObservation() {
                         }
                       }
                     )
-                  }
+                  }}
                 >
-                  Volver
+                  Cancelar
                 </MDButton>
               </MDBox>
             </Card>

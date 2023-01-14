@@ -37,6 +37,7 @@ import 'react-quill/dist/quill.snow.css';
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+import moment from 'moment';
 
 // API requests
 import createObservationAPI from "../../api/createObservation";
@@ -60,6 +61,7 @@ function CreateNewObservation() {
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
   const navigate = useNavigate();
+  const [today, setToday] = useState(moment().format("YYYY-MM-DD"));
 
   function handleHasMusicChange() {
     if (hasMusic) {
@@ -69,6 +71,21 @@ function CreateNewObservation() {
       setHasMusic(true);
     }
   };
+
+  const modules = {
+    toolbar: [
+      [{ font: [] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }],
+      [{ script: "sub" }, { script: "super" }],
+      ["blockquote", "code-block"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+      ["link", "image", "video"],
+      ["clean"],
+    ],
+  }
 
   const jsonError = (name) => (
     <MDTypography variant="body2" color="white">
@@ -210,6 +227,7 @@ function CreateNewObservation() {
                           shrink: true,
                         }}
                         onChange={(e) => setDate(e.target.value)}
+                        inputProps={{max: today }}
                       />
                     </MDBox>
                     <MDBox p={1}>
@@ -228,16 +246,18 @@ function CreateNewObservation() {
                   </Grid>
                   <MDBox p={2}></MDBox>
                 </Grid>
-                <Grid container spacing={1} justifyContent="left">
-                  <Grid item xs={4} lg={4}>
+                <Grid container spacing={2} >
+                  <Grid item xs={4.5} lg={4.5} justifyContent="left">
                     <MDBox p={1}>
-                      <ReactQuill theme="snow" value={observation} onChange={setObservation} style={{ width: '180%', height: 300, aspectRatio: 1 }} />
+                      <ReactQuill theme="snow" 
+                      modules={modules}
+                      value={observation} 
+                      onChange={setObservation} 
+                      style={{ width: '180%', height: 300, aspectRatio: 1 }} />
                     </MDBox>
                   </Grid>
-                  <Grid item xs={4} lg={4}>
-
-                  </Grid>
-                  <Grid item xs={4} lg={4}>
+                
+                  <Grid item xs={4} lg={4} style={{ marginLeft: '28%'}} justifyContent="right">
                     <MDBox p={1}>
                       <TextField
                         id="edigaUserPhoto"
@@ -275,15 +295,15 @@ function CreateNewObservation() {
                     )}
               </MDBox>}
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={submitObservation}>
+                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px", marginTop: "25px" }} onClick={submitObservation}>
                   Crear observación
                 </MDButton>
                 <MDButton
                   variant="outlined"
                   color="error"
                   size="small"
-                  style={{ marginRight: "auto" }}
-                  onClick={() =>
+                  style={{ marginRight: "auto", marginTop: "25px" }}
+                  onClick={() => {if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?'))
                     navigate(`/user/${itemId}`,
                       {
                         state: {
@@ -291,9 +311,9 @@ function CreateNewObservation() {
                         }
                       }
                     )
-                  }
+                  }}
                 >
-                  Volver
+                  Cancelar
                 </MDButton>
               </MDBox>
             </Card>

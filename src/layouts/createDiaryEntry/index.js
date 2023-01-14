@@ -156,13 +156,13 @@ function CreateNewDiaryEntry() {
                 <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px", marginLeft: "16px"  }} onClick={submitDiaryEntry}>
                   Crear entrada
                 </MDButton>
-                <MDButton variant="outlined" color="error" size="small" onClick={() =>  navigate(`/user/${itemId}`,
+                <MDButton variant="outlined" color="error" size="small" onClick={() =>  {if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?')) navigate(`/user/${itemId}`,
                       {
                         state: {
                           tab: 2
                         }
                       }
-                    )}>
+                    )}}>
                   Cancelar
                 </MDButton>
               </MDBox>

@@ -246,7 +246,8 @@ function UserImage() {
 								<MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={() => onSave()}>
 									Guardar
 								</MDButton>
-								<MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => onCancel()}>
+								<MDButton variant="outlined" color="error" size="small" style={{ marginRight: "auto" }} onClick={() => 
+									{if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?')) onCancel()}}>
 									Cancelar
 								</MDButton>
 							</div>
