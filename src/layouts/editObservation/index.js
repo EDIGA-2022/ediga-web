@@ -32,15 +32,18 @@ import Switch from '@mui/material/Switch';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
+// Dialog
+import AlertDialog from '../../components/Dialog';
+
 // API requests 
 import editObservationAPI from "../../api/editObservation";
 import getObservationAPI from "../../api/getObservation";
+import deleteObservationAPI from "../../api/deleteObservation";
 import { useNavigate, useParams, Navigate } from "react-router-dom";
 import moment from 'moment';
 import Quill from 'quill'
@@ -63,6 +66,7 @@ function EditObservation() {
   const [jsonResponseMessage, setJsonResponseMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
+  const [deleteAlert, setDeleteAlert] = useState(false);
   const navigate = useNavigate();
   const [today, setToday] = useState(moment().format("YYYY-MM-DD"));
 
@@ -89,6 +93,9 @@ function EditObservation() {
       ["clean"],
     ],
   }
+
+  const openDeleteAlert = () => setDeleteAlert(true);
+  const closeDeleteAlert = () => setDeleteAlert(false);
 
   const jsonError = (name) => (
     <MDTypography variant="body2" color="white">
@@ -125,8 +132,24 @@ function EditObservation() {
     });
   }
 
-  useEffect(function effectFunction() {
+  const deleteObservation = async () => {
+    deleteObservationAPI(itemId).then(response => {
+      setIsSuccess(response.ok);
+      setShowMsg(true);
+      response.json().then(msg => {
+        setJsonResponseMessage(msg.message);
+        navigate(`/user/${userId}`,
+          {
+            state: {
+              tab: 1
+            }
+          }
+        )
+      })
+    });
+  }
 
+  useEffect(function effectFunction() {
     async function fetchObservation() {
       await getObservationAPI(itemId).then(res => {
         res.json().then(response => {
@@ -170,7 +193,6 @@ function EditObservation() {
     })
   }
 
-
   const Link = Quill.import('formats/link');
   Link.sanitize = function (url) {
     // quill by default creates relative links if scheme is missing.
@@ -180,18 +202,27 @@ function EditObservation() {
     return url;
   }
 
-
-
   return (
     <DashboardLayout>
       <DashboardNavbar onArrowClick={() => navigate(-2)} />
-      <MDBox mt={6} mb={3}>
+      <MDBox mt={0} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={11}>
             <Card>
-              <MDBox p={2}>
-                <MDTypography variant="h5">Editar observación</MDTypography>
-              </MDBox>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
+                <MDBox p={2}>
+                  <MDTypography variant="h5">Editar observación</MDTypography>
+                </MDBox>
+                <MDButton
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  style={{ height: '1.4375em', margin: '16px' }}
+                  onClick={openDeleteAlert}
+                >
+                  Eliminar observación
+                </MDButton>
+              </div>
               <form>
                 <MDBox p={2}>
                   <MDBox p={1}></MDBox>
@@ -303,7 +334,7 @@ function EditObservation() {
                     <MDBox>
                       {selectedImage && photo && (
                         <div>
-                          <img style={{ width: '80%', aspectRatio: 1 }}src={`${photo}`} />
+                          <img style={{ width: '80%', aspectRatio: 1 }} src={`${photo}`} />
                         </div>)}
                     </MDBox>
                   </Grid>
@@ -317,12 +348,12 @@ function EditObservation() {
               </MDBox>}
               {showMsg && isSuccess && <MDBox pt={2} px={2}>
                 {navigate(`/user/${userId}`,
-                      {
-                        state: {
-                          tab: 1
-                        }
-                      }
-                    )}
+                  {
+                    state: {
+                      tab: 1
+                    }
+                  }
+                )}
               </MDBox>}
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={submitObservation}>
@@ -350,6 +381,17 @@ function EditObservation() {
           </Grid>
         </Grid>
       </MDBox>
+      <AlertDialog
+          open={deleteAlert}
+          handleClose={closeDeleteAlert}
+          title={"Esta seguro que desea eliminar la observacion?"}
+          description={"Al eliminar la observacion no podra volver a acceder a ella ni recuperarla luego."}
+          agreeText={"Eliminar"}
+          handleClickAgree={() => {
+            closeDeleteAlert();
+            deleteObservation();
+          }}
+      />
       <Footer />
     </DashboardLayout>
   );
