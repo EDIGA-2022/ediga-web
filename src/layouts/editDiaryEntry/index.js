@@ -174,15 +174,15 @@ function EditDiaryEntry() {
                     )}
               <MDBox p={2}>
                 <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px", marginLeft: "16px"}} onClick={submitDiaryEntry}>
-                  Editar entrada
+                  Guardar
                 </MDButton>
-                <MDButton variant="outlined" color="error" size="small" onClick={() =>  navigate(`/user/${userId}`,
+                <MDButton variant="outlined" color="error" size="small" onClick={() => {if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?')) navigate(`/user/${userId}`,
                       {
                         state: {
                           tab: 2
                         }
                       }
-                    )}>
+                    )}}>
                   Cancelar
                 </MDButton>
               </MDBox>

@@ -186,7 +186,8 @@ function CreateNewUser() {
                 <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "16px" }} onClick={submitUser}>
                     Añadir participante
                 </MDButton>
-                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => navigate(-1)}>
+                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => 
+                  {if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?')) navigate(`/users`)}}>
                     Cancelar
                 </MDButton>
               </MDBox>
