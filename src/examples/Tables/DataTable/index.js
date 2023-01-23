@@ -318,7 +318,15 @@ function DataTable({
           })}
         </TableBody>
       </Table>
-
+      {
+        !rows.length &&
+        <MDTypography style={{
+          margin: '40px 0',
+          textAlignLast: 'center'
+        }}>
+          No existen resultados que coincidan con la busqueda
+        </MDTypography>
+      }
       <MDBox
         display="flex"
         flexDirection={{ xs: "column", sm: "row" }}
