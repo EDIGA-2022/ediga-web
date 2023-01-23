@@ -36,10 +36,14 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import MDButton from "components/MDButton";
 
+// Dialog
+import AlertDialog from '../../components/Dialog';
+
 // API requests
 import createObservation from "../../api/createObservation";
 import getObservationAPI from "../../api/getObservation";
 import editObservationAPI from "../../api/editObservation";
+import deleteObservationAPI from "../../api/deleteObservation";
 
 function UserImage() {
 	const navigate = useNavigate();
@@ -53,7 +57,7 @@ function UserImage() {
 
 	const [addingObservation, setAddingObservation] = useState(false);
 	const [observationText, setObservationText] = useState('');
-	const [observationTitle, setObservationTitle] = useState('')
+	const [observationTitle, setObservationTitle] = useState('');
 	const [photo, setPhoto] = useState({
 		photoId: '',
 		photo: '',
@@ -61,7 +65,9 @@ function UserImage() {
 		answer2: '',
 		answer3: '',
 		userId: '',
-	})
+	});
+	const [deleteAlert, setDeleteAlert] = useState(false);
+
 
 	async function fetchObservation() {
 		// the imageId here is the observationId 
@@ -103,7 +109,6 @@ function UserImage() {
 			fetchObservation();
 		}
 	}, []);
-
 
 	const modules = {
 		toolbar: [
@@ -178,6 +183,25 @@ function UserImage() {
 		}
 	}
 
+
+	const openDeleteAlert = () => setDeleteAlert(true);
+	const closeDeleteAlert = () => setDeleteAlert(false);
+
+
+	const deleteObservation = async () => {
+		deleteObservationAPI(imageId).then(response => {
+			response.json().then(msg => {
+				navigate(`/user/${photo.userId}`,
+					{
+						state: {
+							tab: 1
+						}
+					}
+				)
+			})
+		});
+	}
+
 	return (
 		<DashboardLayout>
 			<DashboardNavbar onArrowClick={() =>
@@ -214,7 +238,22 @@ function UserImage() {
 						borderColor: 'black',
 						borderWidth: 'thin',
 					}} />
-					Observación:
+					<div>
+						<>Observación:</>
+						{edit && <MDButton
+							variant="outlined"
+							color="error"
+							size="small"
+							style={{
+								height: '1.4375em',
+								margin: '16px',
+								marginLeft: '44%',
+							}}
+							onClick={openDeleteAlert}
+						>
+							Eliminar observación
+						</MDButton>}
+					</div>
 					<div>
 						<TextField
 							style={{ width: '45%', marginTop: '16px' }}
@@ -252,6 +291,17 @@ function UserImage() {
 							</div>
 						}
 					</div>
+					<AlertDialog
+						open={deleteAlert}
+						handleClose={closeDeleteAlert}
+						title={"Esta seguro que desea eliminar la observacion?"}
+						description={"Al eliminar la observacion no podra volver a acceder a ella ni recuperarla luego."}
+						agreeText={"Eliminar"}
+						handleClickAgree={() => {
+							closeDeleteAlert();
+							deleteObservation();
+						}}
+					/>
 				</>
 			}
 		</DashboardLayout >
