@@ -1,12 +1,39 @@
 import React from 'react';
 import MDButton from "components/MDButton";
+import PropTypes from 'prop-types';
 import FileSaver from 'file-saver';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import Tooltip from '@mui/material/Tooltip';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import { FaFileCsv, FaFileExcel } from 'react-icons/fa'
 
 const XLSX = require('xlsx');
+const formats = ['Formato CSV (Comma Separated Values File)', 'Formato XLSX (Excel Worksheet)'];
 
-const ExportUsersXLS = ({ csvData, fileName }) => {
+function ExportUsersXLSDialog(props) {
+  const { onClose, selectedValue, open, csvData, fileName } = props;
+  
+  const handleClose = () => {
+    onClose(selectedValue);
+  }
+
+  const handleListItemClick = (value) => {
+    if (value == formats[0]) {
+      exportToCSV();
+    } else {
+      if (value == formats[1]) {
+        exportToExcel();
+      }
+    }
+    onClose(value);
+  }
+
   const actualData = csvData.map((c) => ({
     userId: c.userId,
     alias: c.alias,
@@ -21,10 +48,6 @@ const ExportUsersXLS = ({ csvData, fileName }) => {
     endForm1: c.endForm1,
     endForm2: c.endForm2,
   }));
-
-  const fileType =
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-  const fileExtension = '.xlsx';
 
   const Heading = [
     {
@@ -43,7 +66,7 @@ const ExportUsersXLS = ({ csvData, fileName }) => {
     },
   ];
 
-  const exportToCSV = () => {
+  const createSheet = () => {
     const ws = XLSX.utils.json_to_sheet(Heading, {
       header: ['userId', 'alias', 'instagramProfile', 'gender', 'country', 'yearsOld', 'dateMiddleForm', 'middleForm1', 'middleForm2', 'dateEndForm', 'endForm1', 'endForm2'],
       skipHeader: true,
@@ -55,19 +78,82 @@ const ExportUsersXLS = ({ csvData, fileName }) => {
       origin: -1, //ok
     });
     const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
+    return wb;
+  }
+
+  const exportToExcel = () => {
+    const wb = createSheet();
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const data = new Blob([excelBuffer], { type: fileType });
-    FileSaver.saveAs(data, fileName + fileExtension);
+    const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+    FileSaver.saveAs(data, fileName + '.xlsx');
   };
 
+  const exportToCSV = () => {
+    const wb = createSheet();
+    const csvBuffer = XLSX.write(wb, { bookType: 'csv', type: 'buffer' });
+    const data = new Blob([csvBuffer], { type: 'text/x-csv' });
+    FileSaver.saveAs(data, fileName + '.csv');
+  }
+
   return (
-    <Tooltip title="Descargar datos Sujetos xlsx" placement="bottom">
-      <MDButton variant="outlined" color="white"  style={{ marginLeft: "auto" }} size="small" onClick={() => exportToCSV()}>
-        <FileDownloadOutlinedIcon />
-      </MDButton>
-    </Tooltip>
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle sx={{ fontSize: 18 }}>Opciones Descarga</DialogTitle>
+      <List sx={{ pt: 0 }}>
+        {formats.map((format) => (
+          <ListItem disableGutters>
+            <ListItemButton onClick={() => handleListItemClick(format)} key={format}>
+              <ListItemText primaryTypographyProps={{fontSize: 16}} primary={format}/>
+                {format == formats[0] &&
+                <FaFileCsv/>
+                }
+                {format == formats[1] && 
+                  <FaFileExcel/>
+                }
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Dialog>
   );
 };
 
-export default ExportUsersXLS;
+ExportUsersXLSDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  selectedValue: PropTypes.string.isRequired,
+  fileName: PropTypes.string.isRequired,
+  csvData: PropTypes.array.isRequired,
+};
 
+const ExportUsersXLS = ({ csvData, fileName })  => {
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState(formats[1]);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
+
+  return (
+    <>
+    <Tooltip title="Descargar datos" placement="bottom">
+      <MDButton variant="outlined" color="white"  style={{ marginLeft: "auto" }} size="small" onClick={handleClickOpen}>
+        <FileDownloadOutlinedIcon />
+      </MDButton>
+    </Tooltip>
+      <ExportUsersXLSDialog
+        selectedValue={selectedValue}
+        open={open}
+        onClose={handleClose}
+        csvData={csvData}
+        fileName={fileName}
+        />
+      </>
+  );
+}
+
+export default ExportUsersXLS;
