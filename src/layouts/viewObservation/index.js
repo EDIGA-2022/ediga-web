@@ -45,8 +45,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import moment from 'moment';
 
 function ViewObservation() {
-  
-  const { itemId } = useParams(); 
+
+  const { itemId } = useParams();
   const [userId, setUserId] = useState('');
   const [observationId, setObservationId] = useState('');
   const [title, setTitle] = useState('');
@@ -67,53 +67,62 @@ function ViewObservation() {
   useEffect(function effectFunction() {
 
     async function fetchObservation() {
-        await getObservationAPI(itemId).then(res => {
-          res.json().then(response => {
-            setObservationId(itemId);
-            setUserId(response.userId);
-            setTitle(response.title);
-            setType(response.type);
-            setLikes(response.likes);
-            setComments(response.comments);
-            setMusic(response.music);
-            setDate(response.date != null ? moment(new Date(response.date)).utc().format("YYYY-MM-DD") : '');
-            setHasMusic(response.hasMusic);
-            setObservation(response.observation);
-            setPhoto(response.edigaUserPhoto);
-            setSelectedImage(true);
-          })
-        });
+      await getObservationAPI(itemId).then(res => {
+        res.json().then(response => {
+          setObservationId(itemId);
+          setUserId(response.userId);
+          setTitle(response.title);
+          setType(response.type);
+          setLikes(response.likes);
+          setComments(response.comments);
+          setMusic(response.music);
+          setDate(response.date != null ? moment(new Date(response.date)).utc().format("YYYY-MM-DD") : '');
+          setHasMusic(response.hasMusic);
+          setObservation(response.observation);
+          setPhoto(response.edigaUserPhoto);
+          setSelectedImage(true);
+        })
+      });
     }
 
     fetchObservation();
 
-}, []);
+  }, []);
 
-const handleFileRead = async (event) => {
-  const file = event.target.files[0]
-  const base64 = await convertBase64(file)
-  setPhoto(base64);
-  setSelectedImage(true);
-}
+  const handleFileRead = async (event) => {
+    const file = event.target.files[0]
+    const base64 = await convertBase64(file)
+    setPhoto(base64);
+    setSelectedImage(true);
+  }
 
-const convertBase64 = (file) => {
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file)
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    }
-    fileReader.onerror = (error) => {
-      reject(error);
-    }
-  })
-}
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file)
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      }
+      fileReader.onerror = (error) => {
+        reject(error);
+      }
+    })
+  }
 
 
 
   return (
     <DashboardLayout>
-      <DashboardNavbar onArrowClick={() => navigate(-2)} />
+      <DashboardNavbar
+        onArrowClick={() =>
+          navigate(`/user/${userId}`,
+            {
+              state: {
+                tab: 1
+              }
+            }
+          )}
+      />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={11}>
@@ -124,115 +133,115 @@ const convertBase64 = (file) => {
               <form>
                 <MDBox p={2}>
                   <MDBox p={1}></MDBox>
-                  <TextField id="standard-basic" label="Título de la observación" variant="outlined" value={title} readOnly={true} style = {{width: 650}}/>
+                  <TextField id="standard-basic" label="Título de la observación" variant="outlined" value={title} readOnly={true} style={{ width: 650 }} />
                 </MDBox>
                 <Grid container spacing={3} justifyContent="center">
-                    <Grid item xs={4} lg={4}>
-                        <MDBox p={2}>
-                            <MDTypography color="info" fontWeight="regular" variant="h6">Tipo</MDTypography>
-                            <RadioGroup
-                            aria-labelledby="demo-radio-buttons-group-label"
-                            value={type}
-                            name="radio-buttons-group"
-                            readOnly={true}
-                            >
-                            <FormControlLabel value="P" control={<Radio />} label="Publicación" />
-                            <FormControlLabel value="S" control={<Radio />} label="Historia" />
-                            <FormControlLabel value="R" control={<Radio />} label="Reel" />
-                            <FormControlLabel value="L" control={<Radio />} label="Live" />
-                            </RadioGroup>
-                        </MDBox>
-                    </Grid>
-                    <Grid item xs={4} lg={4}>
-                        <MDBox p={2}>
-                            <MDTypography color="info" fontWeight="regular" variant="h6">Cantidad de likes</MDTypography>
-                            <MDBox p={1}></MDBox>
-                            <TextField
-                            id="outlined-number"
-                            label="Likes"
-                            type="number"
-                            value={likes}
-                            readOnly={true}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            />
-                        </MDBox>
-                        <MDBox p={2}>
-                            <MDTypography color="info" fontWeight="regular" variant="h6">Cantidad de comentarios</MDTypography>
-                            <MDBox p={1}></MDBox>
-                            <TextField
-                            id="outlined-number"
-                            label="Comentarios"
-                            type="number"
-                            value={comments}
-                            readOnly={true}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            />
-                        </MDBox>
-                    </Grid>
-                    <Grid item xs={4} lg={4}>
-                      <MDBox p={2}>
-                        <MDTypography color="info" fontWeight="regular" variant="h6">Fecha de publicación</MDTypography>
-                        <MDBox p={1}></MDBox>
-                        <TextField
-                            id="outlined-number"
-                            label="Fecha"
-                            type="date"
-                            value={date}
-                            readOnly={true}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            />
-                      </MDBox>
-                      <MDBox p={1}>
+                  <Grid item xs={4} lg={4}>
+                    <MDBox p={2}>
+                      <MDTypography color="info" fontWeight="regular" variant="h6">Tipo</MDTypography>
+                      <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        value={type}
+                        name="radio-buttons-group"
+                        readOnly={true}
+                      >
+                        <FormControlLabel value="P" control={<Radio />} label="Publicación" />
+                        <FormControlLabel value="S" control={<Radio />} label="Historia" />
+                        <FormControlLabel value="R" control={<Radio />} label="Reel" />
+                        <FormControlLabel value="L" control={<Radio />} label="Live" />
+                      </RadioGroup>
+                    </MDBox>
+                  </Grid>
+                  <Grid item xs={4} lg={4}>
+                    <MDBox p={2}>
+                      <MDTypography color="info" fontWeight="regular" variant="h6">Cantidad de likes</MDTypography>
+                      <MDBox p={1}></MDBox>
+                      <TextField
+                        id="outlined-number"
+                        label="Likes"
+                        type="number"
+                        value={likes}
+                        readOnly={true}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </MDBox>
+                    <MDBox p={2}>
+                      <MDTypography color="info" fontWeight="regular" variant="h6">Cantidad de comentarios</MDTypography>
+                      <MDBox p={1}></MDBox>
+                      <TextField
+                        id="outlined-number"
+                        label="Comentarios"
+                        type="number"
+                        value={comments}
+                        readOnly={true}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </MDBox>
+                  </Grid>
+                  <Grid item xs={4} lg={4}>
+                    <MDBox p={2}>
+                      <MDTypography color="info" fontWeight="regular" variant="h6">Fecha de publicación</MDTypography>
+                      <MDBox p={1}></MDBox>
+                      <TextField
+                        id="outlined-number"
+                        label="Fecha"
+                        type="date"
+                        value={date}
+                        readOnly={true}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </MDBox>
+                    <MDBox p={1}>
                       <MDBox p={1}></MDBox>
                       <MDBox p={1}></MDBox>
                       <Grid container spacing={2} justifyContent="left">
                         <MDTypography color="info" fontWeight="regular" variant="h6">Contiene música?</MDTypography>
                         <Switch
-                            checked={hasMusic}
-                            disabled={true}
-                            inputProps={{ 'aria-label': 'controlled' }}
+                          checked={hasMusic}
+                          disabled={true}
+                          inputProps={{ 'aria-label': 'controlled' }}
                         />
-                        </Grid>
-                        <TextField id="standard-basic" label="Música" variant="standard" value={music} readOnly={true} />
-                        </MDBox>
-                    </Grid>
-                    <MDBox p={2}></MDBox>
-                </Grid>   
+                      </Grid>
+                      <TextField id="standard-basic" label="Música" variant="standard" value={music} readOnly={true} />
+                    </MDBox>
+                  </Grid>
+                  <MDBox p={2}></MDBox>
+                </Grid>
                 <Grid container spacing={1} justifyContent="left">
-                    <Grid item xs={4} lg={4}> 
-                        <MDBox p={1}>
-                                <ReactQuill    value={observation}
-                                              readOnly={true}
-                                              theme={"bubble"} style = {{ width: '180%', height: 300, aspectRatio: 1 }}/>
-                        </MDBox>
-                    </Grid>
-                    <Grid item xs={4} lg={4}>
+                  <Grid item xs={4} lg={4}>
+                    <MDBox p={1}>
+                      <ReactQuill value={observation}
+                        readOnly={true}
+                        theme={"bubble"} style={{ width: '180%', height: 300, aspectRatio: 1 }} />
+                    </MDBox>
+                  </Grid>
+                  <Grid item xs={4} lg={4}>
 
-                    </Grid>
-                    <Grid item xs={4} lg={4}>
-                        <MDBox p={1}>
-                        
-                        </MDBox>
-                        <MDBox>
-                        {selectedImage && photo && (
+                  </Grid>
+                  <Grid item xs={4} lg={4}>
+                    <MDBox p={1}>
+
+                    </MDBox>
+                    <MDBox>
+                      {selectedImage && photo && (
                         <div>
-                          <img style={{ width: '80%', aspectRatio: 1 }} src={`${photo}`}/>
-                          </div>)}
-                        </MDBox>
-                    </Grid>
-                </Grid> 
-                <MDBox p={3}></MDBox>            
+                          <img style={{ width: '80%', aspectRatio: 1 }} src={`${photo}`} />
+                        </div>)}
+                    </MDBox>
+                  </Grid>
+                </Grid>
+                <MDBox p={3}></MDBox>
               </form>
               <MDBox p={2}>
-              <MDButton
+                <MDButton
                   variant="outlined"
-                  color="error"
+                  color="dark"
                   size="small"
                   style={{ marginRight: "auto" }}
                   onClick={() =>

@@ -32,6 +32,8 @@ import Switch from '@mui/material/Switch';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
+// Dialog
+import AlertDialog from '../../components/Dialog';
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -62,6 +64,10 @@ function CreateNewObservation() {
   const [showMsg, setShowMsg] = useState(false);
   const navigate = useNavigate();
   const [today, setToday] = useState(moment().format("YYYY-MM-DD"));
+  const [editedForm, setEditedForm] = useState(false);
+  const [backAlert, setBackAlert] = useState(false);
+  const openBackAlert = () => setBackAlert(true);
+  const closeBackAlert = () => setBackAlert(false);
 
   function handleHasMusicChange() {
     if (hasMusic) {
@@ -150,12 +156,31 @@ function CreateNewObservation() {
     return url;
   }
 
-
+  const goBack = (displayText) => {
+    navigate(`/user/${itemId}`,
+      {
+        state: {
+          tab: 1,
+          displayText,
+        }
+      }
+    )
+  }
 
   return (
     <DashboardLayout>
-      <DashboardNavbar onArrowClick={() => navigate(-2)} />
-      <MDBox mt={6} mb={3}>
+      <DashboardNavbar
+        onArrowClick={
+          () => {
+            if (editedForm) {
+              openBackAlert()
+            } else {
+              goBack(null);
+            }
+          }
+        }
+      />
+      <MDBox mt={2} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={11}>
             <Card>
@@ -165,7 +190,16 @@ function CreateNewObservation() {
               <form>
                 <MDBox p={2}>
                   <MDBox p={1}></MDBox>
-                  <TextField id="standard-basic" label="Título de la observación" variant="outlined" onChange={(e) => setTitle(e.target.value)} style={{ width: 650 }} />
+                  <TextField
+                    id="standard-basic"
+                    label="Título de la observación"
+                    variant="outlined"
+                    onChange={(e) => {
+                      setTitle(e.target.value);
+                      setEditedForm(true);
+                    }}
+                    style={{ width: 650 }}
+                  />
                 </MDBox>
                 <Grid container spacing={3} justifyContent="center">
                   <Grid item xs={4} lg={4}>
@@ -175,7 +209,10 @@ function CreateNewObservation() {
                         aria-labelledby="demo-radio-buttons-group-label"
                         defaultValue="P"
                         name="radio-buttons-group"
-                        onChange={(e) => setType(e.target.value)}
+                        onChange={(e) => {
+                          setType(e.target.value);
+                          setEditedForm(true);
+                        }}
                       >
                         <FormControlLabel value="P" control={<Radio />} label="Publicación" />
                         <FormControlLabel value="S" control={<Radio />} label="Historia" />
@@ -196,7 +233,10 @@ function CreateNewObservation() {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        onChange={(e) => setLikes(e.target.value)}
+                        onChange={(e) => {
+                          setLikes(e.target.value);
+                          setEditedForm(true);
+                        }}
                       />
                     </MDBox>
                     <MDBox p={2}>
@@ -210,7 +250,10 @@ function CreateNewObservation() {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        onChange={(e) => setComments(e.target.value)}
+                        onChange={(e) => {
+                          setComments(e.target.value);
+                          setEditedForm(true);
+                        }}
                       />
                     </MDBox>
                   </Grid>
@@ -226,8 +269,11 @@ function CreateNewObservation() {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        onChange={(e) => setDate(e.target.value)}
-                        inputProps={{max: today }}
+                        onChange={(e) => {
+                          setDate(e.target.value);
+                          setEditedForm(true);
+                        }}
+                        inputProps={{ max: today }}
                       />
                     </MDBox>
                     <MDBox p={1}>
@@ -249,15 +295,18 @@ function CreateNewObservation() {
                 <Grid container spacing={2} >
                   <Grid item xs={4.5} lg={4.5} justifyContent="left">
                     <MDBox p={1}>
-                      <ReactQuill theme="snow" 
-                      modules={modules}
-                      value={observation} 
-                      onChange={setObservation} 
-                      style={{ width: '180%', height: 300, aspectRatio: 1 }} />
+                      <ReactQuill theme="snow"
+                        modules={modules}
+                        value={observation}
+                        onChange={(e) => {
+                          setObservation(e);
+                          setEditedForm(true);
+                        }}
+                        style={{ width: '180%', height: 300, aspectRatio: 1 }} />
                     </MDBox>
                   </Grid>
-                
-                  <Grid item xs={4} lg={4} style={{ marginLeft: '28%'}} justifyContent="right">
+
+                  <Grid item xs={4} lg={4} style={{ marginLeft: '28%' }} justifyContent="right">
                     <MDBox p={1}>
                       <TextField
                         id="edigaUserPhoto"
@@ -265,7 +314,10 @@ function CreateNewObservation() {
                         inputProps={{ accept: 'image/*' }}
                         label="Foto"
                         name="photo"
-                        onChange={e => handleFileRead(e)}
+                        onChange={e => {
+                          handleFileRead(e);
+                          setEditedForm(true);
+                        }}
                         size="small"
                         variant="standard"
                       />
@@ -287,39 +339,46 @@ function CreateNewObservation() {
               </MDBox>}
               {showMsg && isSuccess && <MDBox pt={2} px={2}>
                 {navigate(`/user/${itemId}`,
-                      {
-                        state: {
-                          tab: 1
-                        }
-                      }
-                    )}
+                  {
+                    state: {
+                      tab: 1
+                    }
+                  }
+                )}
               </MDBox>}
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px", marginTop: "25px" }} onClick={submitObservation}>
-                  Crear observación
-                </MDButton>
                 <MDButton
                   variant="outlined"
-                  color="error"
+                  color="dark"
                   size="small"
-                  style={{ marginRight: "auto", marginTop: "25px" }}
-                  onClick={() => {if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?'))
-                    navigate(`/user/${itemId}`,
-                      {
-                        state: {
-                          tab: 1
-                        }
+                  style={{ marginRight: "16px", marginTop: "25px" }}
+                  onClick={
+                    () => {
+                      if (editedForm) {
+                        openBackAlert()
+                      } else {
+                        goBack(null);
                       }
-                    )
-                  }}
+                    }
+                  }
                 >
                   Cancelar
+                </MDButton>
+                <MDButton variant="contained" color="dark" size="small" style={{ marginRight: "auto", marginTop: "25px" }} onClick={submitObservation}>
+                  Crear observación
                 </MDButton>
               </MDBox>
             </Card>
           </Grid>
         </Grid>
       </MDBox>
+      <AlertDialog
+        open={backAlert && editedForm}
+        handleClose={closeBackAlert}
+        title={"Todos los cambios no guardados se perderán"}
+        agreeText={"Continuar"}
+        handleClickAgree={() => goBack(null)}
+      />
       <Footer />
     </DashboardLayout>
   );

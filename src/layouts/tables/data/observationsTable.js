@@ -56,7 +56,7 @@ function GetObservations(userId) {
   }, []);
 
   const navigate = useNavigate();
-  console.log("rows", rows)
+
   return {
     columns: [
       { Header: "titulo", accessor: "title", align: "left" },
