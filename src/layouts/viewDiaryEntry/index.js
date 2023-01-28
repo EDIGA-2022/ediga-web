@@ -47,7 +47,6 @@ import htmlDocx from 'html-docx-js/dist/html-docx';
 import { saveAs } from 'file-saver'
 
 function ViewDiaryEntry() {
-  
   const { itemId } = useParams();
   const [entry, setEntry] = useState('');
   const [userId, setUserId] = useState('');
@@ -59,43 +58,40 @@ function ViewDiaryEntry() {
 
   const modules = {
     toolbar: [
-        [{ font: [] }],
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
-        ["bold", "italic", "underline", "strike"],
-        [{ color: [] }, { background: [] }],
-        [{ script: "sub" }, { script: "super" }],
-        ["blockquote", "code-block"],
-        [{ list: "ordered" }, { list: "bullet" }],
-        [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
-        ["link", "image", "video"],
-        ["clean"],
+      [{ font: [] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }],
+      [{ script: "sub" }, { script: "super" }],
+      ["blockquote", "code-block"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+      ["link", "image", "video"],
+      ["clean"],
     ],
-}
+  }
 
   useEffect(function effectFunction() {
-
     async function fetchDiaryEntry() {
-        await getDiaryEntryAPI(itemId).then(res => {
-          res.json().then(response => {
-            setDiaryEntryId(itemId);
-            setUserId(response.userId);
-            setEntry(response.entry);
-          })
-        });
+      await getDiaryEntryAPI(itemId).then(res => {
+        res.json().then(response => {
+          setDiaryEntryId(itemId);
+          setUserId(response.userId);
+          setEntry(response.entry);
+        })
+      });
     }
-
     fetchDiaryEntry();
+  }, []);
 
-}, []);
-
-const Link = Quill.import('formats/link');
-Link.sanitize = function(url) {
-  // quill by default creates relative links if scheme is missing.
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    return `http://${url}`
+  const Link = Quill.import('formats/link');
+  Link.sanitize = function (url) {
+    // quill by default creates relative links if scheme is missing.
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return `http://${url}`
+    }
+    return url;
   }
-  return url;
-}
 
   function exportToWord(e) {
     (async () => {
@@ -106,7 +102,17 @@ Link.sanitize = function(url) {
 
   return (
     <DashboardLayout>
-       <DashboardNavbar onArrowClick={() => navigate(-2)} />
+      <DashboardNavbar
+        onArrowClick={() =>
+          navigate(`/user/${userId}`,
+            {
+              state: {
+                tab: 2
+              }
+            }
+          )
+        }
+      />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={1} justifyContent="center">
           <Grid item xs={12} lg={11}>
@@ -115,33 +121,41 @@ Link.sanitize = function(url) {
                 <MDTypography variant="h5" style={{ marginLeft: "16px" }}>Entrada de diario de campo</MDTypography>
               </MDBox>
               <MDBox p={2}>
-              <MDButton variant="outlined" color="info" size="small"  style={{ marginLeft: "16px" }} onClick={exportToWord}>
-                    Exportar .docx
+                <MDButton variant="outlined" color="info" size="small" style={{ marginLeft: "16px" }} onClick={exportToWord}>
+                  Exportar .docx
                 </MDButton>
-            </MDBox>
+              </MDBox>
               <form>
                 <Grid container spacing={1} justifyContent="center">
-                    <Grid item xs={12} lg={12}> 
-                        <MDBox p={4}>
-                        <ReactQuill    
-                            value={entry}
-                            readOnly={true}
-                            style={{ width: '90%', height: 500,background: 'white' }}
-                            theme={"bubble"} />
-                        </MDBox>
-                    </Grid>
-                </Grid> 
-                <MDBox p={3}></MDBox>            
+                  <Grid item xs={12} lg={12}>
+                    <MDBox p={4}>
+                      <ReactQuill
+                        value={entry}
+                        readOnly={true}
+                        style={{ width: '90%', height: 500, background: 'white' }}
+                        theme={"bubble"} />
+                    </MDBox>
+                  </Grid>
+                </Grid>
+                <MDBox p={3}></MDBox>
               </form>
               <MDBox p={2}>
-                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto",  marginLeft: "16px" }} onClick={() =>  navigate(`/user/${userId}`,
+                <MDButton
+                  variant="outlined"
+                  color="dark"
+                  size="small"
+                  style={{ marginRight: "auto", marginLeft: "16px" }}
+                  onClick={() =>
+                    navigate(`/user/${userId}`,
                       {
                         state: {
                           tab: 2
                         }
                       }
-                    )}>
-                    Volver
+                    )
+                  }
+                >
+                  Volver
                 </MDButton>
               </MDBox>
             </Card>

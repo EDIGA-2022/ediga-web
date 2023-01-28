@@ -66,14 +66,10 @@ function User() {
 
 
   useEffect(() => {
-    console.log("REACT_APP_API_URL", REACT_APP_API_URL)
     async function fetchUser() {
       await getUserProfile(userId)
         .then((response) => response.json())
         .then(newUser => {
-          // const newUser = {...user};
-          // newUser.photos = response.photos;
-          console.log("user", newUser)
           setUser(newUser);
         });
     }
@@ -90,20 +86,8 @@ function User() {
         <Tab label="Observaciones" />
         <Tab label="Diario de campo" />
       </Tabs>
-      {/* {user.photos.forEach(photo => {
-        console.log("hola!");
-        <div>
-          <img src={`data:image/jpeg;base64,${photo.photo.replace('\n', '')}`} />
-        <div>
-          <img src={`data:image/jpeg;base64,${(photo.photo)}`} />
-        </div>
-
-      })} */}
       {tabValue === 0 && <MDBox mt={5} mb={3}>
         <Grid container spacing={1}>
-          {/* <Grid item xs={12} md={6} xl={4}>
-            <PlatformSettings />
-          </Grid> */}
           <Grid item xs={12} md={12} xl={6} sx={{ display: "flex" }}>
             <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
             <ProfileInfoCard

@@ -63,12 +63,11 @@ function EditObservation() {
   const [observation, setObservation] = useState('');
   const [photo, setPhoto] = useState('');
   const [selectedImage, setSelectedImage] = useState(false);
-  const [jsonResponseMessage, setJsonResponseMessage] = useState('');
-  const [isSuccess, setIsSuccess] = useState('');
-  const [showMsg, setShowMsg] = useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
+  const [backAlert, setBackAlert] = useState(false);
   const navigate = useNavigate();
   const [today, setToday] = useState(moment().format("YYYY-MM-DD"));
+  const [editedForm, setEditedForm] = useState(false);
 
   function handleHasMusicChange() {
     if (hasMusic) {
@@ -97,15 +96,12 @@ function EditObservation() {
   const openDeleteAlert = () => setDeleteAlert(true);
   const closeDeleteAlert = () => setDeleteAlert(false);
 
+  const openBackAlert = () => setBackAlert(true);
+  const closeBackAlert = () => setBackAlert(false);
+
   const jsonError = (name) => (
     <MDTypography variant="body2" color="white">
       Error: {name}.
-    </MDTypography>
-  );
-
-  const jsonSuccess = () => (
-    <MDTypography variant="body2" color="white">
-      Se ha editado la observación.
     </MDTypography>
   );
 
@@ -124,27 +120,16 @@ function EditObservation() {
       edigaUserPhoto: photo
     }
     editObservationAPI(data).then(response => {
-      setIsSuccess(response.ok);
-      setShowMsg(true);
       response.json().then(msg => {
-        setJsonResponseMessage(msg.message);
+        goBack(msg.message);
       })
     });
   }
 
   const deleteObservation = async () => {
     deleteObservationAPI(itemId).then(response => {
-      setIsSuccess(response.ok);
-      setShowMsg(true);
       response.json().then(msg => {
-        setJsonResponseMessage(msg.message);
-        navigate(`/user/${userId}`,
-          {
-            state: {
-              tab: 1
-            }
-          }
-        )
+        goBack(msg.message);
       })
     });
   }
@@ -202,9 +187,28 @@ function EditObservation() {
     return url;
   }
 
+  const goBack = (displayText) => {
+    navigate(`/user/${userId}`,
+      {
+        state: {
+          tab: 1,
+          displayText,
+        }
+      }
+    )
+  }
+
   return (
     <DashboardLayout>
-      <DashboardNavbar onArrowClick={() => navigate(-2)} />
+      <DashboardNavbar
+        onArrowClick={() => {
+          if (editedForm) {
+            openBackAlert()
+          } else {
+            goBack(null);
+          }
+        }}
+      />
       <MDBox mt={0} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={11}>
@@ -226,7 +230,17 @@ function EditObservation() {
               <form>
                 <MDBox p={2}>
                   <MDBox p={1}></MDBox>
-                  <TextField id="standard-basic" label="Título de la observación" variant="outlined" value={title} onChange={(e) => setTitle(e.target.value)} style={{ width: 650 }} />
+                  <TextField
+                    id="standard-basic"
+                    label="Título de la observación"
+                    variant="outlined"
+                    value={title}
+                    onChange={(e) => {
+                      setTitle(e.target.value);
+                      setEditedForm(true);
+                    }}
+                    style={{ width: 650 }}
+                  />
                 </MDBox>
                 <Grid container spacing={3} justifyContent="center">
                   <Grid item xs={4} lg={4}>
@@ -236,7 +250,10 @@ function EditObservation() {
                         aria-labelledby="demo-radio-buttons-group-label"
                         value={type}
                         name="radio-buttons-group"
-                        onChange={(e) => setType(e.target.value)}
+                        onChange={(e) => {
+                          setType(e.target.value);
+                          setEditedForm(true);
+                        }}
                       >
                         <FormControlLabel value="P" control={<Radio />} label="Publicación" />
                         <FormControlLabel value="S" control={<Radio />} label="Historia" />
@@ -257,7 +274,10 @@ function EditObservation() {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        onChange={(e) => setLikes(e.target.value)}
+                        onChange={(e) => {
+                          setLikes(e.target.value);
+                          setEditedForm(true);
+                        }}
                       />
                     </MDBox>
                     <MDBox p={2}>
@@ -271,7 +291,10 @@ function EditObservation() {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        onChange={(e) => setComments(e.target.value)}
+                        onChange={(e) => {
+                          setComments(e.target.value);
+                          setEditedForm(true);
+                        }}
                       />
                     </MDBox>
                   </Grid>
@@ -287,8 +310,11 @@ function EditObservation() {
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        onChange={(e) => setDate(e.target.value)}
-                        inputProps={{max: today }}
+                        onChange={(e) => {
+                          setDate(e.target.value);
+                          setEditedForm(true);
+                        }}
+                        inputProps={{ max: today }}
                       />
                     </MDBox>
                     <MDBox p={1}>
@@ -302,7 +328,17 @@ function EditObservation() {
                           inputProps={{ 'aria-label': 'controlled' }}
                         />
                       </Grid>
-                      <TextField id="standard-basic" label="Música" variant="standard" value={music} onChange={(e) => setMusic(e.target.value)} disabled={!hasMusic} />
+                      <TextField
+                        id="standard-basic"
+                        label="Música"
+                        variant="standard"
+                        value={music}
+                        onChange={(e) => {
+                          setMusic(e.target.value);
+                          setEditedForm(true);
+                        }}
+                        disabled={!hasMusic}
+                      />
                     </MDBox>
                   </Grid>
                   <MDBox p={2}></MDBox>
@@ -311,14 +347,17 @@ function EditObservation() {
                   <Grid item xs={4.5} lg={4.5} justifyContent="left">
                     <MDBox p={1}>
                       <ReactQuill
-                        theme="snow" 
+                        theme="snow"
                         modules={modules}
-                        value={observation} 
-                        onChange={setObservation} 
+                        value={observation}
+                        onChange={(e) => {
+                          setObservation(e);
+                          setEditedForm(true);
+                        }}
                         style={{ width: '180%', height: 300, aspectRatio: 1 }} />
                     </MDBox>
                   </Grid>
-                  <Grid item xs={4} lg={4} justifyContent="right"  style={{ marginLeft: '28%'}} >
+                  <Grid item xs={4} lg={4} justifyContent="right" style={{ marginLeft: '28%' }} >
                     <MDBox p={1}>
                       <TextField
                         id="edigaUserPhoto"
@@ -341,40 +380,30 @@ function EditObservation() {
                 </Grid>
                 <MDBox p={3}></MDBox>
               </form>
-              {showMsg && !isSuccess && <MDBox pt={2} px={2}>
-                <MDAlert color="error">
-                  {jsonError(jsonResponseMessage)}
-                </MDAlert>
-              </MDBox>}
-              {showMsg && isSuccess && <MDBox pt={2} px={2}>
-                {navigate(`/user/${userId}`,
-                  {
-                    state: {
-                      tab: 1
-                    }
-                  }
-                )}
-              </MDBox>}
-              <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px" }} onClick={submitObservation}>
-                  Guardar
-                </MDButton>
+              <MDBox p={5} style={{ paddingLeft: '16px' }}>
                 <MDButton
                   variant="outlined"
-                  color="error"
+                  color="dark"
                   size="small"
-                  style={{ marginRight: "auto" }}
-                  onClick={() => {if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?'))
-                    navigate(`/user/${userId}`,
-                      {
-                        state: {
-                          tab: 1
-                        }
-                      }
-                    )
+                  style={{ marginRight: "16px" }}
+                  onClick={() => {
+                    if (editedForm) {
+                      openBackAlert();
+                    } else {
+                      goBack(null);
+                    }
                   }}
                 >
                   Cancelar
+                </MDButton>
+                <MDButton
+                  variant="contained"
+                  color="dark"
+                  size="small"
+                  style={{ marginRight: "auto", width: '99px' }}
+                  onClick={submitObservation}
+                >
+                  Guardar
                 </MDButton>
               </MDBox>
             </Card>
@@ -382,15 +411,22 @@ function EditObservation() {
         </Grid>
       </MDBox>
       <AlertDialog
-          open={deleteAlert}
-          handleClose={closeDeleteAlert}
-          title={"Esta seguro que desea eliminar la observacion?"}
-          description={"Al eliminar la observacion no podra volver a acceder a ella ni recuperarla luego."}
-          agreeText={"Eliminar"}
-          handleClickAgree={() => {
-            closeDeleteAlert();
-            deleteObservation();
-          }}
+        open={deleteAlert}
+        handleClose={closeDeleteAlert}
+        title={"Esta seguro que desea eliminar la observacion?"}
+        description={"Al eliminar la observacion no podra volver a acceder a ella ni recuperarla luego."}
+        agreeText={"Eliminar"}
+        handleClickAgree={() => {
+          closeDeleteAlert();
+          deleteObservation();
+        }}
+      />
+      <AlertDialog
+        open={backAlert && editedForm}
+        handleClose={closeBackAlert}
+        title={"Todos los cambios no guardados se perderán"}
+        agreeText={"Continuar"}
+        handleClickAgree={() => goBack(null)}
       />
       <Footer />
     </DashboardLayout>

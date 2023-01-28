@@ -155,8 +155,8 @@ function Cover() {
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
-            {submitted && errors.serverError && <MDAlert p={0.5} color="error" style={{ fontWeight: "normal", fontSize: "14px" }}>{errors.serverError}</MDAlert>}
-            {success && <MDAlert p={0.5} color="success" style={{ fontWeight: "normal", fontSize: "14px" }}>Usuario creado exitosamente</MDAlert>}
+            {submitted && errors.serverError && <MDAlert p={0.5} color="error" style={{ fontSize: "14px" }}>{errors.serverError}</MDAlert>}
+            {success && <MDAlert p={0.5} color="success" style={{ fontSize: "14px" }}>Usuario creado exitosamente</MDAlert>}
             <MDBox mb={2}>
               <MDInput type="text" label="Nombre" variant="standard" fullWidth onChange={nameChange} disabled={loading} />
               {!name && submitted && <FormError text="Este campo es obligatorio"></FormError>}

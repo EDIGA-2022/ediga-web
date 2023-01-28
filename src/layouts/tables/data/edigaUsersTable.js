@@ -129,7 +129,7 @@ function EdigaUsersTable(props) {
             <MDTypography component="a" href="#" display="block" variant="button" fontWeight="medium">
               {user.name}
             </MDTypography>
-            <MDTypography component="a" href="#" display="block" variant="button" fontWeight="normal">
+            <MDTypography component="a" href="#" display="block" variant="button">
               {user.email}
             </MDTypography>
           </MDBox>
@@ -163,7 +163,6 @@ function EdigaUsersTable(props) {
             </IconButton>
           </Tooltip>}
           {showDeleteButton && user.edigaUserId === userIdToDelete && <MDButton color="error" onClick={() => deleteUser(user)}>Eliminar</MDButton>}
-
         </MDTypography>
       ),
 
