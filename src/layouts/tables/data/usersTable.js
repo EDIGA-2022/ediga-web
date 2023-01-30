@@ -29,34 +29,37 @@ import profilePhoto from "assets/images/profile-photo.jpg";
 import { getUsers } from "../../../api/getUsers";
 
 function selectGenderColor(gender) {
-    switch (gender) {
-      case "Mujer cis":
-        return "success"
-      case "Hombre cis":
-        return "error"
-      case "Mujer trans":
-        return "info"
-      case "Hombre trans":
-        return "warning"
-      case "No binario":
-        return "light"
-      case "Otro":
-        return "primary"
-      default:
-        return "dark" 
-    }
+  switch (gender) {
+    case "Mujer cis":
+      return "success"
+    case "Hombre cis":
+      return "error"
+    case "Mujer trans":
+      return "info"
+    case "Hombre trans":
+      return "warning"
+    case "No binario":
+      return "light"
+    case "Otro":
+      return "primary"
+    default:
+      return "dark"
+  }
 };
 
 function GetUsers(searchText, gender, country, age) {
   const [rows, setRows] = useState([]);
   const [allRows, setAllRows] = useState([]);
+  const [loadingRows, setLoadingRows] = useState(false);
 
   const fetchAllUsers = async () => {
+    setLoadingRows(true);
     getUsers().then((response) => {
       if (response.ok) {
         response.json().then((r) => {
+          setLoadingRows(false);
           setRows(r);
-          setAllRows(r); 
+          setAllRows(r);
         });
       } else {
         if (response.status === 401) {
@@ -65,9 +68,9 @@ function GetUsers(searchText, gender, country, age) {
         return Promise.reject(response);
       }
     })
-    .catch((e) => {
-      console.log('error',e);
-    })
+      .catch((e) => {
+        console.log('error', e);
+      })
   }
 
   const filterRows = (searchText, gender, country, age) => {
@@ -78,7 +81,7 @@ function GetUsers(searchText, gender, country, age) {
       filteredRows = allRows.filter((row) => {
         return (
           (row.instagramProfile && row.instagramProfile.toLowerCase().startsWith(searchText.toLowerCase())) ||
-          (row.instagramProfile &&row.instagramProfile.toLowerCase().includes(searchText.toLowerCase())) ||
+          (row.instagramProfile && row.instagramProfile.toLowerCase().includes(searchText.toLowerCase())) ||
           (row.alias && row.alias.toLowerCase().includes(searchText.toLowerCase()))
         );
       });
@@ -98,7 +101,7 @@ function GetUsers(searchText, gender, country, age) {
 
     setRows(filteredRows);
   };
-  
+
   useEffect(() => {
     fetchAllUsers();
   }, []);
@@ -109,7 +112,7 @@ function GetUsers(searchText, gender, country, age) {
 
 
 
- const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return {
     columns: [
@@ -119,48 +122,48 @@ function GetUsers(searchText, gender, country, age) {
       { Header: "pais", accessor: "country", align: "center" },
       { Header: "acciones", accessor: "actions", align: "center" },
     ],
-    rows: 
-      rows.map((row)=> {
+    rows:
+      rows.map((row) => {
         return {
           alias: (
-          <MDBox display="flex" alignItems="center" lineHeight={1}>
-            <MDAvatar src={profilePhoto} alias={row.userId} size="sm" />
-            <MDBox ml={2} lineHeight={1}>
-            <MDTypography component="a" href="#" display="block" variant="button" fontWeight="medium" onClick={() => navigate("/user/" + row.userId)}>
-                {row.userId}
-              </MDTypography>
-            <MDTypography variant="caption">{row.instagramProfile}</MDTypography>
+            <MDBox display="flex" alignItems="center" lineHeight={1}>
+              <MDAvatar src={profilePhoto} alias={row.userId} size="sm" />
+              <MDBox ml={2} lineHeight={1}>
+                <MDTypography component="a" href="#" display="block" variant="button" fontWeight="medium" onClick={() => navigate("/user/" + row.userId)}>
+                  {row.userId}
+                </MDTypography>
+                <MDTypography variant="caption">{row.instagramProfile}</MDTypography>
+              </MDBox>
             </MDBox>
-          </MDBox>
           ),
           yearsOld: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-             { row.yearsOld }
-          </MDTypography>
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+              {row.yearsOld}
+            </MDTypography>
           ),
           gender: (
-          <MDBox ml={-1}>
-            <MDBadge badgeContent={ row.gender } color={selectGenderColor(row.gender)} variant="gradient" size="sm" />
-          </MDBox>
+            <MDBox ml={-1}>
+              <MDBadge badgeContent={row.gender} color={selectGenderColor(row.gender)} variant="gradient" size="sm" />
+            </MDBox>
           ),
           country: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-              { row.country }
-          </MDTypography>
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+              {row.country}
+            </MDTypography>
           ),
           actions: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => navigate("/editUser/" + row.userId )}>
-            <Tooltip title="Editar">
-              <IconButton>
-                <EditIcon/>
-              </IconButton>
-            </Tooltip>
-          </MDTypography> 
+            <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium" onClick={() => navigate("/editUser/" + row.userId)}>
+              <Tooltip title="Editar">
+                <IconButton>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            </MDTypography>
           ),
         }
       }),
-    csvData: 
-     rows
+    csvData: rows,
+    loading: loadingRows,
   };
 }
 

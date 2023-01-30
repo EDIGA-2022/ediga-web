@@ -45,6 +45,10 @@ import Select from '@mui/material/Select';
 import DataTableHeadCell from "examples/Tables/DataTable/DataTableHeadCell";
 import DataTableBodyCell from "examples/Tables/DataTable/DataTableBodyCell";
 
+// Loading
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 function DataTable({
   entriesPerPage,
   canSearch,
@@ -60,6 +64,7 @@ function DataTable({
   country,
   gender,
   age,
+  loading,
 }) {
   const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 10;
   const entries = entriesPerPage.entries
@@ -319,13 +324,23 @@ function DataTable({
         </TableBody>
       </Table>
       {
-        !rows.length &&
+        !rows.length && !loading &&
         <MDTypography style={{
           margin: '40px 0',
           textAlignLast: 'center'
         }}>
           No existen resultados que coincidan con la busqueda
         </MDTypography>
+      }
+      {
+        loading &&
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '46px'
+        }}>
+          <CircularProgress style={{color: '#49a3f1'}} />
+        </Box>
       }
       <MDBox
         display="flex"
