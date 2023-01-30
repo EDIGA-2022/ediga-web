@@ -104,7 +104,8 @@ function GetObservations(userId) {
             </MDTypography>
           ),
         }
-      })
+      }),
+    loading: loadingRows,
   };
 }
 

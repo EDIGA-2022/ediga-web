@@ -51,6 +51,7 @@ function Tables(props) {
   let obj;
   let onClick;
   let tooltip;
+  let loading = false;
 
   const onSearchChangeTable = (value) => {
     setSearchText(value)
@@ -80,6 +81,7 @@ function Tables(props) {
       obj = usersTable(searchText, gender, country, age);
       columns = obj.columns;
       rows = obj.rows;
+      loading = obj.loading;
       csvData = obj.csvData;
       onClick = navigateToCreateNewUser;
       tooltip = 'Crear nuevo sujeto'
@@ -89,6 +91,7 @@ function Tables(props) {
       obj = observationsTable(props.userId);
       columns = obj.columns;
       rows = obj.rows;
+      loading = obj.loading;
       onClick = navigateToCreateNewObservation;
       tooltip = 'Crear nueva observación'
       break;
@@ -97,6 +100,7 @@ function Tables(props) {
       obj = diaryEntriesTable(props.userId);
       columns = obj.columns;
       rows = obj.rows;
+      loading = obj.loading;
       onClick = navigateToCreateNewDiaryEntry;
       tooltip = 'Crear nueva entrada de diario'
       break;
@@ -133,12 +137,6 @@ function Tables(props) {
                       {title}
                     </MDTypography>
                   </Grid>
-                  {/* {props.type === 'users' && <Grid item xs>
-                    <MDButton variant="outlined" color="white" size="small" onClick={() => onExportPhotos()}>
-                      <ImageOutlinedIcon />
-                      <FileDownloadOutlinedIcon />
-                    </MDButton>
-                  </Grid>} */}
                   {props.type === 'users' && 
                     <ExportUsersXLS csvData={csvData} fileName="DataSujetos" />
                   }       
@@ -146,7 +144,7 @@ function Tables(props) {
                     <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
                       <AddIcon />
                     </MDButton>
-                  </Tooltip>         
+                  </Tooltip>
                 </Grid>
               </MDBox >
               <MDBox pt={3}>
@@ -164,6 +162,7 @@ function Tables(props) {
                   gender={gender}
                   country={country}
                   age={age}
+                  loading={loading}
                 />
               </MDBox>
             </Card >
@@ -171,7 +170,7 @@ function Tables(props) {
         </Grid >
       </MDBox >
       <Footer />
-    </div >
+    </div>
   );
 }
 

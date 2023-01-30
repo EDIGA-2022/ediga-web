@@ -154,7 +154,6 @@ function EdigaUsersTable(props) {
           </Tooltip>
         </MDTypography>
       ),
-
       delete: (
         <MDTypography component="a" variant="caption" color="text" fontWeight="medium" onClick={() => requestConfirmation(user)}>
           {(!showDeleteButton || user.edigaUserId != userIdToDelete) && <Tooltip title="Eliminar usuario">
@@ -165,7 +164,7 @@ function EdigaUsersTable(props) {
           {showDeleteButton && user.edigaUserId === userIdToDelete && <MDButton color="error" onClick={() => deleteUser(user)}>Eliminar</MDButton>}
         </MDTypography>
       ),
-
+      loading: loadingRows,
     }
   });
 
@@ -207,6 +206,7 @@ function EdigaUsersTable(props) {
                   showTotalEntries={false}
                   noEndBorder
                   canSearch={false}
+                  loading={loadingRows}
                 />
               </MDBox>
             </Card >

@@ -98,7 +98,8 @@ function GetDiaryEntries(userId) {
 						</MDTypography>
 					),
 				}
-			})
+			}),
+		loading: loadingRows,
 	};
 }
 
