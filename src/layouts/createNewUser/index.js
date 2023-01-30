@@ -29,6 +29,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDAlert from "components/MDAlert";
 import MDButton from "components/MDButton";
+import MDSnackbar from "components/MDSnackbar";
 
 // Dialog
 import AlertDialog from '../../components/Dialog';
@@ -58,6 +59,10 @@ function CreateNewUser() {
   const openBackAlert = () => setBackAlert(true);
   const closeBackAlert = () => setBackAlert(false);
 
+  const [warningSB, setWarningSB] = useState(false);
+  const [message, setMessage] = useState('');
+  const openWarningSB = () => setWarningSB(true);
+  const closeWarningSB = () => setWarningSB(false);
   const navigate = useNavigate();
 
   const ages = [
@@ -102,10 +107,14 @@ function CreateNewUser() {
       alias: alias
     }
     createUserAPI(data).then(response => {
-      setIsSuccess(response.ok);
-      setShowMsg(true);
+      const status = response.status;
       response.json().then(msg => {
-        setJsonResponseMessage(msg.message);
+        if (status === 200) {
+          goBack(msg.message);
+        } else {
+          setMessage(msg.message);
+          openWarningSB();
+        }
       })
     });
   }
@@ -119,6 +128,16 @@ function CreateNewUser() {
       }
     )
   }
+
+  const renderWarningSB = (
+    <MDSnackbar
+      color="error"
+      title={message}
+      open={warningSB}
+      onClose={closeWarningSB}
+      close={closeWarningSB}
+    />
+  );
 
   return (
     <DashboardLayout>
@@ -271,6 +290,11 @@ function CreateNewUser() {
         agreeText={"Continuar"}
         handleClickAgree={() => goBack(null)}
       />
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6} lg={3}>
+          {renderWarningSB}
+        </Grid>
+      </Grid>
       <Footer />
     </DashboardLayout>
   );

@@ -67,10 +67,9 @@ function GetUsers(searchText, gender, country, age) {
         }
         return Promise.reject(response);
       }
-    })
-      .catch((e) => {
-        console.log('error', e);
-      })
+    }).catch((e) => {
+      console.log('error', e);
+    });
   }
 
   const filterRows = (searchText, gender, country, age) => {

@@ -99,20 +99,17 @@ function Cover() {
     setEmail(email)
     setName(name)
     let isAdmin;
-    console.log("role", role)
     if (role === 'admin') {
       isAdmin = true;
     } else {
       isAdmin = false;
     }
-    console.log("Antesde editar", userId, name, email, isAdmin);
     editEdigaUser(userId, name, email, isAdmin).then(res => {
       if (res.status === 200) {
-        setSuccess(true);
         setLoading(false);
-        setTimeout(() => {
-          navigate('/admin/');
-        }, 2000);
+        res.json().then(msg => {
+          goBack(msg.message);
+        })
       } else {
         setErrors({ email: true, password: true, name: true });
         setSuccess(false);
@@ -127,6 +124,16 @@ function Cover() {
     } else {
       return 'Investigador';
     }
+  }
+
+  const goBack = (displayText) => {
+    navigate(`/admin/`,
+      {
+        state: {
+          displayText,
+        }
+      }
+    )
   }
 
   return (

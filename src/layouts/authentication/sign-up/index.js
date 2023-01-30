@@ -105,9 +105,16 @@ function Cover() {
     }
     registerApi(name, email, password, isAdmin, country).then(response => {
       if (response.ok) {
-        setSuccess(true);
-        cleanForm();
         setLoading(false);
+        response.json().then(msg => {
+          navigate(`/admin/`,
+            {
+              state: {
+                displayText: msg.message,
+              }
+            }
+          )
+        })
       } else {
         if (response.status === 401) {
           navigate("/authentication/sign-in");

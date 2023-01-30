@@ -158,13 +158,16 @@ function UserImage() {
         userId: photo.userId,
         observation: observationText,
       }).then(response => {
-        navigate(`/user/${photo.userId}`,
-          {
-            state: {
-              tab: 0
+        response.json().then(msg => {
+          navigate(`/user/${photo.userId}`,
+            {
+              state: {
+                tab: 0,
+                displayText: msg.message,
+              }
             }
-          }
-        );
+          );
+        })
       });
       setAddingObservation(false);
     } else {
