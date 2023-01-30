@@ -93,10 +93,8 @@ function CreateNewDiaryEntry() {
       entry: entry,
     }
     createDiaryEntryAPI(data).then(response => {
-      setIsSuccess(response.ok);
-      setShowMsg(true);
       response.json().then(msg => {
-        setJsonResponseMessage(msg.message);
+        goBack(msg.message);
       })
     });
   }
