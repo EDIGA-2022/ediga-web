@@ -152,6 +152,16 @@ function Dashboard() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <MDBox
+        color="grey"
+        bgColor="light"
+        fontSize={14}
+        coloredShadow="light"
+        borderRadius="lg"
+        mb={3}
+        opacity={1}
+        p={2}
+      ><b>Nota: </b>Los datos mostrados a continuación fueron recopilados de respuestas extraídas de la aplicación móvil de EDIGA.</MDBox>
       {data && <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
