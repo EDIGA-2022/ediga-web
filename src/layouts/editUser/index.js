@@ -30,6 +30,8 @@ import MDTypography from "components/MDTypography";
 import MDAlert from "components/MDAlert";
 import MDButton from "components/MDButton";
 
+// Dialog
+import AlertDialog from 'components/Dialog';
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -41,6 +43,7 @@ import { useParams, useNavigate, Navigate } from "react-router-dom";
 // API requests
 import editUserAPI from "../../api/editUser"
 import getUserAPI from "../../api/getUser"
+import deleteUserAPI from "../../api/deleteUser"
 
 
 function EditUser() {
@@ -56,8 +59,11 @@ function EditUser() {
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
   const [alias, setAlias] = useState('');
+  const [deleteAlert, setDeleteAlert] = useState(false);
   const navigate = useNavigate();
 
+  const openDeleteAlert = () => setDeleteAlert(true);
+  const closeDeleteAlert = () => setDeleteAlert(false);  
 
   useEffect(function effectFunction() {
 
@@ -107,6 +113,17 @@ function EditUser() {
     </MDTypography>
   );
 
+  const deleteUser = async () => {
+    deleteUserAPI(itemId).then(response => {
+      setIsSuccess(response.ok);
+      setShowMsg(true);
+      response.json().then(msg => {
+        setJsonResponseMessage(msg.message);
+        navigate(`/users`)
+      })
+    });
+  }
+
   const submitUser = async () => {
 
     const data = {
@@ -134,18 +151,29 @@ function EditUser() {
        <DashboardNavbar onArrowClick={() => navigate("/users")} />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3} justifyContent="center">
-          <Grid item xs={12} lg={8}>
+          <Grid item xs={12} lg={11}>
             <Card>
-              <MDBox p={2}>
-                <MDTypography variant="h5">Fromulario de edición para un participante</MDTypography>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
+              <MDBox ml={5} mb={3} mt={3}>
+                <MDTypography variant="h4">Fromulario de edición para un participante</MDTypography>
               </MDBox>
+              <MDButton
+                variant="outlined"
+                color="error"
+                size="small"
+                style={{ height: '1.4375em', margin: '16px' }}
+                onClick={openDeleteAlert}
+              >
+                Eliminar sujeto
+              </MDButton>
+              </div>
               <form>
-                <MDBox p={2}>
+                <MDBox ml={5} mb={3}>
                   <MDTypography variant="h5">Nombre ficticio</MDTypography>
                   <MDBox p={1}></MDBox>
                   <TextField id="standard-basic" label="Nombre ficticio" variant="standard" value={alias} onChange={(e) => setAlias(e.target.value)}/>
                 </MDBox>
-                <MDBox p={2}>
+                <MDBox ml={5} mb={3}>
                     <MDTypography variant="h5">Edad</MDTypography>
                     <MDBox p={1}></MDBox>
                     <Autocomplete
@@ -158,7 +186,7 @@ function EditUser() {
                       renderInput={(params) => <TextField {...params} label="Edad" />}
                     />
                 </MDBox>
-                <MDBox p={2}>
+                <MDBox ml={5} mb={3}>
                     <MDTypography variant="h5">País</MDTypography>
                     <MDBox p={1}></MDBox>
                     <Autocomplete
@@ -172,7 +200,7 @@ function EditUser() {
                       
                     />
                 </MDBox>
-                <MDBox p={2}>
+                <MDBox ml={5} mb={3}>
                     <MDTypography variant="h5">Género con el que se identifica</MDTypography>
                     <MDBox p={1}></MDBox>
                     <RadioGroup
@@ -190,7 +218,7 @@ function EditUser() {
                     </RadioGroup>
                     <TextField id="standard-basic" label="Otro" variant="standard" value={answer1openField} onChange={(e) => setAnswer1openField(e.target.value)} disabled={answer1 != 6}/>
                 </MDBox>
-                <MDBox p={2}>
+                <MDBox ml={5} mb={3}>
                     <MDTypography variant="h5">Usuario de instagram</MDTypography>
                     <MDBox p={1}></MDBox>
                     <TextField id="standard-basic" label="@" variant="standard" value={answer3openField} onChange={(e) => setAnswer3openField(e.target.value)}/>
@@ -204,7 +232,7 @@ function EditUser() {
              {showMsg && isSuccess && <MDBox pt={2} px={2}>
               <Navigate to="/users"/>
               </MDBox>}
-              <MDBox p={2}>
+              <MDBox ml={5} mb={3}>
                 <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "16px" }} onClick={submitUser}>
                     Guardar
                 </MDButton>
@@ -217,6 +245,17 @@ function EditUser() {
           </Grid>
         </Grid>
       </MDBox>
+      <AlertDialog
+          open={deleteAlert}
+          handleClose={closeDeleteAlert}
+          title={"Esta seguro que desea eliminar el sujeto?"}
+          description={"Al eliminar al sujeto no podra volver a acceder al mismo ni recuperarlo luego."}
+          agreeText={"Eliminar"}
+          handleClickAgree={() => {
+            closeDeleteAlert();
+            deleteUser();
+          }}
+      />
       <Footer />
     </DashboardLayout>
   );
