@@ -31,7 +31,7 @@ import MDAlert from "components/MDAlert";
 import MDButton from "components/MDButton";
 
 // Dialog
-import AlertDialog from '../../components/Dialog';
+import AlertDialog from 'components/Dialog';
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -43,6 +43,7 @@ import { useParams, useNavigate, Navigate } from "react-router-dom";
 // API requests
 import editUserAPI from "../../api/editUser"
 import getUserAPI from "../../api/getUser"
+import deleteUserAPI from "../../api/deleteUser"
 
 function EditUser() {
 
@@ -57,13 +58,17 @@ function EditUser() {
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
   const [alias, setAlias] = useState('');
+  const [deleteAlert, setDeleteAlert] = useState(false);
   const [editedForm, setEditedForm] = useState(false);
   const [backAlert, setBackAlert] = useState(false);
   const openBackAlert = () => setBackAlert(true);
   const closeBackAlert = () => setBackAlert(false);
+  const openDeleteAlert = () => setDeleteAlert(true);
+  const closeDeleteAlert = () => setDeleteAlert(false);  
 
   const navigate = useNavigate();
 
+  
   useEffect(function effectFunction() {
 
     async function fetchUser() {
@@ -84,6 +89,7 @@ function EditUser() {
     fetchUser();
 
   }, []);
+
 
   const ages = [
     { label: '13 años', age: 13 },
@@ -110,6 +116,17 @@ function EditUser() {
       El sujeto se ha editado con éxito.
     </MDTypography>
   );
+
+  const deleteUser = async () => {
+    deleteUserAPI(itemId).then(response => {
+      setIsSuccess(response.ok);
+      setShowMsg(true);
+      response.json().then(msg => {
+        setJsonResponseMessage(msg.message);
+        navigate(`/users`)
+      })
+    });
+  }
 
   const submitUser = async () => {
 
@@ -156,142 +173,168 @@ function EditUser() {
         }
       />
       <MDBox mt={6} mb={3}>
-        <Card>
-          <MDBox p={2}>
-            <MDTypography variant="h5">Fromulario de edición para un sujeto</MDTypography>
-          </MDBox>
-          <form>
-            <MDBox p={2}>
-              <MDTypography variant="h5">Nombre ficticio</MDTypography>
-              <MDBox p={1}></MDBox>
-              <TextField
-                id="standard-basic"
-                label="Nombre ficticio"
-                variant="standard"
-                value={alias}
-                onChange={(e) => {
-                  setAlias(e.target.value);
-                  setEditedForm(true);
-                }}
-              />
-            </MDBox>
-            <MDBox p={2}>
-              <MDTypography variant="h5">Edad</MDTypography>
-              <MDBox p={1}></MDBox>
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={ages}
-                sx={{ width: 300 }}
-                value={answer2}
-                onChange={(event, value) => {
-                  setAnswer2(value.age);
-                  setEditedForm(true);
-                }}
-                renderInput={(params) => <TextField {...params} label="Edad" />}
-              />
-            </MDBox>
-            <MDBox p={2}>
-              <MDTypography variant="h5">País</MDTypography>
-              <MDBox p={1}></MDBox>
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={countries}
-                sx={{ width: 300 }}
-                value={userCountry}
-                onChange={(event, value) => {
-                  setUserCountry(value.country);
-                  setEditedForm(true);
-                }}
-                renderInput={(params) => <TextField {...params} label="País" />}
-
-              />
-            </MDBox>
-            <MDBox p={2}>
-              <MDTypography variant="h5">Género con el que se identifica</MDTypography>
-              <MDBox p={1}></MDBox>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                value={answer1}
-                name="radio-buttons-group"
-                onChange={(e) => {
-                  setAnswer1(e.target.value);
-                  setEditedForm(true);
-                }}
+        <Grid container spacing={3} justifyContent="center">
+          <Grid item xs={12} lg={11}>
+            <Card>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
+              <MDBox ml={5} mb={3} mt={3}>
+                <MDTypography variant="h4">Fromulario de edición para un sujeto</MDTypography>
+              </MDBox>
+              <MDButton
+                variant="outlined"
+                color="error"
+                size="small"
+                style={{ height: '1.4375em', margin: '16px' }}
+                onClick={openDeleteAlert}
               >
-                <FormControlLabel value="1" control={<Radio />} label="Mujer cis" />
-                <FormControlLabel value="2" control={<Radio />} label="Hombre cis" />
-                <FormControlLabel value="3" control={<Radio />} label="Mujer trans" />
-                <FormControlLabel value="4" control={<Radio />} label="Hombre trans" />
-                <FormControlLabel value="5" control={<Radio />} label="No binario" />
-                <FormControlLabel value="6" control={<Radio />} label="Otro" />
-              </RadioGroup>
-              <TextField
-                id="standard-basic"
-                label="Otro"
-                variant="standard"
-                value={answer1openField}
-                onChange={(e) => {
-                  setAnswer1openField(e.target.value);
-                  setEditedForm(true);
-                }}
-                disabled={answer1 != 6}
-              />
-            </MDBox>
-            <MDBox p={2}>
-              <MDTypography variant="h5">Usuario de instagram</MDTypography>
-              <MDBox p={1}></MDBox>
-              <TextField
-                id="standard-basic"
-                label="@"
-                variant="standard"
-                value={answer3openField}
-                onChange={(e) => {
-                  setAnswer3openField(e.target.value);
-                  setEditedForm(true);
-                }}
-              />
-            </MDBox>
-          </form>
-          {showMsg && !isSuccess && <MDBox pt={2} px={2}>
-            <MDAlert color="error">
-              {jsonError(jsonResponseMessage)}
-            </MDAlert>
-          </MDBox>}
-          {showMsg && isSuccess && <MDBox pt={2} px={2}>
-            <Navigate to="/users" />
-          </MDBox>}
-          <MDBox p={2}>
-            <MDButton
-              variant="outlined"
-              color="dark"
-              size="small"
-              style={{ marginRight: "16px" }}
-              onClick={
-                () => {
-                  if (editedForm) {
-                    openBackAlert()
-                  } else {
-                    goBack(null);
+                Eliminar sujeto
+              </MDButton>
+              </div>
+              <form>
+                <MDBox ml={5} mb={3}>
+                  <MDTypography variant="h5">Nombre ficticio</MDTypography>
+                  <MDBox p={1}></MDBox>
+                  <TextField
+                    id="standard-basic"
+                    label="Nombre ficticio"
+                    variant="standard"
+                    value={alias}
+                    onChange={(e) => {
+                      setAlias(e.target.value);
+                      setEditedForm(true);
+                    }}
+                  />
+                </MDBox>
+                <MDBox ml={5} mb={3}>
+                    <MDTypography variant="h5">Edad</MDTypography>
+                    <MDBox p={1}></MDBox>
+                    <Autocomplete
+                      disablePortal
+                      id="combo-box-demo"
+                      options={ages}
+                      sx={{ width: 300 }}
+                      value={answer2}
+                      onChange={(event, value) => {
+                        setAnswer2(value.age);
+                        setEditedForm(true);
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Edad" />}
+                    />
+                </MDBox>
+                <MDBox ml={5} mb={3}>
+                    <MDTypography variant="h5">País</MDTypography>
+                    <MDBox p={1}></MDBox>
+                    <Autocomplete
+                      disablePortal
+                      id="combo-box-demo"
+                      options={countries}
+                      sx={{ width: 300 }}
+                      value={userCountry}
+                      onChange={(event, value) => {
+                        setUserCountry(value.country);
+                        setEditedForm(true);
+                      }}
+                      renderInput={(params) => <TextField {...params} label="País" />}
+                      
+                    />
+                </MDBox>
+                <MDBox ml={5} mb={3}>
+                    <MDTypography variant="h5">Género con el que se identifica</MDTypography>
+                    <MDBox p={1}></MDBox>
+                    <RadioGroup
+                      aria-labelledby="demo-radio-buttons-group-label"
+                      value={answer1}
+                      name="radio-buttons-group"
+                      onChange={(e) => {
+                        setAnswer1(e.target.value);
+                        setEditedForm(true);
+                      }}
+                    >
+                      <FormControlLabel value="1" control={<Radio />} label="Mujer cis" />
+                      <FormControlLabel value="2" control={<Radio />} label="Hombre cis" />
+                      <FormControlLabel value="3" control={<Radio />} label="Mujer trans" />
+                      <FormControlLabel value="4" control={<Radio />} label="Hombre trans" />
+                      <FormControlLabel value="5" control={<Radio />} label="No binario" />
+                      <FormControlLabel value="6" control={<Radio />} label="Otro" />
+                    </RadioGroup>
+                    <TextField
+                      id="standard-basic"
+                      label="Otro"
+                      variant="standard"
+                      value={answer1openField}
+                      onChange={(e) => {
+                        setAnswer1openField(e.target.value);
+                        setEditedForm(true);
+                      }}
+                      disabled={answer1 != 6}
+                    />
+                </MDBox>
+                <MDBox ml={5} mb={3}>
+                    <MDTypography variant="h5">Usuario de instagram</MDTypography>
+                    <MDBox p={1}></MDBox>
+                    <TextField
+                      id="standard-basic"
+                      label="@"
+                      variant="standard"
+                      value={answer3openField}
+                      onChange={(e) => {
+                        setAnswer3openField(e.target.value);
+                        setEditedForm(true);
+                      }}
+                    />
+                </MDBox>
+              </form>
+              {showMsg && !isSuccess && <MDBox pt={2} px={2}>
+                <MDAlert color="error">
+                  {jsonError(jsonResponseMessage)}
+                </MDAlert>
+              </MDBox>}
+             {showMsg && isSuccess && <MDBox pt={2} px={2}>
+              <Navigate to="/users" />
+              </MDBox>}
+              <MDBox ml={5} mb={3}>
+                <MDButton
+                  variant="outlined"
+                  color="dark"
+                  size="small"
+                  style={{ marginRight: "16px" }}
+                  onClick={
+                    () => {
+                      if (editedForm) {
+                        openBackAlert()
+                      } else {
+                        goBack(null);
+                      }
+                    }
                   }
-                }
-              }
-            >
-              Cancelar
-            </MDButton>
-            <MDButton
-              variant="contained"
-              color="dark"
-              size="small"
-              style={{ marginRight: "auto" }}
-              onClick={submitUser}
-            >
-              Guardar
-            </MDButton>
-          </MDBox>
-        </Card>
+                >
+                  Cancelar
+                </MDButton>
+                <MDButton
+                  variant="contained"
+                  color="dark"
+                  size="small"
+                  style={{ marginRight: "auto" }}
+                  onClick={submitUser}
+                >
+                  Guardar
+                </MDButton>
+              </MDBox>
+            </Card>
+          </Grid>
+        </Grid>
       </MDBox>
+      <AlertDialog
+          open={deleteAlert}
+          handleClose={closeDeleteAlert}
+          title={"Esta seguro que desea eliminar el sujeto?"}
+          description={"Al eliminar al sujeto no podra volver a acceder al mismo ni recuperarlo luego."}
+          agreeText={"Eliminar"}
+          handleClickAgree={() => {
+            closeDeleteAlert();
+            deleteUser();
+          }}
+      />
       <AlertDialog
         open={backAlert && editedForm}
         handleClose={closeBackAlert}
