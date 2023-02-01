@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -60,11 +60,16 @@ function EditUser() {
   const [showMsg, setShowMsg] = useState(false);
   const [alias, setAlias] = useState('');
   const [deleteAlert, setDeleteAlert] = useState(false);
-  const navigate = useNavigate();
-
+  const [editedForm, setEditedForm] = useState(false);
+  const [backAlert, setBackAlert] = useState(false);
+  const openBackAlert = () => setBackAlert(true);
+  const closeBackAlert = () => setBackAlert(false);
   const openDeleteAlert = () => setDeleteAlert(true);
   const closeDeleteAlert = () => setDeleteAlert(false);  
 
+  const navigate = useNavigate();
+
+  
   useEffect(function effectFunction() {
 
     async function fetchUser() {
@@ -86,7 +91,6 @@ function EditUser() {
 
 }, []);
   
-
   const ages = [
     { label: '13 años', age: 13 },
     { label: '14 años', age: 14 },
@@ -109,7 +113,7 @@ function EditUser() {
 
   const jsonSuccess = () => (
     <MDTypography variant="body2" color="white">
-      El participante se ha editado con éxito.
+      El sujeto se ha editado con éxito.
     </MDTypography>
   );
 
@@ -143,19 +147,38 @@ function EditUser() {
         setJsonResponseMessage(msg.message);
       })
    });
+  }
 
+  const goBack = (displayText) => {
+    navigate(`/users`,
+      {
+        state: {
+          displayText,
+        }
+      }
+    )
   }
 
   return (
     <DashboardLayout>
-       <DashboardNavbar onArrowClick={() => navigate("/users")} />
+      <DashboardNavbar
+        onArrowClick={
+          () => {
+            if (editedForm) {
+              openBackAlert()
+            } else {
+              goBack(null);
+            }
+          }
+        }
+      />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={11}>
             <Card>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
               <MDBox ml={5} mb={3} mt={3}>
-                <MDTypography variant="h4">Fromulario de edición para un participante</MDTypography>
+                <MDTypography variant="h4">Fromulario de edición para un sujeto</MDTypography>
               </MDBox>
               <MDButton
                 variant="outlined"
@@ -171,7 +194,16 @@ function EditUser() {
                 <MDBox ml={5} mb={3}>
                   <MDTypography variant="h5">Nombre ficticio</MDTypography>
                   <MDBox p={1}></MDBox>
-                  <TextField id="standard-basic" label="Nombre ficticio" variant="standard" value={alias} onChange={(e) => setAlias(e.target.value)}/>
+                  <TextField
+                    id="standard-basic"
+                    label="Nombre ficticio"
+                    variant="standard"
+                    value={alias}
+                    onChange={(e) => {
+                      setAlias(e.target.value);
+                      setEditedForm(true);
+                    }}
+                  />
                 </MDBox>
                 <MDBox ml={5} mb={3}>
                     <MDTypography variant="h5">Edad</MDTypography>
@@ -182,7 +214,10 @@ function EditUser() {
                       options={ages}
                       sx={{ width: 300 }}
                       value={answer2}
-                      onChange={(event, value) => setAnswer2(value.age)}
+                      onChange={(event, value) => {
+                        setAnswer2(value.age);
+                        setEditedForm(true);
+                      }}
                       renderInput={(params) => <TextField {...params} label="Edad" />}
                     />
                 </MDBox>
@@ -195,7 +230,10 @@ function EditUser() {
                       options={countries}
                       sx={{ width: 300 }}
                       value={userCountry}
-                      onChange={(event, value) => setUserCountry(value.country)}
+                      onChange={(event, value) => {
+                        setUserCountry(value.country);
+                        setEditedForm(true);
+                      }}
                       renderInput={(params) => <TextField {...params} label="País" />}
                       
                     />
@@ -207,7 +245,10 @@ function EditUser() {
                       aria-labelledby="demo-radio-buttons-group-label"
                       value={answer1}
                       name="radio-buttons-group"
-                      onChange={(e) => setAnswer1(e.target.value)}
+                      onChange={(e) => {
+                        setAnswer1(e.target.value);
+                        setEditedForm(true);
+                      }}
                     >
                       <FormControlLabel value="1" control={<Radio />} label="Mujer cis" />
                       <FormControlLabel value="2" control={<Radio />} label="Hombre cis" />
@@ -216,29 +257,67 @@ function EditUser() {
                       <FormControlLabel value="5" control={<Radio />} label="No binario" />
                       <FormControlLabel value="6" control={<Radio />} label="Otro" />
                     </RadioGroup>
-                    <TextField id="standard-basic" label="Otro" variant="standard" value={answer1openField} onChange={(e) => setAnswer1openField(e.target.value)} disabled={answer1 != 6}/>
+                    <TextField
+                      id="standard-basic"
+                      label="Otro"
+                      variant="standard"
+                      value={answer1openField}
+                      onChange={(e) => {
+                        setAnswer1openField(e.target.value);
+                        setEditedForm(true);
+                      }}
+                      disabled={answer1 != 6}
+                    />
                 </MDBox>
                 <MDBox ml={5} mb={3}>
                     <MDTypography variant="h5">Usuario de instagram</MDTypography>
                     <MDBox p={1}></MDBox>
-                    <TextField id="standard-basic" label="@" variant="standard" value={answer3openField} onChange={(e) => setAnswer3openField(e.target.value)}/>
+                    <TextField
+                      id="standard-basic"
+                      label="@"
+                      variant="standard"
+                      value={answer3openField}
+                      onChange={(e) => {
+                        setAnswer3openField(e.target.value);
+                        setEditedForm(true);
+                      }}
+                    />
                 </MDBox>
               </form>
-              {showMsg &&!isSuccess && <MDBox pt={2} px={2}>
+              {showMsg && !isSuccess && <MDBox pt={2} px={2}>
                 <MDAlert color="error">
                   {jsonError(jsonResponseMessage)}
                 </MDAlert>
               </MDBox>}
              {showMsg && isSuccess && <MDBox pt={2} px={2}>
-              <Navigate to="/users"/>
+              <Navigate to="/users" />
               </MDBox>}
               <MDBox ml={5} mb={3}>
-                <MDButton variant="outlined" color="info" size="small"  style={{ marginRight: "16px" }} onClick={submitUser}>
-                    Guardar
+                <MDButton
+                  variant="outlined"
+                  color="dark"
+                  size="small"
+                  style={{ marginRight: "16px" }}
+                  onClick={
+                    () => {
+                      if (editedForm) {
+                        openBackAlert()
+                      } else {
+                        goBack(null);
+                      }
+                    }
+                  }
+                >
+                  Cancelar
                 </MDButton>
-                <MDButton variant="outlined" color="error" size="small"  style={{ marginRight: "auto" }} onClick={() => 
-                  {if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?')) navigate(`/users`)}}>
-                    Cancelar
+                <MDButton
+                  variant="contained"
+                  color="dark"
+                  size="small"
+                  style={{ marginRight: "auto" }}
+                  onClick={submitUser}
+                >
+                  Guardar
                 </MDButton>
               </MDBox>
             </Card>
@@ -255,6 +334,13 @@ function EditUser() {
             closeDeleteAlert();
             deleteUser();
           }}
+      />
+      <AlertDialog
+        open={backAlert && editedForm}
+        handleClose={closeBackAlert}
+        title={"Todos los cambios no guardados se perderán"}
+        agreeText={"Continuar"}
+        handleClickAgree={() => goBack(null)}
       />
       <Footer />
     </DashboardLayout>
