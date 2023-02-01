@@ -131,7 +131,7 @@ function Basic() {
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
-            {submitted && errors.serverError && <MDAlert p={0.5} color="error" style={{ fontWeight: "normal", fontSize: "14px" }}>{errors.serverError}</MDAlert>}
+            {submitted && errors.serverError && <MDAlert p={0.5} color="error" style={{ fontSize: "14px" }}>{errors.serverError}</MDAlert>}
             <MDBox mb={2}>
               <MDInput type="email" label="Email" fullWidth value={email} onChange={emailChange} />
               {!email && submitted && <FormError text="Este campo es obligatorio"></FormError>}

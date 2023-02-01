@@ -45,7 +45,6 @@ import editUserAPI from "../../api/editUser"
 import getUserAPI from "../../api/getUser"
 import deleteUserAPI from "../../api/deleteUser"
 
-
 function EditUser() {
 
   const { itemId } = useParams();
@@ -74,23 +73,24 @@ function EditUser() {
 
     async function fetchUser() {
 
-        await getUserAPI(itemId).then(res => {
-          res.json().then(response => {
-            setUserId(itemId);
-            setUserCountry(response.userCountry);
-            setAnswer1(response.answer1);
-            setAnswer2(response.answer2);
-            setAnswer3openField(response.answer3openField);
-            setAnswer1openField(response.answer1openField);
-            setAlias(response.alias);
-          })
-        });
+      await getUserAPI(itemId).then(res => {
+        res.json().then(response => {
+          setUserId(itemId);
+          setUserCountry(response.userCountry);
+          setAnswer1(response.answer1);
+          setAnswer2(response.answer2);
+          setAnswer3openField(response.answer3openField);
+          setAnswer1openField(response.answer1openField);
+          setAlias(response.alias);
+        })
+      });
     }
 
     fetchUser();
 
-}, []);
-  
+  }, []);
+
+
   const ages = [
     { label: '13 años', age: 13 },
     { label: '14 años', age: 14 },
@@ -139,14 +139,14 @@ function EditUser() {
       answer3: "Si",
       answer3openField: answer3openField,
       alias: alias
-   }
-   editUserAPI(data).then(response => {
+    }
+    editUserAPI(data).then(response => {
       setIsSuccess(response.ok);
       setShowMsg(true);
       response.json().then(msg => {
         setJsonResponseMessage(msg.message);
       })
-   });
+    });
   }
 
   const goBack = (displayText) => {

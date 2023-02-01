@@ -34,6 +34,9 @@ import 'react-quill/dist/quill.snow.css';
 import htmlDocx from 'html-docx-js/dist/html-docx'
 import { saveAs } from 'file-saver'
 
+// Dialog
+import AlertDialog from '../../components/Dialog';
+
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
@@ -52,6 +55,10 @@ function CreateNewDiaryEntry() {
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
   const navigate = useNavigate();
+  const [editedForm, setEditedForm] = useState(false);
+  const [backAlert, setBackAlert] = useState(false);
+  const openBackAlert = () => setBackAlert(true);
+  const closeBackAlert = () => setBackAlert(false);
 
   const modules = {
     toolbar: [
@@ -86,10 +93,8 @@ function CreateNewDiaryEntry() {
       entry: entry,
     }
     createDiaryEntryAPI(data).then(response => {
-      setIsSuccess(response.ok);
-      setShowMsg(true);
       response.json().then(msg => {
-        setJsonResponseMessage(msg.message);
+        goBack(msg.message);
       })
     });
   }
@@ -110,9 +115,30 @@ function CreateNewDiaryEntry() {
     })();
   }
 
+  const goBack = (displayText) => {
+    navigate(`/user/${itemId}`,
+      {
+        state: {
+          tab: 2,
+          displayText,
+        }
+      }
+    )
+  }
+
   return (
     <DashboardLayout>
-      <DashboardNavbar onArrowClick={() => navigate(-2)} />
+      <DashboardNavbar
+        onArrowClick={
+          () => {
+            if (editedForm) {
+              openBackAlert()
+            } else {
+              goBack(null);
+            }
+          }
+        }
+      />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={1} justifyContent="center">
           <Grid item xs={12} lg={11}>
@@ -128,14 +154,17 @@ function CreateNewDiaryEntry() {
               <form>
                 <Grid container spacing={1} justifyContent="center">
                   <Grid item xs={12} lg={12}>
-                      <MDBox p={4}>
-                        <ReactQuill
-                          modules={modules}
-                          style={{ width: '90%', height: 500, background: 'white' }}
-                          theme="snow"
-                          onChange={setEntry}
-                        />
-                      </MDBox>
+                    <MDBox p={4}>
+                      <ReactQuill
+                        modules={modules}
+                        style={{ width: '90%', height: 500, background: 'white' }}
+                        theme="snow"
+                        onChange={(e) => {
+                          setEntry(e);
+                          setEditedForm(true);
+                        }}
+                      />
+                    </MDBox>
                   </Grid>
                 </Grid>
                 <MDBox p={3}></MDBox>
@@ -146,30 +175,49 @@ function CreateNewDiaryEntry() {
                 </MDAlert>
               </MDBox>}
               {showMsg && isSuccess && navigate(`/user/${itemId}`,
-                      {
-                        state: {
-                          tab: 2
-                        }
-                      }
-                    )}
-              <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px", marginLeft: "16px"  }} onClick={submitDiaryEntry}>
-                  Crear entrada
-                </MDButton>
-                <MDButton variant="outlined" color="error" size="small" onClick={() =>  {if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?')) navigate(`/user/${itemId}`,
-                      {
-                        state: {
-                          tab: 2
-                        }
-                      }
-                    )}}>
+                {
+                  state: {
+                    tab: 2
+                  }
+                }
+              )}
+              <MDBox p={4}>
+                <MDButton
+                  variant="outlined"
+                  color="dark"
+                  size="small"
+                  style={{ marginRight: "16px" }}
+                  onClick={() => {
+                    if (editedForm) {
+                      openBackAlert()
+                    } else {
+                      goBack(null);
+                    }
+                  }}
+                >
                   Cancelar
+                </MDButton>
+                <MDButton
+                  variant="contained"
+                  color="dark"
+                  size="small"
+                  style={{ marginRight: "auto" }}
+                  onClick={submitDiaryEntry}
+                >
+                  Crear entrada
                 </MDButton>
               </MDBox>
             </Card>
           </Grid>
         </Grid>
       </MDBox>
+      <AlertDialog
+        open={backAlert && editedForm}
+        handleClose={closeBackAlert}
+        title={"Todos los cambios no guardados se perderán"}
+        agreeText={"Continuar"}
+        handleClickAgree={() => goBack(null)}
+      />
       <Footer />
     </DashboardLayout>
   );

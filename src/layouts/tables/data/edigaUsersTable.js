@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 // Material Dashboard 2 React components
@@ -22,6 +22,7 @@ import MDBox from "components/MDBox";
 import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
 import MDBadge from "components/MDBadge";
+import MDSnackbar from "components/MDSnackbar";
 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -57,12 +58,14 @@ function countryColor(country) {
 
 
 function EdigaUsersTable(props) {
-
+  const { state } = useLocation();
   const [rows, setRows] = useState([]);
   const [loadingRows, setLoadingRows] = useState(false);
-
+  const [successSB, setSuccessSB] = useState(false);
+  const [message, setMessage] = useState('');
+  const openSuccessSB = () => setSuccessSB(true);
+  const closeSuccessSB = () => setSuccessSB(false);
   const [showDeleteButton, setShowDeleteButton] = useState(false);
-  // const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
 
   const fetchAllUsers = async () => {
@@ -105,6 +108,13 @@ function EdigaUsersTable(props) {
 
   useEffect(() => {
     fetchAllUsers();
+    if (state) {
+      const { displayText } = state;
+      if (displayText) {
+        setMessage(displayText);
+        openSuccessSB();
+      }
+    }
   }, []);
 
   var columns = [
@@ -121,15 +131,25 @@ function EdigaUsersTable(props) {
 
   const navigate = useNavigate();
 
+  const renderSuccessSB = (
+    <MDSnackbar
+      color="success"
+      title={message}
+      open={successSB}
+      onClose={closeSuccessSB}
+      close={closeSuccessSB}
+    />
+  );
+
   const createRows = (rows) => rows.map((user) => {
     return {
       name: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
-            <MDTypography component="a" href="#" display="block" variant="button" fontWeight="medium">
+            <MDTypography component="a" display="block" variant="button" fontWeight="medium">
               {user.name}
             </MDTypography>
-            <MDTypography component="a" href="#" display="block" variant="button" fontWeight="normal">
+            <MDTypography component="a" display="block" variant="button">
               {user.email}
             </MDTypography>
           </MDBox>
@@ -154,7 +174,6 @@ function EdigaUsersTable(props) {
           </Tooltip>
         </MDTypography>
       ),
-
       delete: (
         <MDTypography component="a" variant="caption" color="text" fontWeight="medium" onClick={() => requestConfirmation(user)}>
           {(!showDeleteButton || user.edigaUserId != userIdToDelete) && <Tooltip title="Eliminar usuario">
@@ -163,10 +182,9 @@ function EdigaUsersTable(props) {
             </IconButton>
           </Tooltip>}
           {showDeleteButton && user.edigaUserId === userIdToDelete && <MDButton color="error" onClick={() => deleteUser(user)}>Eliminar</MDButton>}
-
         </MDTypography>
       ),
-
+      loading: loadingRows,
     }
   });
 
@@ -208,12 +226,18 @@ function EdigaUsersTable(props) {
                   showTotalEntries={false}
                   noEndBorder
                   canSearch={false}
+                  loading={loadingRows}
                 />
               </MDBox>
             </Card >
           </Grid >
         </Grid >
       </MDBox >
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6} lg={3}>
+          {renderSuccessSB}
+        </Grid>
+      </Grid>
       <Footer />
     </div >
   );

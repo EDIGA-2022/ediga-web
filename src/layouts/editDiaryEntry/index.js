@@ -45,6 +45,9 @@ import getDiaryEntryAPI from "../../api/getDiaryEntry";
 import { useNavigate, useParams } from "react-router-dom";
 import Quill from 'quill'
 
+// Dialog
+import AlertDialog from '../../components/Dialog';
+
 function EditDiaryEntry() {
 
   const { itemId } = useParams();
@@ -55,6 +58,11 @@ function EditDiaryEntry() {
   const [isSuccess, setIsSuccess] = useState('');
   const [showMsg, setShowMsg] = useState(false);
   const navigate = useNavigate();
+
+  const [editedForm, setEditedForm] = useState(false);
+  const [backAlert, setBackAlert] = useState(false);
+  const openBackAlert = () => setBackAlert(true);
+  const closeBackAlert = () => setBackAlert(false);
 
   const modules = {
     toolbar: [
@@ -89,10 +97,8 @@ function EditDiaryEntry() {
       entry: entry,
     }
     editDiaryEntryAPI(data).then(response => {
-      setIsSuccess(response.ok);
-      setShowMsg(true);
       response.json().then(msg => {
-        setJsonResponseMessage(msg.message);
+        goBack(msg.message);
       })
     });
   }
@@ -129,18 +135,39 @@ function EditDiaryEntry() {
     })();
   }
 
+  const goBack = (displayText) => {
+    navigate(`/user/${userId}`,
+      {
+        state: {
+          tab: 2,
+          displayText,
+        }
+      }
+    )
+  }
+
   return (
     <DashboardLayout>
-      <DashboardNavbar onArrowClick={() => navigate(-2)} />
+      <DashboardNavbar
+        onArrowClick={
+          () => {
+            if (editedForm) {
+              openBackAlert()
+            } else {
+              goBack(null);
+            }
+          }
+        }
+      />
       <MDBox mt={6} mb={3}>
         <Grid container spacing={1} justifyContent="center">
           <Grid item xs={12} lg={11}>
             <Card>
               <MDBox p={2}>
-                <MDTypography variant="h5"  style={{ marginLeft: "16px" }} >Editar entrada de diario de campo</MDTypography>
+                <MDTypography variant="h5" style={{ marginLeft: "16px" }} >Editar entrada de diario de campo</MDTypography>
               </MDBox>
               <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small"  style={{ marginLeft: "16px" }}  onClick={exportToWord}>
+                <MDButton variant="outlined" color="info" size="small" style={{ marginLeft: "16px" }} onClick={exportToWord}>
                   Exportar .docx
                 </MDButton>
               </MDBox>
@@ -153,7 +180,10 @@ function EditDiaryEntry() {
                         value={entry}
                         style={{ width: '90%', height: 500, background: 'white' }}
                         theme="snow"
-                        onChange={setEntry}
+                        onChange={(e) => {
+                          setEntry(e);
+                          setEditedForm(true);
+                        }}
                       />
                     </MDBox>
                   </Grid>
@@ -165,31 +195,51 @@ function EditDiaryEntry() {
                   {jsonError(jsonResponseMessage)}
                 </MDAlert>
               </MDBox>}
-              {showMsg && isSuccess &&  navigate(`/user/${userId}`,
-                      {
-                        state: {
-                          tab: 2
-                        }
+              {showMsg && isSuccess && navigate(`/user/${userId}`,
+                {
+                  state: {
+                    tab: 2
+                  }
+                }
+              )}
+              <MDBox p={4}>
+                <MDButton
+                  variant="outlined"
+                  color="dark"
+                  size="small"
+                  onClick={
+                    () => {
+                      if (editedForm) {
+                        openBackAlert()
+                      } else {
+                        goBack(null);
                       }
-                    )}
-              <MDBox p={2}>
-                <MDButton variant="outlined" color="info" size="small" style={{ marginRight: "16px", marginLeft: "16px"}} onClick={submitDiaryEntry}>
-                  Guardar
-                </MDButton>
-                <MDButton variant="outlined" color="error" size="small" onClick={() => {if (window.confirm('Todos los cambios no guardados se perderán, ¿confirma cancelar?')) navigate(`/user/${userId}`,
-                      {
-                        state: {
-                          tab: 2
-                        }
-                      }
-                    )}}>
+                    }
+                  }
+                >
                   Cancelar
+                </MDButton>
+                <MDButton
+                  variant="contained"
+                  color="dark"
+                  size="small"
+                  style={{ marginRight: "16px", marginLeft: "16px" }}
+                  onClick={submitDiaryEntry}
+                >
+                  Guardar
                 </MDButton>
               </MDBox>
             </Card>
           </Grid>
         </Grid>
       </MDBox>
+      <AlertDialog
+        open={backAlert && editedForm}
+        handleClose={closeBackAlert}
+        title={"Todos los cambios no guardados se perderán"}
+        agreeText={"Continuar"}
+        handleClickAgree={() => goBack(null)}
+      />
       <Footer />
     </DashboardLayout>
   );

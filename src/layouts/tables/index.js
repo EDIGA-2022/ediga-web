@@ -18,10 +18,13 @@ import AddIcon from '@mui/icons-material/Add';
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Tooltip from '@mui/material/Tooltip';
+
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
+import MDSnackbar from "components/MDSnackbar";
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
+
 // Button, Navigation
 import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
@@ -30,27 +33,44 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 import diaryEntriesTable from "layouts/tables/data/diaryEntriesTable";
 import observationsTable from "layouts/tables/data/observationsTable";
+
 // Data
 import exportPhotos from "../../api/exportPhotos";
 import usersTable from "layouts/tables/data/usersTable";
 
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 
 function Tables(props) {
   var columns = useState([]);
   var csvData = useState([]);
   var rows = useState([]);
+  const { state } = useLocation();
   const [searchText, setSearchText] = useState('');
   const [gender, setGender] = useState(0);
   const [country, setCountry] = useState(0);
   const [age, setAge] = useState(0);
+  const [successSB, setSuccessSB] = useState(false);
+  const [message, setMessage] = useState('');
+  const openSuccessSB = () => setSuccessSB(true);
+  const closeSuccessSB = () => setSuccessSB(false);
 
   let title;
   let obj;
   let onClick;
   let tooltip;
+  let loading = false;
+
+  useEffect(() => {
+    if (state) {
+      const { displayText } = state;
+      if (displayText) {
+        setMessage(displayText);
+        openSuccessSB();
+      }
+    }
+  }, []);
 
   const onSearchChangeTable = (value) => {
     setSearchText(value)
@@ -72,14 +92,13 @@ function Tables(props) {
     navigate('/createDiaryEntry/' + props.userId);
   };
 
-
-
   switch (props.type) {
     case 'users':
       title = 'Sujetos';
       obj = usersTable(searchText, gender, country, age);
       columns = obj.columns;
       rows = obj.rows;
+      loading = obj.loading;
       csvData = obj.csvData;
       onClick = navigateToCreateNewUser;
       tooltip = 'Crear nuevo sujeto'
@@ -89,6 +108,7 @@ function Tables(props) {
       obj = observationsTable(props.userId);
       columns = obj.columns;
       rows = obj.rows;
+      loading = obj.loading;
       onClick = navigateToCreateNewObservation;
       tooltip = 'Crear nueva observación'
       break;
@@ -97,6 +117,7 @@ function Tables(props) {
       obj = diaryEntriesTable(props.userId);
       columns = obj.columns;
       rows = obj.rows;
+      loading = obj.loading;
       onClick = navigateToCreateNewDiaryEntry;
       tooltip = 'Crear nueva entrada de diario'
       break;
@@ -109,6 +130,16 @@ function Tables(props) {
       console.log("response", response)
     });
   }
+
+  const renderSuccessSB = (
+    <MDSnackbar
+      color="success"
+      title={message}
+      open={successSB}
+      onClose={closeSuccessSB}
+      close={closeSuccessSB}
+    />
+  );
 
   return (
     <div>
@@ -133,20 +164,14 @@ function Tables(props) {
                       {title}
                     </MDTypography>
                   </Grid>
-                  {/* {props.type === 'users' && <Grid item xs>
-                    <MDButton variant="outlined" color="white" size="small" onClick={() => onExportPhotos()}>
-                      <ImageOutlinedIcon />
-                      <FileDownloadOutlinedIcon />
-                    </MDButton>
-                  </Grid>} */}
-                  {props.type === 'users' && 
+                  {props.type === 'users' &&
                     <ExportUsersXLS csvData={csvData} fileName="DataSujetos" />
-                  }       
+                  }
                   <Tooltip title={tooltip} placement="bottom">
                     <MDButton variant="outlined" color="white" size="small" style={{ marginLeft: "auto" }} onClick={onClick}>
                       <AddIcon />
                     </MDButton>
-                  </Tooltip>         
+                  </Tooltip>
                 </Grid>
               </MDBox >
               <MDBox pt={3}>
@@ -164,14 +189,20 @@ function Tables(props) {
                   gender={gender}
                   country={country}
                   age={age}
+                  loading={loading}
                 />
               </MDBox>
             </Card >
           </Grid >
         </Grid >
       </MDBox >
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6} lg={3}>
+          {renderSuccessSB}
+        </Grid>
+      </Grid>
       <Footer />
-    </div >
+    </div>
   );
 }
 

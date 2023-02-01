@@ -30,6 +30,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
+import MDSnackbar from "components/MDSnackbar";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -55,6 +56,11 @@ function User() {
   const [tabValue, setTabValue] = useState(0);
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
+  const [successSB, setSuccessSB] = useState(false);
+  const [message, setMessage] = useState('');
+  const openSuccessSB = () => setSuccessSB(true);
+  const closeSuccessSB = () => setSuccessSB(false);
+
   const [user, setUser] = useState({
     userId,
     country: '',
@@ -67,7 +73,6 @@ function User() {
     endFormAnswers: {},
   });
 
-
   useEffect(() => {
     async function fetchUser() {
       await getUserProfile(userId)
@@ -79,15 +84,30 @@ function User() {
     fetchUser();
     if (state) {
       const {
-        tab
+        tab,
+        displayText,
       } = state;
       setTabValue(tab);
+      if (displayText) {
+        setMessage(displayText);
+        openSuccessSB();
+      }
     }
   }, []);
 
+  const renderSuccessSB = (
+    <MDSnackbar
+      color="success"
+      title={message}
+      open={successSB}
+      onClose={closeSuccessSB}
+      close={closeSuccessSB}
+    />
+  );
+
   return (
     <DashboardLayout>
-      <DashboardNavbar onArrowClick={() => navigate(-2)} />
+      <DashboardNavbar onArrowClick={() => navigate(`/users`)} />
       <MDBox mb={2} />
       <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
         <Tab label="App ediga" />
@@ -99,7 +119,7 @@ function User() {
           <Grid item xs={12} md={12} xl={6} sx={{ display: "flex" }}>
             <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
             <ProfileInfoCard
-              title="Informacion del participante"
+              title="Informacion del sujeto"
               description=""
               action={{ route: "", tooltip: "Edit Profile" }}
               shadow={true}
@@ -127,6 +147,11 @@ function User() {
       {tabValue === 2 &&
         <Tables type={"diaryEntries"} userId={userId} />
       }
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6} lg={3}>
+          {renderSuccessSB}
+        </Grid>
+      </Grid>
     </DashboardLayout>
   );
 };

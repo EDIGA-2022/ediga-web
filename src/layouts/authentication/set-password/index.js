@@ -102,7 +102,7 @@ function Basic(props) {
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
-            {submitted && error && <MDAlert p={0.5} color="error" style={{ fontWeight: "normal", fontSize: "14px" }}>{error}</MDAlert>}
+            {submitted && error && <MDAlert p={0.5} color="error" style={{ fontSize: "14px" }}>{error}</MDAlert>}
             <MDBox mb={2}>
               <MDInput type="password" label="Contraseña" fullWidth value={password} onChange={passwordChange} />
               {!password && submitted && <FormError text="Este campo es obligatorio"></FormError>}

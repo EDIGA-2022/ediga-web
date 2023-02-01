@@ -99,20 +99,17 @@ function Cover() {
     setEmail(email)
     setName(name)
     let isAdmin;
-    console.log("role", role)
     if (role === 'admin') {
       isAdmin = true;
     } else {
       isAdmin = false;
     }
-    console.log("Antesde editar", userId, name, email, isAdmin);
     editEdigaUser(userId, name, email, isAdmin).then(res => {
       if (res.status === 200) {
-        setSuccess(true);
         setLoading(false);
-        setTimeout(() => {
-          navigate('/admin/');
-        }, 2000);
+        res.json().then(msg => {
+          goBack(msg.message);
+        })
       } else {
         setErrors({ email: true, password: true, name: true });
         setSuccess(false);
@@ -127,6 +124,16 @@ function Cover() {
     } else {
       return 'Investigador';
     }
+  }
+
+  const goBack = (displayText) => {
+    navigate(`/admin/`,
+      {
+        state: {
+          displayText,
+        }
+      }
+    )
   }
 
   return (
@@ -149,8 +156,8 @@ function Cover() {
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
-            {submitted && errors.serverError && <MDAlert p={0.5} color="error" style={{ fontWeight: "normal", fontSize: "14px" }}>{errors.serverError}</MDAlert>}
-            {success && <MDAlert p={0.5} color="success" style={{ fontWeight: "normal", fontSize: "14px" }}>Usuario editado exitosamente</MDAlert>}
+            {submitted && errors.serverError && <MDAlert p={0.5} color="error" style={{ fontSize: "14px" }}>{errors.serverError}</MDAlert>}
+            {success && <MDAlert p={0.5} color="success" style={{ fontSize: "14px" }}>Usuario editado exitosamente</MDAlert>}
             <MDBox mb={2}>
               <MDInput type="text" label="Nombre" variant="standard" fullWidth value={name} onChange={nameChange} disabled={loading} />
               {!name && submitted && <FormError text="Este campo es obligatorio"></FormError>}
@@ -174,16 +181,15 @@ function Cover() {
                 renderInput={(params) => <TextField {...params} label="Asigna un rol" />}
               />
             </MDBox>
-
             <MDBox mt={1} mb={1}>
-              {!loading && <MDButton variant="gradient" color="info" fullWidth onClick={edit}>
-                Editar
+              {!loading && <MDButton variant="outlined" color="dark" fullWidth onClick={() => navigate("/admin")}>
+                Cancelar
               </MDButton>}
               {loading && <Spinner></Spinner>}
             </MDBox>
             <MDBox mt={1} mb={1}>
-              {!loading && <MDButton variant="gradient" color="error" fullWidth onClick={() => navigate("/admin")}>
-                Cancelar
+              {!loading && <MDButton variant="contained" color="dark" fullWidth onClick={edit}>
+                Editar
               </MDButton>}
               {loading && <Spinner></Spinner>}
             </MDBox>
