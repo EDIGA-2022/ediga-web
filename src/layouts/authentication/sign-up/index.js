@@ -33,7 +33,7 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 
 // Authentication layout components
-import CoverLayout from "layouts/authentication/components/CoverLayout";
+import RegisterLayout from "layouts/authentication/components/NoNavbarLayout";
 
 // Loader component
 import Spinner from "components/shared/spinner/spinner"
@@ -63,7 +63,6 @@ function Cover() {
   };
 
   const [country, setCountry] = useState('');
-
 
 
   let isAdmin = false;
@@ -143,7 +142,7 @@ function Cover() {
 
   }
   return (
-    <CoverLayout>
+    <RegisterLayout>
       {redirectToLogin() && <Card>
         <MDBox
           variant="gradient"
@@ -151,7 +150,6 @@ function Cover() {
           borderRadius="lg"
           coloredShadow="success"
           mx={2}
-          mt={-3}
           p={3}
           mb={1}
           textAlign="center"
@@ -225,7 +223,7 @@ function Cover() {
           </MDBox>
         </MDBox>
       </Card>}
-    </CoverLayout>
+    </RegisterLayout>
   );
 }
 

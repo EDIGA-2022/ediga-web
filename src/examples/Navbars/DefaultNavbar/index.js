@@ -114,17 +114,17 @@ function DefaultNavbar({ transparent, light, action }) {
         <MDBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
           <DefaultNavbarLink icon="bar_chart" name="Métricas" route="/dashboard" light={light} />
           <DefaultNavbarLink
-            icon="account_circle"
-            name="Registrar investigador"
-            route="/authentication/sign-up"
+            icon="settings"
+            name="Sección de administrador"
+            route="/admin"
             light={light}
           />
-          <DefaultNavbarLink
+          {/* <DefaultNavbarLink
             icon="key"
             name="Iniciar sesión"
             route="/authentication/sign-in"
             light={light}
-          />
+          /> */}
         </MDBox>
         {action &&
           (action.type === "internal" ? (

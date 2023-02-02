@@ -151,7 +151,16 @@ function Dashboard() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      <MDBox
+        color="grey"
+        bgColor="light"
+        fontSize={14}
+        coloredShadow="light"
+        borderRadius="lg"
+        mb={3}
+        opacity={1}
+        p={2}
+      ><b>Nota: </b>Los datos mostrados a continuación fueron recopilados de respuestas extraídas de la aplicación móvil de EDIGA.</MDBox>
       {data && <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
@@ -159,12 +168,12 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="dark"
                 icon="person"
-                title="Cantidad de usuarios"
+                title="Cantidad de sujetos"
                 count={totalUsers}
                 percentage={{
                   color: "success",
                   // amount: "+55%",
-                  label: "Usuarios de todos los países",
+                  label: "Sujetos de todos los países",
                 }}
               />
             </MDBox>
@@ -188,7 +197,7 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="success"
                 icon="phone_android"
-                title="Usuarios rastreados"
+                title="Sujetos rastreados"
                 count={trackedUsers}
                 percentage={{
                   color: "success",
@@ -208,7 +217,7 @@ function Dashboard() {
                 percentage={{
                   color: "success",
                   amount: "",
-                  label: "Usuarios que dieron su instagram",
+                  label: "Sujetos que dieron su instagram",
                 }}
               />
             </MDBox>
@@ -220,7 +229,7 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsBarChart
                   color="success"
-                  title="Usuarios por país"
+                  title="Sujetos por país"
                   // description="Last Campaign Performance"
                   date="Datos actualizados recientemente"
                   chart={countriesBarChartData}

@@ -30,7 +30,7 @@ import MDAlert from "components/MDAlert";
 
 
 // Authentication layout components
-import BasicLayout from "layouts/authentication/components/BasicLayout";
+import BasicLayout from "layouts/authentication/components/NoNavbarLayout";
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
@@ -96,7 +96,7 @@ function Basic() {
             setLoading(false);
             setShowSetPassword(true);
           } else {
-            navigate("/dashboard");
+            navigate("/");
           }
         })
       } else {
