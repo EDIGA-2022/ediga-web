@@ -151,7 +151,6 @@ function Dashboard() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
       <MDBox
         color="grey"
         bgColor="light"

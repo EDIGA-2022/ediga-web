@@ -66,7 +66,7 @@ export const adminRoutes = [
     name: "Métricas",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/dashboard",
+    route: "/",
     component: <Dashboard />,
   },
   {
@@ -216,7 +216,7 @@ export const commonRoutes = [
     name: "Métricas",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/dashboard",
+    route: "/",
     component: <Dashboard />,
   },
   {

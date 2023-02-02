@@ -96,7 +96,7 @@ function Basic() {
             setLoading(false);
             setShowSetPassword(true);
           } else {
-            navigate("/dashboard");
+            navigate("/");
           }
         })
       } else {
