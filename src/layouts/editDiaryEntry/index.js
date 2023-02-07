@@ -159,7 +159,7 @@ function EditDiaryEntry() {
           }
         }
       />
-      <MDBox mt={6} mb={3}>
+      <MDBox mb={3}>
         <Grid container spacing={1} justifyContent="center">
           <Grid item xs={12} lg={11}>
             <Card>

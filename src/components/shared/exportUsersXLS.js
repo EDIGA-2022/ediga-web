@@ -13,7 +13,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { FaFileCsv, FaFileExcel } from 'react-icons/fa'
 
 const XLSX = require('xlsx');
-const formats = ['Formato CSV (Valores Separados por Comas)', 'Formato XLSX (Hoja de cálculo Excel)'];
+const formats = ['Formato CSV', 'Formato XLSX'];
 
 function ExportUsersXLSDialog(props) {
   const { onClose, selectedValue, open, csvData, fileName } = props;

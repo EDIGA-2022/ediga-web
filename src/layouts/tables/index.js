@@ -61,6 +61,7 @@ function Tables(props) {
   let onClick;
   let tooltip;
   let loading = false;
+  let placeholder;
 
   useEffect(() => {
     if (state) {
@@ -101,7 +102,7 @@ function Tables(props) {
       loading = obj.loading;
       csvData = obj.csvData;
       onClick = navigateToCreateNewUser;
-      tooltip = 'Crear nuevo sujeto'
+      tooltip = 'Crear nuevo sujeto';
       break;
     case 'observations':
       title = 'Observaciones';
@@ -110,7 +111,8 @@ function Tables(props) {
       rows = obj.rows;
       loading = obj.loading;
       onClick = navigateToCreateNewObservation;
-      tooltip = 'Crear nueva observación'
+      tooltip = 'Crear nueva observación';
+      placeholder = 'No hay observaciones. Crea la primera clickeando en el icono +';
       break;
     case 'diaryEntries':
       title = 'Diario de campo';
@@ -119,7 +121,8 @@ function Tables(props) {
       rows = obj.rows;
       loading = obj.loading;
       onClick = navigateToCreateNewDiaryEntry;
-      tooltip = 'Crear nueva entrada de diario'
+      tooltip = 'Crear nueva entrada de diario';
+      placeholder = 'No hay diarios de campo. Crea el primero clickeando en el icono +';
       break;
     default:
       break;
@@ -190,6 +193,8 @@ function Tables(props) {
                   country={country}
                   age={age}
                   loading={loading}
+                  filters={title === 'Sujetos'}
+                  placeholder={placeholder}
                 />
               </MDBox>
             </Card >

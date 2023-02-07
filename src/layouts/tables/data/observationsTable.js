@@ -23,6 +23,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { IconButton, Tooltip } from '@mui/material';
 import { getUserObservations } from "../../../api/getUserObservations";
 import moment from 'moment';
+import 'moment/locale/es';
 
 function GetObservations(userId) {
   const [rows, setRows] = useState([]);
@@ -62,7 +63,7 @@ function GetObservations(userId) {
       { Header: "titulo", accessor: "title", align: "left" },
       { Header: "contenido", accessor: "text", align: "left" },
       { Header: "creado por", accessor: "createdBy", align: "left" },
-      { Header: "fecha de creacion", accessor: "createdAt", align: "left" },
+      { Header: "fecha de creación", accessor: "createdAt", align: "left" },
       { Header: "ultima vez actualizado", accessor: "updatedAt", align: "left" },
       { Header: "", accessor: "accions", align: "left" },
     ],

@@ -65,6 +65,8 @@ function DataTable({
   gender,
   age,
   loading,
+  filters,
+  placeholder,
 }) {
   const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 10;
   const entries = entriesPerPage.entries
@@ -324,12 +326,21 @@ function DataTable({
         </TableBody>
       </Table>
       {
-        !rows.length && !loading &&
+        !rows.length && !loading && filters &&
         <MDTypography style={{
           margin: '40px 0',
           textAlignLast: 'center'
         }}>
           No existen resultados que coincidan con la busqueda
+        </MDTypography>
+      }
+      {
+        !rows.length && !loading && !filters &&
+        <MDTypography style={{
+          margin: '40px 0',
+          textAlignLast: 'center'
+        }}>
+          {placeholder}
         </MDTypography>
       }
       {

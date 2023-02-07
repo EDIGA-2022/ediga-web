@@ -23,6 +23,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { IconButton, Tooltip } from '@mui/material';
 import { getUserDiaryEntries } from "../../../api/getUserDiaryEntries";
 import moment from 'moment';
+import 'moment/locale/es';
 
 function GetDiaryEntries(userId) {
 	const [rows, setRows] = useState([]);
@@ -61,7 +62,7 @@ function GetDiaryEntries(userId) {
 		columns: [
 			{ Header: "Entrada", accessor: "entry", align: "left" },
 			{ Header: "creado por", accessor: "createdBy", align: "left" },
-			{ Header: "fecha de creacion", accessor: "createdAt", align: "left" },
+			{ Header: "fecha de creación", accessor: "createdAt", align: "left" },
 			{ Header: "ultima vez actualizado", accessor: "updatedAt", align: "left" },
 			{ Header: "", accessor: "accions", align: "left" },
 		],
