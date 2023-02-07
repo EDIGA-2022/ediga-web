@@ -66,7 +66,7 @@ function navbar(theme, ownerState) {
 
       [breakpoints.up("sm")]: {
         minHeight: "auto",
-        padding: `${pxToRem(4)} ${pxToRem(16)}`,
+        padding: `${pxToRem(4)}`,
       },
     },
   };

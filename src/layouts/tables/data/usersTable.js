@@ -129,7 +129,7 @@ function GetUsers(searchText, gender, country, age) {
               <MDAvatar src={profilePhoto} alias={row.userId} size="sm" />
               <MDBox ml={2} lineHeight={1}>
                 <MDTypography component="a" href="#" display="block" variant="button" fontWeight="medium" onClick={() => navigate("/user/" + row.userId)}>
-                  {row.userId}
+                  {row.alias || '- Sujeto sin alias -'}
                 </MDTypography>
                 <MDTypography variant="caption">{row.instagramProfile}</MDTypography>
               </MDBox>

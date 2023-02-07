@@ -108,7 +108,6 @@ function User() {
   return (
     <DashboardLayout>
       <DashboardNavbar onArrowClick={() => navigate(`/users`)} />
-      <MDBox mb={2} />
       <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
         <Tab label="App ediga" />
         <Tab label="Observaciones" />
@@ -117,12 +116,13 @@ function User() {
       {tabValue === 0 && <MDBox mt={5} mb={3}>
         <Grid container spacing={1}>
           <Grid item xs={12} md={12} xl={6} sx={{ display: "flex" }}>
-            <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
             <ProfileInfoCard
               title="Informacion del sujeto"
               description=""
               action={{ route: "", tooltip: "Edit Profile" }}
               shadow={true}
+              instagram={user.instagramProfile}
+              alias={user.alias}
               genre={user.genre}
               country={user.country}
               yearsOld={user.yearsOld}
@@ -133,7 +133,7 @@ function User() {
           </Grid>
           <Grid item xs={12} xl={6}>
             <ProfilePhotosList
-              title="Imagenes"
+              title="Imágenes"
               photos={user.photos}
               shadow={true}
               userId={userId}

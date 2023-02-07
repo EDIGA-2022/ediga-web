@@ -49,9 +49,13 @@ function ProfileInfoCard({
   yearsOld,
   middleForm,
   endForm,
-  photos
+  photos,
+  instagram,
+  alias,
 }) {
   const labels1 = [
+    'Instagram',
+    'Alias',
     'Género',
     'País',
     'Edad',
@@ -72,6 +76,8 @@ function ProfileInfoCard({
   const { socialMediaColors } = colors;
   const { size } = typography;
 
+  values1.push(instagram);
+  values1.push(alias);
   values1.push(genre);
   values1.push(country);
   values1.push(yearsOld);

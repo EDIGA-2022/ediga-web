@@ -124,7 +124,7 @@ function Basic() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Iniciar sesión
+            Bienvenido al portal EDIGA
           </MDTypography>
 
 
