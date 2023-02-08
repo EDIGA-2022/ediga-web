@@ -33,7 +33,7 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 
 // Authentication layout components
-import CoverLayout from "layouts/authentication/components/CoverLayout";
+import RegisterLayout from "layouts/authentication/components/NoNavbarLayout";
 
 // Loader component
 import Spinner from "components/shared/spinner/spinner"
@@ -137,7 +137,7 @@ function Cover() {
   }
 
   return (
-    <CoverLayout>
+    <RegisterLayout>
       <Card>
         <MDBox
           variant="gradient"
@@ -196,7 +196,7 @@ function Cover() {
           </MDBox>
         </MDBox>
       </Card>
-    </CoverLayout>
+    </RegisterLayout>
   );
 }
 
