@@ -160,13 +160,12 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="EDIGA Dashboard"
+            brandName="Panel EDIGA"
             routes={user?.isAdmin ? adminRoutes : commonRoutes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
           <Configurator />
-          {/* {configsButton} */}
         </>
       )}
       {layout === "vr" && <Configurator />}
