@@ -109,7 +109,7 @@ function User() {
     <DashboardLayout>
       <DashboardNavbar onArrowClick={() => navigate(`/users`)} />
       <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
-        <Tab label="App ediga" />
+        <Tab label="App EDIGA" />
         <Tab label="Observaciones" />
         <Tab label="Diario de campo" />
       </Tabs>
