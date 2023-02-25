@@ -72,8 +72,8 @@ function ImageInfoCard({
 
     return (
         <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
-            <div style={{ display: "flex" }}>
-                <div>
+            <div style={{ display: "flex", height: '100%' }}>
+                <div style={{ maxWidth: '46%' }}>
                     <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
                         <MDTypography variant="h6" fontWeight="bold" >
                             {"Preguntas que acompañan a la imagen"}
@@ -86,12 +86,18 @@ function ImageInfoCard({
                     </MDBox>
                 </div>
                 <div style={{
-                    padding: '20px'
+                    padding: '20px',
+                    maxWidth: '46%',
+                    height: '100%'
                 }}>
                     <img
                         src={photoSrc}
                         loading="lazy"
-                        height="350"
+                        style={{
+                            maxWidth: '100%',
+                            objectFit: 'contain',
+                            height: '100%'
+                        }}
                     />
                 </div>
             </div>

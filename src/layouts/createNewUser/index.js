@@ -164,11 +164,11 @@ function CreateNewUser() {
           </MDBox>
           <form>
             <MDBox p={2}>
-              <MDTypography variant="h5">Nombre ficticio</MDTypography>
+              <MDTypography variant="h5">Alias</MDTypography>
               <MDBox p={1}></MDBox>
               <TextField
                 id="standard-basic"
-                label="Nombre ficticio"
+                label="Alias"
                 variant="standard"
                 onChange={(e) => {
                   setAlias(e.target.value)

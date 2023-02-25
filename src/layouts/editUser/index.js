@@ -192,11 +192,11 @@ function EditUser() {
               </div>
               <form>
                 <MDBox ml={5} mb={3}>
-                  <MDTypography variant="h5">Nombre ficticio</MDTypography>
+                  <MDTypography variant="h5">Alias</MDTypography>
                   <MDBox p={1}></MDBox>
                   <TextField
                     id="standard-basic"
-                    label="Nombre ficticio"
+                    label="Alias"
                     variant="standard"
                     value={alias}
                     onChange={(e) => {
