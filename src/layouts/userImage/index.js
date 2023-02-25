@@ -231,7 +231,7 @@ function UserImage() {
       />
       <MDBox mb={2} />
       <Grid container spacing={1} sx={{ width: '1600px' }}>
-        <Grid item xs={12} md={12} xl={6} sx={{ display: "flex", height: 400 }}>
+        <Grid item xs={12} md={12} xl={8} sx={{ display: "flex", height: 400 }}>
           <ImageInfoCard
             answer1={photo.answer1}
             answer2={photo.answer2}

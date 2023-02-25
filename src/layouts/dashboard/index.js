@@ -182,7 +182,7 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="access_time"
-                title="Tiempo promedio de uso diario"
+                title="Tiempo promedio de uso diario de Instagram"
                 count={averageTime + " hora(s)"}
                 percentage={{
                   color: "success",
