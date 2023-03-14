@@ -185,7 +185,6 @@ function Cover() {
               {!loading && <MDButton variant="outlined" color="dark" fullWidth onClick={() => navigate("/admin")}>
                 Cancelar
               </MDButton>}
-              {loading && <Spinner></Spinner>}
             </MDBox>
             <MDBox mt={1} mb={1}>
               {!loading && <MDButton variant="contained" color="dark" fullWidth onClick={edit}>
