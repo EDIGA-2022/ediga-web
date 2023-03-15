@@ -331,7 +331,7 @@ function DataTable({
           margin: '40px 0',
           textAlignLast: 'center'
         }}>
-          No existen resultados que coincidan con la busqueda
+          No existen resultados que coincidan con la búsqueda
         </MDTypography>
       }
       {
